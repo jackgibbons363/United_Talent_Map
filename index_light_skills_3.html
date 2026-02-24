@@ -1,0 +1,5783 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f3f5fe" />
+  <title>McCann United Talent Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+  :root{
+    /* Colour scheme */
+    --page-bg: #0b1220;        /* dark initial background while locked */
+    --page-bg-light: #f3f5fe;  /* app background after login */
+
+    --text: #0b1220;
+    --button-on: #572ef5;
+    --button-off-bg: #ffffff;
+    --button-off-border: #572ef5;
+    --button-off-text: #572ef5;
+
+    --software: #e97950;
+    --platform: #63cd95;
+    --specialism-digital: #9b4871; 
+    --specialism-print: #4597e6;
+
+    --card-bg: #ffffff;
+    --card-text: #0b1220;
+    --muted: #6b7280;
+
+    --safe-top: env(safe-area-inset-top, 0px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    padding: calc(12px + var(--safe-top)) 12px 24px;
+    font-family: 'Inter', sans-serif; /* or Inter */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em; /* Gives it that premium brand feel */
+    background:var(--page-bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+    font-size:16px;
+    transition: background .24s ease;
+  }
+      
+   .site-footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:.85rem;
+  padding:24px 0 0;
+  margin-top:12px;
+  margin-bottom:60px;
+  border-top:1px solid rgba(11,17,30,0.06);
+}   
+      
+   .footer-padding{
+  text-align:center;
+  color:var(--muted);
+  font-size:.85rem;
+  padding:24px 0 0;
+  margin-top:12px;
+  margin-bottom:60px;
+} 
+
+  /* Login overlay (dark) */
+  .login-overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(0,0,0,0.88), rgba(0,0,0,0.92)); z-index:2000; }
+  .login-card{ background:#fff; color:#0b1220; padding:22px; border-radius:12px; width:360px; box-shadow:0 10px 40px rgba(2,6,23,0.6); text-align:center; }
+  .login-card h2{ margin:0 0 12px; font-size:1.05rem; color:#0b1220 }
+  .login-form{ display:flex; gap:8px; flex-direction:column; align-items:stretch; }
+  .login-form input[type="password"]{ padding:10px 12px; font-size:1rem; border-radius:8px; border:1px solid #e6e9f6; background:#fff }
+  .login-form button{ padding:10px 12px; border-radius:8px; border:none; background:var(--button-on); color:#fff; cursor:pointer; font-weight:700; }
+  .login-error{ color:#c0392b; margin-top:8px; font-weight:700; display:none; }
+
+  /* Main layout (light after login) */
+  .container{max-width:1200px;margin:0 auto}
+  .top-actions{ display:flex; justify-content:flex-end; gap:8px; margin-bottom:12px; align-items:center; display: none !important; }
+  h1{ text-align:center; color:var(--text); margin:6px 0 18px; font-size:2rem }
+      
+      /* Two-column layout */
+.two-col-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.left-sidebar {
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(11,17,30,0.04);
+}
+
+.right-content {
+  min-width: 0; /* prevents grid blowout */
+}
+
+/* Stack to single column on narrow screens */
+@media (max-width: 768px) {
+  .two-col-layout {
+    grid-template-columns: 1fr;
+  }
+  .left-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+      
+      
+  .search-legend-row{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.name-search-wrapper{ width:100%; display:flex; flex-direction:column; }
+
+.search-legend-row .name-search-wrapper input[type="search"]{
+  width:100%;
+}
+
+.name-search-wrapper{ width:100%; display:flex; }
+.name-search-wrapper input[type="search"]{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6e9f6; background:#fff; color:var(--text); }
+
+.legend{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.legend div{display:flex;align-items:center; gap:6px; font-size:0.82rem;}
+      
+  .legend .sw{width:14px;height:14px;border-radius:3px;background:var(--software)}
+  .legend .pf{width:14px;height:14px;border-radius:3px;background:var(--platform)}
+  .legend .sd{width:14px;height:14px;border-radius:3px;background:var(--specialism-digital)}
+  .legend .sp{width:14px;height:14px;border-radius:3px;background:var(--specialism-print)}
+
+
+
+
+ .controls{display:flex; flex-direction:column; gap:10px; margin-bottom:12px;}
+  input[type="search"], select, button, .skill-chip{ padding:10px 12px; border-radius:10px; font-size:0.95rem; box-shadow:none; }
+  input[type="search"], select { background: #fff; color: var(--text); border: 1px solid #e6e9f6; width:100%; }
+
+  button{ background:var(--button-on); color:#fff; border:1px solid var(--button-on); cursor:pointer; font-weight:600; }
+  .muted-btn{ background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); }
+
+  .reset-btn { background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); padding:10px 12px; border-radius:10px; font-weight:700 }
+
+  .skill-list{ display:flex; flex-direction:column; gap:4px; margin:8px 0 8px }
+  .skill-chip{ background:var(--button-off-bg); cursor:pointer; user-select:none; border:1px solid var(--button-off-border); color:var(--button-off-text); padding:6px 10px; border-radius:20px; font-weight:700; font-size:0.82rem; }
+  .skill-chip.software{ border-color:var(--software); color:var(--software) }
+  .skill-chip.platform{ border-color:var(--platform); color:var(--platform) }
+  .skill-chip.specialism-digital{ border-color:var(--specialism-digital); color:var(--specialism-digital) }
+  .skill-chip.specialism-print{ border-color:var(--specialism-print); color:var(--specialism-print) }
+  .skill-chip.selected { background:var(--button-on); color:#fff; border-color:var(--button-on) }
+      
+  /* Skill chip hover — darker border + light grey background on rollover */
+  .skill-chip:hover{
+    transition: border-color .15s ease, background .15s ease;
+    background: #f0f1f4;
+  }
+  .skill-chip.software:hover{ border-color: #c45a2e; }
+  .skill-chip.platform:hover{ border-color: #3da96e; }
+  .skill-chip.specialism-digital:hover{ border-color: #6e2f50; }
+  .skill-chip.specialism-print:hover{ border-color: #2d6fb8; }
+
+  /* Default (uncategorised) chip hover */
+  .skill-chip:hover:not(.software):not(.platform):not(.specialism-digital):not(.specialism-print){
+    border-color: #3a1ab0;
+  }
+
+  /* Don't apply hover effect to selected or dimmed chips */
+  .skill-chip.selected:hover{ border-color: var(--button-on); background: var(--button-on); }
+  .skill-chip.category-dimmed:hover{ border-color: var(--button-off-border); background: var(--button-off-bg); } 
+
+  .clear-chip{ display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:700; font-size:0.95rem; width:100%; }
+.clear-chip[hidden]{ display:none; }
+
+  .segmented { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--button-off-border); background:#fff; margin-left:0; width:100%; }
+.segmented button { flex:1; padding:10px 12px; border:0; border-right:1px solid var(--button-off-border); background:var(--button-off-bg); cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--button-off-text); transition: background .15s ease, color .15s ease; }
+.segmented button:last-child { border-right:0; }
+.segmented button.active { background:var(--button-on); color:#fff; }   
+
+  /* Results Container is now a flow container, not a grid itself */
+  #results { margin-bottom: 40px; }
+  
+  /* The grid is applied to the sub-lists per department */
+  .dept-results-grid { display:grid; gap:20px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-items:start; margin-bottom:40px; }
+  
+  .dept-section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid #e6e9f6;
+      padding-bottom: 8px;
+      margin: 32px 0 16px 0;
+  }
+      
+        /* Collapsible skill sections */
+  .skill-section { margin-bottom: 8px; }
+  .skill-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #e6e9f6;
+    font-weight: 700;
+    font-size: .9rem;
+    color: var(--muted);
+    user-select: none;
+    transition: background .15s ease;
+  }
+  .skill-section-header:hover { background: #f0f1f4; }
+  .skill-section-header .section-swatch {
+    width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0;
+  }
+  .skill-section-header .section-arrow {
+    margin-left: auto;
+    transition: transform .2s ease;
+    font-size: .75rem;
+  }
+  .skill-section-header.collapsed .section-arrow { transform: rotate(-90deg); }
+
+  .skill-section-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: flex-start;
+  padding: 8px 0 4px;
+  overflow: hidden;
+  transition: max-height .25s ease, opacity .2s ease;
+}
+  .skill-section-chips.hidden {
+    max-height: 0 !important;
+    opacity: 0;
+    padding: 0;
+  }
+
+  .skill-sections-wrapper {
+    display: flex; flex-direction: column;
+    gap: 4px; margin: 8px 0;
+  }
+  
+  /* UPDATED CARD CSS: Auto height for chip expansion */
+  .card{
+    background:var(--card-bg);
+    color:var(--card-text);
+    padding:16px;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(11,17,30,0.04);
+    border-left:6px solid var(--button-on);
+    cursor:pointer;
+    position:relative;
+    height: auto; 
+    transition: transform .12s ease, box-shadow .12s ease;
+    outline: none;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .card:focus, .card:hover{ transform: translateY(-4px); box-shadow:0 12px 30px rgba(11,17,30,0.06); }
+  
+  .card.top3{ border-left-color: #efc94f; box-shadow:0 0 0 2px rgba(239,201,79,0.08) }
+  .card .card-body{ flex:1 1 auto; min-width:0 }
+  .card h3{ margin:0 0 6px; font-size:1.05rem; color:var(--card-text) }
+  .card p { margin: 0 0 10px; color: var(--muted); font-size: .92rem; }
+  .dept-badges{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+  .dept-pill{ background:rgba(11,17,30,0.04); color:var(--card-text); padding:4px 8px; border-radius:999px; font-size:.78rem; font-weight:700; }
+
+  .badge{ position:absolute; right:12px; top:12px; padding:6px 10px; border-radius:999px; color:#000; font-weight:700; font-size:.9rem; background:var(--button-on); }
+  
+  /* NEW BADGE COLOURS for 1-5 Scale */
+  /* High = 4-5 (Green), Mid = 3 (Amber), Low = 1-2 (Red/Grey) */
+  .high{ background:#27ae60; color:#fff } 
+  .mid{ background:#f39c12; color:#000 } 
+  .low{ background:#e74c3c; color:#fff }
+
+  .match-breakdown { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .match-chip { font-size:0.8rem; background:#f1f3ff; border:1px solid #dce2f5; color:#0b1220; padding:3px 8px; border-radius:6px; display:flex; align-items:center; gap:6px; }
+  .match-chip b { color:var(--button-on); font-weight:800; }
+
+  .hover-details{ margin-top:0; max-height:0; overflow:hidden; opacity:0; transition: max-height .22s ease, opacity .22s ease, margin-top .22s ease; font-size:.9rem; color:var(--muted) }
+  .card:hover .hover-details{ max-height:400px; opacity:1; margin-top:8px; }
+
+  .backdrop{ position:fixed; inset:0; background:rgba(11,17,30,0.32); opacity:0; pointer-events:none; transition: opacity .18s ease; z-index: 990; }
+  .backdrop.open{ opacity:1; pointer-events:auto; }
+
+  .side-panel{ position:fixed; top:0; right:0; height:100%; width:min(420px, 100%); background:var(--card-bg); color:var(--card-text); box-shadow: -8px 0 30px rgba(11,17,30,0.06); padding:24px; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.9,.2,1); z-index:999; will-change:transform; overflow:auto; }
+  .side-panel.open{ transform: translateX(0) }
+  .side-panel .close-btn{ position:sticky; top:10px; float:right; cursor:pointer; font-size:1.2rem; background:transparent; border:1px solid rgba(11,17,30,0.06); padding:6px 8px; color:var(--card-text); border-radius:8px; }
+  .stat{ display:flex; justify-content:space-between; gap:12px; font-size:.9rem; padding:8px 0; border-bottom:1px dashed rgba(11,17,30,0.04); color:var(--card-text); align-items: center; }
+  .stat .score-row { display: flex; align-items: center; gap: 6px; }
+  .warning{ grid-column:1/-1; color:#c0392b; font-weight:700; text-align:center; padding:8px; background:rgba(11,17,30,0.03); border-radius:8px }
+
+  .panel-header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .panel-title{ flex:1 1 auto; min-width:0; }
+  .panel-title h2{ margin:0 0 6px; font-size:1.25rem; color:var(--card-text); }
+  .panel-avatar{ margin-right: 14px; width:72px; height:72px; border-radius:50%; overflow:hidden; flex:0 0 72px; display:flex; align-items:center; justify-content:center; background:#f1f3ff; color:#0b1220; font-weight:700; font-size:1.05rem; }
+  .panel-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .resource-contacts { margin-top:8px; color:var(--card-text); font-size:.95rem; }
+  .resource-contacts a { color: #0b1220 !important; text-decoration: underline !important; font-weight:700; }
+
+  #panelContent > * { margin-bottom:12px; }
+  
+  .side-panel .recency-key { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(11,17,30,0.04); font-size: 0.82rem; line-height: 1.4; color: var(--card-text); }
+  .side-panel .recency-key strong { display:block; margin-bottom:6px; }
+  .side-panel .recency-key .key-item { display: flex; align-items:center; gap:6px; margin-bottom: 4px; }
+  
+  .side-panel .skill-scale { margin-top: 12px; color: var(--card-text); font-size: 0.82rem; line-height: 1.18; }
+  .side-panel .skill-scale ol { margin: 8px 0 0 18px; padding: 0; }
+  .side-panel .skill-scale li { margin: 6px 0; color: var(--card-text); }
+
+  .side-panel .profile-summary { color: var(--muted); margin-top: 20px; font-size: .95rem; }
+      
+      .sidebar-label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.00em;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+   
+     .panel-dept-section { margin-bottom: 10px; }
+  .panel-dept-heading {
+    display: block;
+    font-size: .82rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+
+  @media (prefers-reduced-motion: reduce){ .card, .side-panel{ transition:none } }
+  </style>
+</head>
+<body>
+  <script id="embedded-team" type="application/json">
+
+[
+  {
+    "name": "Jack Gibbons",
+    "role": "Digital Studio Manager & QA",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "avatar": "",
+    "skills": {
+      "DCO Flashtalking": 5,
+      "DOOH": 5,
+      "Photoshop": 4,
+      "HTML Email": 4,
+      "After Effects": 4,
+      "XD": 4,
+      "Figma": 4,
+      "Google Web Designer": 4,
+      "DCO Google Studio": 4,
+      "Firefly": 4,
+      "Facebook": 4,
+      "Illustrator": 3,
+      "InDesign": 3,
+      "Runway": 3,
+      "Premier Pro": 3,
+      "Word": 2
+    },
+    "skillRecency": {
+      "DCO Flashtalking": "warm",
+      "DOOH": "hot",
+      "Photoshop": "hot",
+      "HTML Email": "warm",
+      "After Effects": "warm",
+      "XD": "hot",
+      "Figma": "warm",
+      "Google Web Designer": "warm",
+      "DCO Google Studio": "cold",
+      "Firefly": "hot",
+      "Facebook": "cold",
+      "Illustrator": "cold",
+      "InDesign": "warm",
+      "Runway": "cold",
+      "Premier Pro": "cold",
+      "Word": "cold"
+    },
+    "recentSkills": [
+      "DCO Flashtalking",
+      "DOOH",
+      "Photoshop",
+      "HTML Email",
+      "After Effects",
+      "XD",
+      "Figma",
+      "Google Web Designer",
+      "Firefly",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Matthew Johnston",
+    "role": "Digital Artworker",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "HTML Email": 3,
+      "After Effects": 3,
+      "Photoshop": 3,
+      "XD": 3,
+      "Figma": 2,
+      "Illustrator": 3,
+      "Google Web Designer": 3,
+      "Blender": 2,
+      "DCO Flashtalking": 1,
+      "DCO Storyteq": 1,
+      "DCO Google Studio": 1,
+      "Firefly": 3,
+      "Runway": 1,
+      "InDesign": 3,
+      "Premier Pro": 2,
+      "Facebook": 2,
+      "DOOH": 3
+    },
+    "recentSkills": [
+      "HTML Email",
+      "After Effects",
+      "Photoshop",
+      "XD",
+      "Illustrator",
+      "Google Web Designer",
+      "Firefly",
+      "InDesign",
+      "DOOH"
+    ]
+  },
+  {
+    "name": "Ben Bayliss",
+    "role": "Digital Artworker",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "avatar": "",
+    "skills": {
+      "HTML Email": 3,
+      "CSS": 3,
+      "After Effects": 3,
+      "Photoshop": 3,
+      "XD": 3,
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Google Web Designer": 3,
+      "Firefly": 3,
+      "Premier Pro": 3,
+      "Corebook": 3,
+      "Lightroom": 3,
+      "Adobe Audition": 3,
+      "DOOH": 3,
+      "Javascript": 2,
+      "Figma": 2,
+      "Runway": 2,
+      "DCO Flashtalking": 1,
+      "DCO Storyteq": 1,
+      "DCO Google Studio": 1,
+      "Adobe Dimension": 1,
+      "Blender": 1,
+      "Facebook": 1
+    },
+    "skillRecency": {
+      "HTML Email": "hot",
+      "CSS": "hot",
+      "After Effects": "hot",
+      "Photoshop": "hot",
+      "XD": "hot",
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Google Web Designer": "hot",
+      "Firefly": "hot",
+      "Premier Pro": "hot",
+      "Corebook": "hot",
+      "Lightroom": "hot",
+      "Adobe Audition": "hot",
+      "DOOH": "hot",
+      "Javascript": "cold",
+      "Figma": "cold",
+      "Runway": "cold",
+      "DCO Flashtalking": "cold",
+      "DCO Storyteq": "cold",
+      "DCO Google Studio": "cold",
+      "Adobe Dimension": "cold",
+      "Blender": "cold",
+      "Facebook": "cold"
+    },
+    "recentSkills": [
+      "HTML Email",
+      "CSS",
+      "After Effects",
+      "Photoshop",
+      "XD",
+      "InDesign",
+      "Illustrator",
+      "Google Web Designer",
+      "Firefly",
+      "Premier Pro",
+      "Corebook",
+      "Lightroom",
+      "Adobe Audition",
+      "DOOH"
+    ]
+  },
+  {
+    "name": "Alex Turner",
+    "role": "Senior Designer",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann London",
+    "level": "senior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "Figma": 3,
+      "XD": 3,
+      "HTML Email": 2
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "Figma",
+      "XD"
+    ]
+  },
+  {
+    "name": "Maya Patel",
+    "role": "Motion Lead",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann London",
+    "level": "senior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "After Effects": 4,
+      "Premier Pro": 3,
+      "Photoshop": 3,
+      "Runway": 3
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro",
+      "Photoshop",
+      "Runway"
+    ]
+  },
+  {
+    "name": "Tom Baker",
+    "role": "Digital Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann Bristol",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "HTML Email": 3,
+      "Photoshop": 3,
+      "Google Web Designer": 3
+    },
+    "recentSkills": [
+      "HTML Email",
+      "Photoshop",
+      "Google Web Designer"
+    ]
+  },
+  {
+    "name": "Emily Cross",
+    "role": "Junior Designer",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann Bristol",
+    "level": "junior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "XD": 2,
+      "Figma": 2,
+      "Photoshop": 2
+    },
+    "recentSkills": []
+  },
+  {
+    "name": "Nora Green",
+    "role": "Senior Designer",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann Milton Keynes",
+    "level": "senior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "InDesign": 3
+    },
+    "recentSkills": [
+      "Illustrator",
+      "Photoshop",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Owen Price",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "McCann Milton Keynes",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "HTML Email": 3,
+      "Photoshop": 3,
+      "Premier Pro": 2
+    },
+    "recentSkills": [
+      "HTML Email",
+      "Photoshop"
+    ]
+  },
+  {
+    "name": "Sam Rivers",
+    "role": "Motion Designer",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "McCann London",
+    "level": "senior",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "After Effects": 4,
+      "Premier Pro": 3,
+      "Runway": 3,
+      "Blender": 3,
+      "DOOH": 3,
+      "Motion Graphics": 4
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro",
+      "Runway",
+      "Blender",
+      "DOOH",
+      "Motion Graphics"
+    ]
+  },
+  {
+    "name": "Hannah Lee",
+    "role": "Animator",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "McCann Bristol",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "Character Animator": 3,
+      "After Effects": 3,
+      "Premier Pro": 3,
+      "Blender": 2,
+      "DOOH": 3
+    },
+    "recentSkills": [
+      "Character Animator",
+      "After Effects",
+      "Premier Pro",
+      "DOOH"
+    ]
+  },
+  {
+    "name": "Priya Desai",
+    "role": "Social Designer",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "McCann London",
+    "level": "mid",
+    "profileSummary": "Digital artworker also with an interest in Print. Enjoys working on large projects with a focus on OOH.",
+    "skills": {
+      "Photoshop": 3,
+      "Figma": 3,
+      "Facebook": 3,
+      "Stories": 3,
+      "Corebook": 3
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Figma",
+      "Facebook",
+      "Stories",
+      "Corebook"
+    ]
+  },
+  {
+    "name": "Karen Matthews",
+    "role": "Design Group Head + QA",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Design Group Head + QA in Creative Design.",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Clive Davies",
+    "role": "Creative Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Creative Director in Creative Design.",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Sam Oxford-Dean",
+    "role": "Design Lead",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Design Lead in Creative Design.",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Andy Barker",
+    "role": "Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Designer in Creative Design.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Megan Parfitt",
+    "role": "Designer (Mat Leave)",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Designer (Mat Leave) in Creative Design.",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 3
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Sharon Chong-Bayley",
+    "role": "Designer (Mat Cover)",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Designer (Mat Cover) in Creative Design.",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 3
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign"
+    ]
+  },
+  {
+    "name": "Ian Gerrard",
+    "role": "Design Director + QA",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Design Director + QA in Print Design.",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop"
+    ]
+  },
+  {
+    "name": "Neil Agnew",
+    "role": "Design Lead",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Design Lead in Print Design.",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop"
+    ]
+  },
+  {
+    "name": "Lee Carter",
+    "role": "Senior Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Senior Designer in Print Design.",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop"
+    ]
+  },
+  {
+    "name": "Adam Kenyon",
+    "role": "Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Designer in Print Design.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 2
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Thomas Finch",
+    "role": "Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Designer in Print Design.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 2,
+      "Firefly": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "cold",
+      "Firefly": "warm"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Firefly"
+    ]
+  },
+  {
+    "name": "Lucy Stronach",
+    "role": "Digital Designer",
+    "department": "Digital Design",
+    "departments": [
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Designer in Digital Design.",
+    "skills": {
+      "Figma": 3,
+      "Photoshop": 3,
+      "Illustrator": 3
+    },
+    "recentSkills": [
+      "Figma",
+      "Photoshop",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Mike Bradbury",
+    "role": "Digital Designer",
+    "department": "Digital Design",
+    "departments": [
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Designer in Digital Design.",
+    "skills": {
+      "Figma": 3,
+      "Photoshop": 3,
+      "Illustrator": 3
+    },
+    "recentSkills": [
+      "Figma",
+      "Photoshop",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Mags Marcinska",
+    "role": "Digital Designer",
+    "department": "Digital Design",
+    "departments": [
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Designer in Digital Design.",
+    "skills": {
+      "Figma": 3,
+      "Photoshop": 3,
+      "Illustrator": 3
+    },
+    "recentSkills": [
+      "Figma",
+      "Photoshop",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Juliette Le Mare",
+    "role": "Digital Designer",
+    "department": "Digital Design",
+    "departments": [
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Designer in Digital Design.",
+    "skills": {
+      "Figma": 3,
+      "Photoshop": 3,
+      "Illustrator": 3
+    },
+    "recentSkills": [
+      "Figma",
+      "Photoshop",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Lauren Torr",
+    "role": "Digital Designer",
+    "department": "Digital Design",
+    "departments": [
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Designer in Digital Design.",
+    "skills": {
+      "Figma": 3,
+      "Photoshop": 3,
+      "Illustrator": 3
+    },
+    "recentSkills": [
+      "Figma",
+      "Photoshop",
+      "Illustrator"
+    ]
+  },
+  {
+    "name": "Rob Dewhurst",
+    "role": "Print Studio Manager & QA",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Print Studio Manager & QA in Print Artwork.",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 4
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Nick Lawrence",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Louise Sakalas",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Phil O'Mara",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Emma Burcham",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Lindsey Sherman",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Joseph Horsall",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Anthony Flitcroft",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Gavin Knowles",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Louise Troyano",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 2,
+      "Photoshop": 2,
+      "Artworking": 3
+    },
+    "recentSkills": [
+      "InDesign",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Al Brough",
+    "role": "Junior Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "Junior Artworker in Print Artwork.",
+    "skills": {
+      "InDesign": 2,
+      "Illustrator": 1,
+      "Photoshop": 1,
+      "Artworking": 1
+    },
+    "recentSkills": []
+  },
+  {
+    "name": "Tony Eden",
+    "role": "Systems Technical Manager +QA",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Systems Technical Manager +QA in Creative Retouch.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "High-end Retouching": 4,
+      "Capture One": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "High-end Retouching": "hot",
+      "Capture One": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "High-end Retouching",
+      "Capture One"
+    ]
+  },
+  {
+    "name": "Rob Brown",
+    "role": "Head of Post-production",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Head of Post-production in Motion.",
+    "skills": {
+      "After Effects": 4,
+      "Premier Pro": 4
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Sam Brierley",
+    "role": "Animator",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Animator in Motion.",
+    "skills": {
+      "After Effects": 3,
+      "Premier Pro": 3
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Roz Hague",
+    "role": "Motion Designer / Animator",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Motion Designer / Animator in Motion.",
+    "skills": {
+      "After Effects": 3,
+      "Premier Pro": 3
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "George Hobbs",
+    "role": "Editor",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Editor in Motion.",
+    "skills": {
+      "Premier Pro": 4,
+      "After Effects": 2
+    },
+    "recentSkills": [
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Liam Rustill",
+    "role": "Editor",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Editor in Motion.",
+    "skills": {
+      "Premier Pro": 4,
+      "After Effects": 2
+    },
+    "recentSkills": [
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Dan Lomax",
+    "role": "Editor",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Editor in Motion.",
+    "skills": {
+      "Premier Pro": 4,
+      "After Effects": 2
+    },
+    "recentSkills": [
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Duncan Rudd",
+    "role": "Freelance Animator",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Freelance Animator in Motion.",
+    "skills": {
+      "After Effects": 3,
+      "Premier Pro": 3
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro"
+    ]
+  },
+  {
+    "name": "Nick Kirkham",
+    "role": "Director of Film & Photography",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Director of Film & Photography in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Neil Flitcroft",
+    "role": "Director of Film & Photography + QC",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Director of Film & Photography + QC in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Ben Kelly",
+    "role": "Director of Photography",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Director of Photography in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Anna Law",
+    "role": "Senior Photographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Senior Photographer in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Emma Uyttendaele",
+    "role": "Content Creator",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Content Creator in Photography.",
+    "skills": {
+      "Photography": 3,
+      "Social Content": 3,
+      "Reels/TikTok": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Social Content",
+      "Reels/TikTok"
+    ]
+  },
+  {
+    "name": "Charlotte Turnock",
+    "role": "Content Creator",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Content Creator in Photography.",
+    "skills": {
+      "Photography": 3,
+      "Social Content": 3,
+      "Reels/TikTok": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Social Content",
+      "Reels/TikTok"
+    ]
+  },
+  {
+    "name": "Chloe Action",
+    "role": "Junior Content Creator",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "Junior Content Creator in Photography.",
+    "skills": {
+      "Photography": 2,
+      "Photoshop": 2
+    },
+    "recentSkills": []
+  },
+  {
+    "name": "Michael Deville",
+    "role": "Photographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Photographer in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Jack Roe",
+    "role": "Junior Photographer / Videographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "Junior Photographer / Videographer in Photography.",
+    "skills": {
+      "Photography": 2,
+      "Photoshop": 2
+    },
+    "recentSkills": []
+  },
+  {
+    "name": "Jake Newton",
+    "role": "Photographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Photographer in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Emmett Hunt",
+    "role": "Photographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Photographer in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Emily Denniston",
+    "role": "Food Photographer",
+    "department": "Photography",
+    "departments": [
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Food Photographer in Photography.",
+    "skills": {
+      "Photography": 4,
+      "Photoshop": 3,
+      "Lightroom": 3
+    },
+    "recentSkills": [
+      "Photography",
+      "Photoshop",
+      "Lightroom"
+    ]
+  },
+  {
+    "name": "Erin Cleland",
+    "role": "Proofreading Manager + QA",
+    "department": "Proofreading",
+    "departments": [
+      "Proofreading"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Proofreading Manager + QA in Proofreading.",
+    "skills": {
+      "Proofreading": 4
+    },
+    "recentSkills": [
+      "Proofreading"
+    ]
+  },
+  {
+    "name": "Leslie Murgatroyd",
+    "role": "Proofreader",
+    "department": "Proofreading",
+    "departments": [
+      "Proofreading"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Proofreader in Proofreading.",
+    "skills": {
+      "Proofreading": 4
+    },
+    "recentSkills": [
+      "Proofreading"
+    ]
+  },
+  {
+    "name": "Jimmy Lawless",
+    "role": "Proofreader",
+    "department": "Proofreading",
+    "departments": [
+      "Proofreading"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Proofreader in Proofreading.",
+    "skills": {
+      "Proofreading": 4
+    },
+    "recentSkills": [
+      "Proofreading"
+    ]
+  },
+  {
+    "name": "David Cummins",
+    "role": "Proofreader",
+    "department": "Proofreading",
+    "departments": [
+      "Proofreading"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Proofreader in Proofreading.",
+    "skills": {
+      "Proofreading": 4
+    },
+    "recentSkills": [
+      "Proofreading"
+    ]
+  },
+  {
+    "name": "Mille Fletcher",
+    "role": "Proofreader",
+    "department": "Proofreading",
+    "departments": [
+      "Proofreading"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Proofreader in Proofreading.",
+    "skills": {
+      "Proofreading": 4
+    },
+    "recentSkills": [
+      "Proofreading"
+    ]
+  },
+  {
+    "name": "Stuart Lowndes",
+    "role": "Deputy Digital Studio Manager",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "After Effects": 5,
+      "Photoshop": 5,
+      "Display Banners": 5,
+      "HTML Email": 5,
+      "CSS": 4,
+      "Google Web Designer": 4,
+      "Illustrator": 4,
+      "Firefly": 4,
+      "DCO Storyteq": 4,
+      "DOOH": 4,
+      "Social Content": 4,
+      "InDesign": 3,
+      "Premier Pro": 3,
+      "XD": 3,
+      "Ziflow": 3,
+      "Figma": 3,
+      "Runway": 3,
+      "DCO Flashtalking": 3,
+      "DCO Google Studio": 3,
+      "Excel": 3,
+      "Word": 3,
+      "Character Animator": 2,
+      "Javascript": 2,
+      "Blender": 2,
+      "Adobe Audition": 1
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Photoshop": "hot",
+      "Display Banners": "warm",
+      "HTML Email": "hot",
+      "CSS": "hot",
+      "Google Web Designer": "warm",
+      "Illustrator": "warm",
+      "Firefly": "hot",
+      "DCO Storyteq": "cold",
+      "DOOH": "warm",
+      "Social Content": "hot",
+      "InDesign": "warm",
+      "Premier Pro": "warm",
+      "XD": "hot",
+      "Ziflow": "warm",
+      "Figma": "warm",
+      "Runway": "warm",
+      "DCO Flashtalking": "warm",
+      "DCO Google Studio": "cold",
+      "Excel": "warm",
+      "Word": "cold",
+      "Character Animator": "cold",
+      "Javascript": "warm",
+      "Blender": "cold",
+      "Adobe Audition": "cold"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Photoshop",
+      "Display Banners",
+      "HTML Email",
+      "CSS",
+      "Google Web Designer",
+      "Illustrator",
+      "Firefly",
+      "DOOH",
+      "Social Content",
+      "InDesign",
+      "Premier Pro",
+      "XD",
+      "Ziflow",
+      "Figma",
+      "Runway",
+      "DCO Flashtalking",
+      "Excel",
+      "Javascript"
+    ],
+    "customDefinitions": {
+      "Excel": "Software"
+    }
+  },
+  {
+    "name": "Julia Petrova",
+    "role": "Junior Digital Artworker",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "HTML Email": 4,
+      "XD": 4,
+      "Illustrator": 4,
+      "Lightroom": 4,
+      "CSS": 4,
+      "Word": 4,
+      "InDesign": 4,
+      "Facebook": 4,
+      "Firefly": 4,
+      "Brand Identity": 4,
+      "After Effects": 3,
+      "Premier Pro": 3,
+      "Google Web Designer": 3,
+      "Corebook": 3,
+      "Figma": 3,
+      "DCO Google Studio": 3,
+      "Social Content": 3,
+      "Display Banners": 3,
+      "Javascript": 2,
+      "Adobe Bridge": 2,
+      "Runway": 2,
+      "DCO Flashtalking": 2,
+      "Adobe Dimension": 1,
+      "Adobe Audition": 1,
+      "Capture One": 1,
+      "Character Animator": 1,
+      "Ziflow": 1,
+      "Blender": 1
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "HTML Email": "hot",
+      "XD": "hot",
+      "Illustrator": "warm",
+      "Lightroom": "warm",
+      "CSS": "warm",
+      "Word": "hot",
+      "InDesign": "warm",
+      "Facebook": "hot",
+      "Firefly": "hot",
+      "Brand Identity": "hot",
+      "After Effects": "hot",
+      "Premier Pro": "cold",
+      "Google Web Designer": "warm",
+      "Corebook": "cold",
+      "Figma": "cold",
+      "DCO Google Studio": "warm",
+      "Social Content": "warm",
+      "Display Banners": "hot",
+      "Javascript": "warm",
+      "Adobe Bridge": "cold",
+      "Runway": "cold",
+      "DCO Flashtalking": "cold",
+      "Adobe Dimension": "cold",
+      "Adobe Audition": "cold",
+      "Capture One": "cold",
+      "Character Animator": "cold",
+      "Ziflow": "cold",
+      "Blender": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "HTML Email",
+      "XD",
+      "Illustrator",
+      "Lightroom",
+      "CSS",
+      "Word",
+      "InDesign",
+      "Facebook",
+      "Firefly",
+      "Brand Identity",
+      "After Effects",
+      "Google Web Designer",
+      "DCO Google Studio",
+      "Social Content",
+      "Display Banners",
+      "Javascript"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Josh George",
+    "role": "Senior Digital Content Operator",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Design",
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Vast experience with a number of different softwares built up from almost 10 years at the agency",
+    "avatar": "",
+    "skills": {
+      "After Effects": 4,
+      "Google Web Designer": 4,
+      "Word": 4,
+      "Display Banners": 4,
+      "Illustrator": 3,
+      "InDesign": 3,
+      "XD": 4,
+      "Facebook": 4,
+      "Runway": 4,
+      "HTML Email": 4,
+      "Social Content": 4,
+      "Photoshop": 3,
+      "Premier Pro": 3,
+      "Figma": 3,
+      "Firefly": 3
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Google Web Designer": "hot",
+      "Word": "hot",
+      "Display Banners": "hot",
+      "Illustrator": "warm",
+      "InDesign": "hot",
+      "XD": "hot",
+      "Facebook": "warm",
+      "Runway": "hot",
+      "HTML Email": "hot",
+      "Social Content": "hot",
+      "Photoshop": "hot",
+      "Premier Pro": "hot",
+      "Figma": "warm",
+      "Firefly": "hot"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Google Web Designer",
+      "Word",
+      "Display Banners",
+      "Illustrator",
+      "InDesign",
+      "XD",
+      "Facebook",
+      "Runway",
+      "HTML Email",
+      "Social Content",
+      "Photoshop",
+      "Premier Pro",
+      "Figma",
+      "Firefly"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Joe Johnston",
+    "role": "Digital Operator",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Digital Operator with experience supporting creative and production teams through efficient content handling, editing, and delivery. Strong technical skills across the Adobe Creative Suite, with a consistent focus on accuracy, quality, and workflow improvement.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "After Effects": 5,
+      "CSS": 3,
+      "Google Web Designer": 5,
+      "Premier Pro": 4,
+      "Word": 4,
+      "XD": 5,
+      "Blender": 3,
+      "Facebook": 4,
+      "Figma": 3,
+      "Firefly": 4,
+      "DOOH": 5,
+      "Display Banners": 5,
+      "HTML Email": 4,
+      "Social Content": 5,
+      "Illustrator": 4,
+      "InDesign": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "After Effects": "hot",
+      "CSS": "warm",
+      "Google Web Designer": "warm",
+      "Premier Pro": "warm",
+      "Word": "warm",
+      "XD": "hot",
+      "Blender": "cold",
+      "Facebook": "cold",
+      "Figma": "cold",
+      "Firefly": "warm",
+      "DOOH": "warm",
+      "Display Banners": "warm",
+      "HTML Email": "hot",
+      "Social Content": "warm",
+      "Illustrator": "warm",
+      "InDesign": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "After Effects",
+      "CSS",
+      "Google Web Designer",
+      "Premier Pro",
+      "Word",
+      "XD",
+      "Firefly",
+      "DOOH",
+      "Display Banners",
+      "HTML Email",
+      "Social Content",
+      "Illustrator",
+      "InDesign"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Izzy Mack",
+    "role": "Junior Digital Artworker",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "After Effects": 4,
+      "Google Web Designer": 4,
+      "Illustrator": 3,
+      "InDesign": 3,
+      "Premier Pro": 3,
+      "XD": 4,
+      "Figma": 2,
+      "Runway": 4,
+      "DCO Flashtalking": 4,
+      "DOOH": 4,
+      "Display Banners": 4,
+      "HTML Email": 3,
+      "Social Content": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "After Effects": "hot",
+      "Google Web Designer": "hot",
+      "Illustrator": "warm",
+      "InDesign": "warm",
+      "Premier Pro": "cold",
+      "XD": "hot",
+      "Figma": "warm",
+      "Runway": "hot",
+      "DCO Flashtalking": "hot",
+      "DOOH": "hot",
+      "Display Banners": "hot",
+      "HTML Email": "warm",
+      "Social Content": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "After Effects",
+      "Google Web Designer",
+      "Illustrator",
+      "InDesign",
+      "XD",
+      "Figma",
+      "Runway",
+      "DCO Flashtalking",
+      "DOOH",
+      "Display Banners",
+      "HTML Email",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Bruno de Marchi",
+    "role": "Digital Artworker",
+    "department": "Digital Artwork",
+    "departments": [
+      "Digital Artwork"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "CSS": 4,
+      "Illustrator": 4,
+      "After Effects": 3,
+      "Google Web Designer": 3,
+      "InDesign": 3,
+      "Premier Pro": 3,
+      "Javascript": 3,
+      "Word": 3,
+      "Figma": 3,
+      "Firefly": 3,
+      "DCO Flashtalking": 3,
+      "Display Banners": 3,
+      "HTML Email": 3,
+      "Brand Identity": 3,
+      "WordPress": 3,
+      "Blender": 1
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "CSS": "warm",
+      "Illustrator": "hot",
+      "After Effects": "hot",
+      "Google Web Designer": "warm",
+      "InDesign": "cold",
+      "Premier Pro": "hot",
+      "Javascript": "cold",
+      "Word": "warm",
+      "Figma": "warm",
+      "Firefly": "warm",
+      "DCO Flashtalking": "warm",
+      "Display Banners": "warm",
+      "HTML Email": "warm",
+      "Brand Identity": "cold",
+      "WordPress": "cold",
+      "Blender": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "CSS",
+      "Illustrator",
+      "After Effects",
+      "Google Web Designer",
+      "Premier Pro",
+      "Word",
+      "Figma",
+      "Firefly",
+      "DCO Flashtalking",
+      "Display Banners",
+      "HTML Email"
+    ],
+    "customDefinitions": {
+      "WordPress": "Digital Specialism"
+    }
+  },
+  {
+    "name": "George Aytoun",
+    "role": "Head of Design",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Head of Design in Birmingham. Skilled in Branding, Scamping, 2D/3D visualisation, Typography, AI, Campaign, Photography, Grading, Creative Retouching, After Effects Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "Illustrator": 5,
+      "After Effects": 4,
+      "InDesign": 4,
+      "Firefly": 4,
+      "Photography": 4,
+      "High-end Retouching": 4,
+      "Colour Grading": 4,
+      "Brand Identity": 5,
+      "Figma": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "After Effects": "hot",
+      "InDesign": "hot",
+      "Firefly": "hot",
+      "Photography": "hot",
+      "High-end Retouching": "hot",
+      "Colour Grading": "hot",
+      "Brand Identity": "hot",
+      "Figma": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "After Effects",
+      "InDesign",
+      "Firefly",
+      "Photography",
+      "High-end Retouching",
+      "Colour Grading",
+      "Brand Identity",
+      "Figma"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Michael Greenhalgh",
+    "role": "Deputy Design Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Digital Design"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Deputy Design Director in Birmingham. Skilled in Branding, Scamping, 3D CGI Design, AI, Creative Retouching, Social and After Effects Animation, Digital UX, CRM.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "Illustrator": 4,
+      "After Effects": 4,
+      "Blender": 4,
+      "Firefly": 4,
+      "High-end Retouching": 4,
+      "Brand Identity": 4,
+      "Social Content": 4,
+      "Figma": 4,
+      "HTML Email": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "After Effects": "hot",
+      "Blender": "hot",
+      "Firefly": "hot",
+      "High-end Retouching": "hot",
+      "Brand Identity": "hot",
+      "Social Content": "hot",
+      "Figma": "hot",
+      "HTML Email": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "After Effects",
+      "Blender",
+      "Firefly",
+      "High-end Retouching",
+      "Brand Identity",
+      "Social Content",
+      "Figma",
+      "HTML Email"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Sam Taylor",
+    "role": "Senior Conceptual Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Senior Conceptual Designer in Birmingham. Skilled in Illustration, Branding, Scamping, AI, Creative Retouching, Social, basic After Effects Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 5,
+      "After Effects": 3,
+      "Firefly": 4,
+      "High-end Retouching": 4,
+      "Brand Identity": 4,
+      "Social Content": 3,
+      "InDesign": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "After Effects": "warm",
+      "Firefly": "hot",
+      "High-end Retouching": "hot",
+      "Brand Identity": "hot",
+      "Social Content": "warm",
+      "InDesign": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "After Effects",
+      "Firefly",
+      "High-end Retouching",
+      "Brand Identity",
+      "Social Content",
+      "InDesign"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Ben Brown",
+    "role": "Senior Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Senior Designer in Birmingham. Skilled in Branding, Packaging, Typography, AI, After Effects Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4,
+      "After Effects": 4,
+      "Firefly": 4,
+      "Brand Identity": 4,
+      "Packaging": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "After Effects": "hot",
+      "Firefly": "hot",
+      "Brand Identity": "hot",
+      "Packaging": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "After Effects",
+      "Firefly",
+      "Brand Identity",
+      "Packaging"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Carl Khombe",
+    "role": "Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Designer in Birmingham. Skilled in Design (Execution), Social, After Effects Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 3,
+      "After Effects": 3,
+      "Social Content": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "After Effects": "hot",
+      "Social Content": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "After Effects",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Sandeep Singh",
+    "role": "Senior Motion and CGI Designer",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Senior Motion and CGI Designer in Birmingham. Skilled in 3D CGI (Blender and C4D), After Effects Animation, AI.",
+    "avatar": "",
+    "skills": {
+      "After Effects": 5,
+      "Blender": 5,
+      "Firefly": 4,
+      "Photoshop": 3,
+      "Premier Pro": 3,
+      "Cinema 4D": 5
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Blender": "hot",
+      "Firefly": "hot",
+      "Photoshop": "warm",
+      "Premier Pro": "warm",
+      "Cinema 4D": "hot"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Blender",
+      "Firefly",
+      "Photoshop",
+      "Premier Pro",
+      "Cinema 4D"
+    ],
+    "customDefinitions": {
+      "Cinema 4D": "Software"
+    }
+  },
+  {
+    "name": "Ntando Moya",
+    "role": "Junior Motion and CGI Designer",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "junior",
+    "profileSummary": "Junior Motion and CGI Designer in Birmingham. Skilled in After Effects Animation, 3D CGI (Blender).",
+    "avatar": "",
+    "skills": {
+      "After Effects": 3,
+      "Blender": 3,
+      "Photoshop": 2,
+      "Premier Pro": 2
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Blender": "hot",
+      "Photoshop": "warm",
+      "Premier Pro": "warm"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Blender",
+      "Photoshop",
+      "Premier Pro"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Simon Buschenfeld",
+    "role": "Social Creative Director",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Social Creative Director in Birmingham.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 5,
+      "Facebook": 4,
+      "Photoshop": 3,
+      "Figma": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot",
+      "Photoshop": "warm",
+      "Figma": "warm"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook",
+      "Photoshop",
+      "Figma"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Suzi Crawford",
+    "role": "Social Creative",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Social Creative in Birmingham.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 4,
+      "Facebook": 3,
+      "Photoshop": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot",
+      "Photoshop": "warm"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook",
+      "Photoshop"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Scott McKend",
+    "role": "Social Creative",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Social Creative in Birmingham.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 4,
+      "Facebook": 3,
+      "Photoshop": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot",
+      "Photoshop": "warm"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook",
+      "Photoshop"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Christina Brunnock",
+    "role": "Social Designer",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Social Designer in Birmingham. Skilled in Social Design, After Effects, AI.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 4,
+      "After Effects": 3,
+      "Firefly": 3,
+      "Photoshop": 3,
+      "Facebook": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "After Effects": "hot",
+      "Firefly": "hot",
+      "Photoshop": "hot",
+      "Facebook": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "After Effects",
+      "Firefly",
+      "Photoshop",
+      "Facebook"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Nick Collingwood",
+    "role": "Social Designer",
+    "department": "Social",
+    "departments": [
+      "Social",
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Social Designer in Birmingham. Skilled in Social Design, After Effects, 2D/3D Compositing, 2D/3D Animation, AI.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 4,
+      "After Effects": 4,
+      "Firefly": 3,
+      "Photoshop": 3,
+      "Blender": 3,
+      "Facebook": 3,
+      "Image Compositing": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "After Effects": "hot",
+      "Firefly": "hot",
+      "Photoshop": "hot",
+      "Blender": "hot",
+      "Facebook": "hot",
+      "Image Compositing": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "After Effects",
+      "Firefly",
+      "Photoshop",
+      "Blender",
+      "Facebook",
+      "Image Compositing"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Katie Coulter",
+    "role": "Junior Social Designer",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Birmingham",
+    "level": "junior",
+    "profileSummary": "Junior Social Designer in Birmingham. Skilled in Social Design, After Effects, AI.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 3,
+      "After Effects": 2,
+      "Firefly": 2,
+      "Photoshop": 2,
+      "Facebook": 2
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "After Effects": "hot",
+      "Firefly": "hot",
+      "Photoshop": "hot",
+      "Facebook": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "After Effects",
+      "Firefly",
+      "Photoshop",
+      "Facebook"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Steve Cumberland",
+    "role": "Head of Post Production",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Head of Post Production in Birmingham. Skilled in Broadcast, Motion, AI, Film, Editing, Colour Grading, Sound Design + VO.",
+    "avatar": "",
+    "skills": {
+      "Premier Pro": 5,
+      "After Effects": 5,
+      "Colour Grading": 5,
+      "Adobe Audition": 4,
+      "Firefly": 4,
+      "Photoshop": 3
+    },
+    "skillRecency": {
+      "Premier Pro": "hot",
+      "After Effects": "hot",
+      "Colour Grading": "hot",
+      "Adobe Audition": "hot",
+      "Firefly": "hot",
+      "Photoshop": "warm"
+    },
+    "recentSkills": [
+      "Premier Pro",
+      "After Effects",
+      "Colour Grading",
+      "Adobe Audition",
+      "Firefly",
+      "Photoshop"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Luke Farmer",
+    "role": "Senior Motion Content Producer",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Senior Motion Content Producer in Birmingham. Skilled in Content Motion Capture, Shoot Filming, Editing, 2D/3D Compositing, 2D/3D Animation, 3D CGI (Blender and C4D), AI, Film.",
+    "avatar": "",
+    "skills": {
+      "After Effects": 5,
+      "Premier Pro": 4,
+      "Blender": 4,
+      "Firefly": 4,
+      "Image Compositing": 4,
+      "Photography": 4,
+      "Cinema 4D": 4,
+      "Photoshop": 3
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Premier Pro": "hot",
+      "Blender": "hot",
+      "Firefly": "hot",
+      "Image Compositing": "hot",
+      "Photography": "hot",
+      "Cinema 4D": "hot",
+      "Photoshop": "warm"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro",
+      "Blender",
+      "Firefly",
+      "Image Compositing",
+      "Photography",
+      "Cinema 4D",
+      "Photoshop"
+    ],
+    "customDefinitions": {
+      "Cinema 4D": "Software"
+    }
+  },
+  {
+    "name": "Keelan Boyt",
+    "role": "Motion Content Producer",
+    "department": "Motion",
+    "departments": [
+      "Motion"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Motion Content Producer in Birmingham. Skilled in Content Motion Capture, Shoot Filming, Editing, 2D Compositing, 2D Animation, AI, Film.",
+    "avatar": "",
+    "skills": {
+      "After Effects": 4,
+      "Premier Pro": 4,
+      "Firefly": 3,
+      "Image Compositing": 3,
+      "Photography": 3,
+      "Photoshop": 3
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Premier Pro": "hot",
+      "Firefly": "hot",
+      "Image Compositing": "hot",
+      "Photography": "hot",
+      "Photoshop": "warm"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Premier Pro",
+      "Firefly",
+      "Image Compositing",
+      "Photography",
+      "Photoshop"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Elaine Parker",
+    "role": "Head of Studio",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Head of Studio in Birmingham. Collective studio skillset includes artwork, digital, animation, web, Adapt+, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 5
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Annlouise Shepherd",
+    "role": "Team Leader",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Team Leader in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 4
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Louise Doherty",
+    "role": "Team Leader",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Team Leader in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 4
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Steven Partridge",
+    "role": "Team Leader",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Team Leader in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 4
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Simon Edwards",
+    "role": "Team Leader",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "senior",
+    "profileSummary": "Team Leader in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 4
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Paul Reynolds",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "David Harris",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Glen Cottrell",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Michelle Pinchbeck",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Pauline Lam",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Andrew Smith",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Martin Honey",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Martyn Shelley",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Neil Clifft",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Birmingham",
+    "level": "mid",
+    "profileSummary": "Artworker in Birmingham Studio. Collective skillset includes artwork, digital, animation, web, retouching, grading, presentations, CGI, illustration, and CRM.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 3,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Tom Smith",
+    "role": "Head of Design",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "Head of Design in Leeds. Skilled in Branding, Scamping, 2D/3D visualisation, Typography, AI, Campaign, Photography, Grading, Creative Retouching, After Effects Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "Illustrator": 5,
+      "After Effects": 4,
+      "InDesign": 4,
+      "Firefly": 4,
+      "Photography": 4,
+      "High-end Retouching": 4,
+      "Colour Grading": 4,
+      "Brand Identity": 5,
+      "Figma": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "After Effects": "hot",
+      "InDesign": "hot",
+      "Firefly": "hot",
+      "Photography": "hot",
+      "High-end Retouching": "hot",
+      "Colour Grading": "hot",
+      "Brand Identity": "hot",
+      "Figma": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "After Effects",
+      "InDesign",
+      "Firefly",
+      "Photography",
+      "High-end Retouching",
+      "Colour Grading",
+      "Brand Identity",
+      "Figma"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Georgia Holden",
+    "role": "Midweight Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Leeds",
+    "level": "mid",
+    "profileSummary": "Midweight Designer in Leeds. Skilled in Branding, Illustration, Design execution, Static Social.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 4,
+      "InDesign": 3,
+      "Brand Identity": 3,
+      "Social Content": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Brand Identity": "hot",
+      "Social Content": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Brand Identity",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Hana Keirnan",
+    "role": "Head of Social",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "Head of Social in Leeds.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 5,
+      "Facebook": 4
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Holly Harper",
+    "role": "Senior Social Account Manager",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "Senior Social Account Manager in Leeds. Skilled in Social Ideation, Content Creation, Account Management, Event Planning.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 4,
+      "Facebook": 4
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Katie Bibby",
+    "role": "Social & PR Account Manager",
+    "department": "Social",
+    "departments": [
+      "Social"
+    ],
+    "location": "Leeds",
+    "level": "mid",
+    "profileSummary": "Social & PR Account Manager in Leeds. Skilled in PR, Content Creation, Account Management, Event Planning.",
+    "avatar": "",
+    "skills": {
+      "Social Content": 3,
+      "Facebook": 3
+    },
+    "skillRecency": {
+      "Social Content": "hot",
+      "Facebook": "hot"
+    },
+    "recentSkills": [
+      "Social Content",
+      "Facebook"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Emma Quirk",
+    "role": "Senior Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "Senior Artworker in Leeds. Skilled in Print, PPT, Retouch, Roll out, Social, basic motion.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Photoshop": 4,
+      "Illustrator": 3,
+      "Artworking": 4,
+      "High-end Retouching": 3,
+      "Social Content": 3,
+      "After Effects": 2
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Artworking": "hot",
+      "High-end Retouching": "hot",
+      "Social Content": "warm",
+      "After Effects": "warm"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Photoshop",
+      "Illustrator",
+      "Artworking",
+      "High-end Retouching",
+      "Social Content",
+      "After Effects"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Zane Radcliffe",
+    "role": "Executive Creative Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Executive Creative Director in Bristol. Skilled in Creative ideation, Creative Copywriting, Conceptual Design.",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 5,
+      "Brand Identity": 4
+    },
+    "skillRecency": {
+      "Copywriting": "hot",
+      "Brand Identity": "hot"
+    },
+    "recentSkills": [
+      "Copywriting",
+      "Brand Identity"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Jack Ashdown",
+    "role": "Creative Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Creative Director in Bristol. Skilled in Creative ideation, Art Direction, Conceptual Design.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "Brand Identity": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Brand Identity": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "Brand Identity"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Jake Pole",
+    "role": "Deputy Creative Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Deputy Creative Director in Bristol. Skilled in Creative ideation, Art Direction, Conceptual Design, Runway.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "Runway": 4,
+      "Brand Identity": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Runway": "hot",
+      "Brand Identity": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "Runway",
+      "Brand Identity"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Amy-Rose Lynch",
+    "role": "Senior Copywriter",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Copywriter in Bristol. Skilled in Creative ideation, Copywriting.",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 4,
+      "Word": 4
+    },
+    "skillRecency": {
+      "Copywriting": "hot",
+      "Word": "hot"
+    },
+    "recentSkills": [
+      "Copywriting",
+      "Word"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Emily Kerr",
+    "role": "Senior Copywriter",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Copywriter in Bristol. Skilled in Creative ideation, Creative & Long Form Copy.",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 4,
+      "Word": 4
+    },
+    "skillRecency": {
+      "Copywriting": "hot",
+      "Word": "hot"
+    },
+    "recentSkills": [
+      "Copywriting",
+      "Word"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Emily Cuthbert",
+    "role": "Creative",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Social"
+    ],
+    "location": "Bristol",
+    "level": "mid",
+    "profileSummary": "Creative in Bristol. Skilled in Creative ideation, Art Direction, Scamping, Copywriting, Social Creative.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "Copywriting": 3,
+      "Social Content": 3
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Copywriting": "hot",
+      "Social Content": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "Copywriting",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Heidi Dixon",
+    "role": "Creative",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Social"
+    ],
+    "location": "Bristol",
+    "level": "mid",
+    "profileSummary": "Creative in Bristol. Skilled in Creative ideation, Copywriting, Social Creative.",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 3,
+      "Social Content": 3
+    },
+    "skillRecency": {
+      "Copywriting": "hot",
+      "Social Content": "hot"
+    },
+    "recentSkills": [
+      "Copywriting",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Jess Hardy",
+    "role": "Copywriter",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "mid",
+    "profileSummary": "Copywriter in Bristol. Skilled in Creative & Long Form Copy.",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 3,
+      "Word": 3
+    },
+    "skillRecency": {
+      "Copywriting": "hot",
+      "Word": "hot"
+    },
+    "recentSkills": [
+      "Copywriting",
+      "Word"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Bryan Miles",
+    "role": "Design Director",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Design Director in Bristol. Skilled in Conceptual Design, Static Design, Branding.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "Illustrator": 5,
+      "InDesign": 4,
+      "Brand Identity": 5
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Brand Identity": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Brand Identity"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Grace Kiplin",
+    "role": "Senior Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Motion"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Designer in Bristol. Skilled in Motion Design, Editing, Animation, Design - After Effects.",
+    "avatar": "",
+    "skills": {
+      "After Effects": 4,
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "Premier Pro": 3,
+      "InDesign": 3
+    },
+    "skillRecency": {
+      "After Effects": "hot",
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Premier Pro": "hot",
+      "InDesign": "warm"
+    },
+    "recentSkills": [
+      "After Effects",
+      "Photoshop",
+      "Illustrator",
+      "Premier Pro",
+      "InDesign"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Nick McCarthy",
+    "role": "Senior Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Designer in Bristol. Skilled in Conceptual Design, Static Design, Branding.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4,
+      "Brand Identity": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Brand Identity": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Brand Identity"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Will Skane Davis",
+    "role": "Senior Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Motion",
+      "Photography"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Designer in Bristol. Skilled in Motion Design, Editing, Animation, Design - Premier / Runway / Photography & Filming.",
+    "avatar": "",
+    "skills": {
+      "Premier Pro": 4,
+      "After Effects": 4,
+      "Runway": 4,
+      "Photography": 4,
+      "Photoshop": 4,
+      "Illustrator": 3
+    },
+    "skillRecency": {
+      "Premier Pro": "hot",
+      "After Effects": "hot",
+      "Runway": "hot",
+      "Photography": "hot",
+      "Photoshop": "hot",
+      "Illustrator": "warm"
+    },
+    "recentSkills": [
+      "Premier Pro",
+      "After Effects",
+      "Runway",
+      "Photography",
+      "Photoshop",
+      "Illustrator"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Lauren Armstead",
+    "role": "Midweight Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Bristol",
+    "level": "mid",
+    "profileSummary": "Midweight Designer in Bristol. Skilled in Static Design, Branding, Basic Social Animation.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 3,
+      "Brand Identity": 3,
+      "After Effects": 2,
+      "Social Content": 2
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Brand Identity": "hot",
+      "After Effects": "warm",
+      "Social Content": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Brand Identity",
+      "After Effects",
+      "Social Content"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Mark Leverton",
+    "role": "Head of Artwork",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Head of Artwork in Bristol. Skilled in Print & Digital Artworking, HTML Banner Builds.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Photoshop": 4,
+      "Artworking": 5,
+      "Display Banners": 4,
+      "Google Web Designer": 4,
+      "HTML Email": 3
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot",
+      "Display Banners": "hot",
+      "Google Web Designer": "hot",
+      "HTML Email": "warm"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking",
+      "Display Banners",
+      "Google Web Designer",
+      "HTML Email"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Sarah Franklin",
+    "role": "Senior Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Digital Artwork"
+    ],
+    "location": "Bristol",
+    "level": "senior",
+    "profileSummary": "Senior Artworker in Bristol. Skilled in Print & Digital Artworking, Basic HTML Banner Builds.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 4,
+      "Illustrator": 3,
+      "Photoshop": 3,
+      "Artworking": 4,
+      "Display Banners": 3,
+      "Google Web Designer": 2,
+      "HTML Email": 2
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot",
+      "Display Banners": "warm",
+      "Google Web Designer": "warm",
+      "HTML Email": "warm"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Illustrator",
+      "Photoshop",
+      "Artworking",
+      "Display Banners",
+      "Google Web Designer",
+      "HTML Email"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Amy Moran",
+    "role": "Retoucher",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "junior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "3D Studio max": 5,
+      "Photoshop": 4,
+      "High-end Retouching": 4,
+      "Image Compositing": 4,
+      "Photography": 4,
+      "Generative AI": 4,
+      "Lightroom": 3,
+      "Capture One": 3,
+      "Firefly": 3,
+      "InDesign": 2,
+      "Premier Pro": 2,
+      "Illustrator": 1
+    },
+    "skillRecency": {
+      "3D Studio max": "hot",
+      "Photoshop": "hot",
+      "High-end Retouching": "hot",
+      "Image Compositing": "hot",
+      "Photography": "cold",
+      "Generative AI": "hot",
+      "Lightroom": "warm",
+      "Capture One": "cold",
+      "Firefly": "warm",
+      "InDesign": "warm",
+      "Premier Pro": "cold",
+      "Illustrator": "warm"
+    },
+    "recentSkills": [
+      "3D Studio max",
+      "Photoshop",
+      "High-end Retouching",
+      "Image Compositing",
+      "Generative AI",
+      "Lightroom",
+      "Firefly",
+      "InDesign",
+      "Illustrator"
+    ],
+    "customDefinitions": {
+      "Generative AI": "Print Specialism"
+    }
+  },
+  {
+    "name": "Jimmy Lynch",
+    "role": "Retoucher",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "3D Studio max": 3,
+      "High-end Retouching": 5,
+      "Image Compositing": 5,
+      "Storyboarding": 5,
+      "Blender": 4,
+      "Premier Pro": 4,
+      "Colour Grading": 4,
+      "Sketchup 3D": 4,
+      "Illustrator": 3,
+      "After Effects": 3,
+      "Character Animator": 2,
+      "Substance Painter": 2,
+      "InDesign": 2,
+      "Capture One": 2,
+      "Unreal Engine": 2
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "3D Studio max": "warm",
+      "High-end Retouching": "hot",
+      "Image Compositing": "hot",
+      "Storyboarding": "hot",
+      "Blender": "hot",
+      "Premier Pro": "warm",
+      "Colour Grading": "hot",
+      "Sketchup 3D": "warm",
+      "Illustrator": "warm",
+      "After Effects": "cold",
+      "Character Animator": "cold",
+      "Substance Painter": "warm",
+      "InDesign": "warm",
+      "Capture One": "cold",
+      "Unreal Engine": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "3D Studio max",
+      "High-end Retouching",
+      "Image Compositing",
+      "Storyboarding",
+      "Blender",
+      "Premier Pro",
+      "Colour Grading",
+      "Sketchup 3D",
+      "Illustrator",
+      "3D Studio max",
+      "Substance Painter",
+      "InDesign"
+    ],
+    "customDefinitions": {
+      "3D Studio max": "Software",
+      "Substance Painter": "Software",
+      "Storyboarding": "Software",
+      "Unreal Engine": "Software",
+      "Sketchup 3D": "Software"
+    }
+  },
+  {
+    "name": "Gary John Hardwick",
+    "role": "Senior Retoucher",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "High-end Retouching": 5,
+      "3D Studio max": 5,
+      "Colour Grading": 5,
+      "Image Compositing": 5,
+      "Photography": 3,
+      "Firefly": 2,
+      "InDesign": 2,
+      "Illustrator": 2,
+      "Adobe Bridge": 2,
+      "Capture One": 2,
+      "Lightroom": 2
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "High-end Retouching": "hot",
+      "3D Studio max": "hot",
+      "Colour Grading": "hot",
+      "Image Compositing": "hot",
+      "Photography": "cold",
+      "Firefly": "warm",
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Adobe Bridge": "hot",
+      "Capture One": "hot",
+      "Lightroom": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "High-end Retouching",
+      "3D Studio max",
+      "Colour Grading",
+      "Image Compositing",
+      "Firefly",
+      "InDesign",
+      "Illustrator",
+      "Adobe Bridge",
+      "Capture One",
+      "Lightroom"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Joe Lewis",
+    "role": "Retoucher",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "High-end Retouching": 5,
+      "Colour Matching": 5,
+      "Image Compositing": 5,
+      "3D Studio max": 5,
+      "Colour Grading": 5,
+      "Product Mock Up": 5,
+      "Firefly": 4,
+      "Generative AI": 4,
+      "Illustrator": 2,
+      "InDesign": 2,
+      "Adobe Bridge": 2,
+      "Lightroom": 2
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "High-end Retouching": "hot",
+      "Colour Matching": "hot",
+      "Image Compositing": "hot",
+      "3D Studio max": "hot",
+      "Colour Grading": "hot",
+      "Product Mock Up": "hot",
+      "Firefly": "hot",
+      "Generative AI": "hot",
+      "Illustrator": "warm",
+      "InDesign": "warm",
+      "Adobe Bridge": "cold",
+      "Lightroom": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "High-end Retouching",
+      "Colour Matching",
+      "Image Compositing",
+      "3D Studio max",
+      "Colour Grading",
+      "Product Mock Up",
+      "Firefly",
+      "Generative AI",
+      "Illustrator",
+      "InDesign"
+    ],
+    "customDefinitions": {
+      "Colour Matching": "Print Specialism",
+      "Generative AI": "Print Specialism",
+      "Product Mock Up": "Print Specialism"
+    }
+  },
+  {
+    "name": "James Eden",
+    "role": "Deputy Retouching Manager",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Deputy Retouching Manager with experience managing and supporting retouching teams delivering high-end imagery. Expert in Adobe Photoshop with advanced skills in colour matching, compositing, and image refinement. Proven ability to create and amend premium visual content using both traditional retouching techniques and AI-driven tools, ensuring consistently high creative and technical standards across projects.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "Firefly": 5,
+      "Colour Grading": 5,
+      "Image Compositing": 5,
+      "Product MockUp": 5,
+      "High-end Retouching": 5,
+      "3D Studio max": 5,
+      "Capture One": 3,
+      "InDesign": 2,
+      "Illustrator": 2
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Firefly": "hot",
+      "Colour Grading": "hot",
+      "Image Compositing": "hot",
+      "Product MockUp": "hot",
+      "High-end Retouching": "hot",
+      "3D Studio max": "hot",
+      "Capture One": "warm",
+      "InDesign": "warm",
+      "Illustrator": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Firefly",
+      "Colour Grading",
+      "Image Compositing",
+      "Product MockUp",
+      "High-end Retouching",
+      "3D Studio max",
+      "Capture One",
+      "InDesign",
+      "Illustrator"
+    ],
+    "customDefinitions": {
+      "Product MockUp": "Digital Specialism"
+    }
+  },
+  {
+    "name": "Carl Oates",
+    "role": "Retoucher",
+    "department": "Creative Retouch",
+    "departments": [
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Image Compositing": 5,
+      "3D Studio max": 5,
+      "Photoshop": 4,
+      "High-end Retouching": 4,
+      "Colour Grading": 4,
+      "Generative AI": 4,
+      "Illustrator": 2,
+      "InDesign": 2,
+      "Firefly": 2
+    },
+    "skillRecency": {
+      "Image Compositing": "hot",
+      "3D Studio max": "hot",
+      "Photoshop": "hot",
+      "High-end Retouching": "hot",
+      "Colour Grading": "hot",
+      "Generative AI": "hot",
+      "Illustrator": "warm",
+      "InDesign": "warm",
+      "Firefly": "warm"
+    },
+    "recentSkills": [
+      "Image Compositing",
+      "3D Studio max",
+      "Photoshop",
+      "High-end Retouching",
+      "Colour Grading",
+      "Generative AI",
+      "Illustrator",
+      "InDesign",
+      "Firefly"
+    ],
+    "customDefinitions": {
+      "Generative AI": "Print Specialism"
+    }
+  },
+  {
+    "name": "Ellen Watson",
+    "role": "Copywriter",
+    "department": "Digital Design",
+    "departments": [
+      "Creative Design",
+      "Print Design",
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Leaflet Copy": 5,
+      "Word": 4,
+      "Jasper AI": 4,
+      "Web SEO copy": 4,
+      "Email Campaign Copy": 4,
+      "DM Copy": 4,
+      "Brochure Copy": 4,
+      "OOH Advertising Copy": 4,
+      "Semrush (SEO)": 3,
+      "Press Copy": 3
+    },
+    "skillRecency": {
+      "Leaflet Copy": "hot",
+      "Word": "hot",
+      "Jasper AI": "warm",
+      "Web SEO copy": "warm",
+      "Email Campaign Copy": "hot",
+      "DM Copy": "hot",
+      "Brochure Copy": "hot",
+      "OOH Advertising Copy": "hot",
+      "Semrush (SEO)": "cold",
+      "Press Copy": "cold"
+    },
+    "recentSkills": [
+      "Leaflet Copy",
+      "Word",
+      "Jasper AI",
+      "Web SEO copy",
+      "Email Campaign Copy",
+      "DM Copy",
+      "Brochure Copy",
+      "OOH Advertising Copy"
+    ]
+  },
+  {
+    "name": "Jen Lamb",
+    "role": "Design Lead",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "InDesign": 5,
+      "Illustrator": 3,
+      "Firefly": 2,
+      "Press & Editorial": 4,
+      "Packaging": 4,
+      "Retail & POS": 4,
+      "Out of Home (OOH)": 4,
+      "Brand Identity": 4,
+      "Direct Mail": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "InDesign": "hot",
+      "Illustrator": "warm",
+      "Firefly": "warm",
+      "Press & Editorial": "warm",
+      "Packaging": "cold",
+      "Retail & POS": "warm",
+      "Out of Home (OOH)": "cold",
+      "Brand Identity": "cold",
+      "Direct Mail": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Illustrator",
+      "Firefly",
+      "Press & Editorial",
+      "Retail & POS"
+    ],
+    "customDefinitions": {}
+  },
+  {
+    "name": "Shelley Daniels",
+    "role": "Senior Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "I am confident and skilled in creating a wide range of printed media, from booklets and brand guidelines to POS, OOO and creating logo designs and brand identity. I can design vehicle livery and exhibition stands. I have designed landing pages for web, can create ideas for social media ads and email templates.\n\n \n\nI enjoy creating moodboards particularly for food and can see the project through from start to finish; initial moodboard (choosing colour palette, props, styling) to page layout and art direction of the photography. I love brochure design, particularly working in an editorial style.\n\n I enjoy working up concepts for Point of Sale in retail stores and like to explore new ways of elevating in store communication.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "InDesign": 5,
+      "Illustrator": 4,
+      "Brand Identity": 5,
+      "Out of Home (OOH)": 5,
+      "Direct Mail": 4,
+      "Packaging": 4,
+      "Art Direction of photography": 5,
+      "Moodboards": 5,
+      "Brochure design": 5
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "InDesign": "hot",
+      "Illustrator": "warm",
+      "Brand Identity": "warm",
+      "Out of Home (OOH)": "hot",
+      "Direct Mail": "warm",
+      "Packaging": "warm",
+      "Art Direction of photography": "hot",
+      "Moodboards": "hot",
+      "Brochure design": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Illustrator",
+      "Brand Identity",
+      "Out of Home (OOH)",
+      "Direct Mail",
+      "Packaging",
+      "Art Direction of photography",
+      "Moodboards",
+      "Brochure design"
+    ],
+    "customDefinitions": {
+      "Art Direction of photography": "Print Specialism",
+      "Moodboards": "Print Specialism",
+      "Brochure design": "Print Specialism"
+    }
+  },
+  {
+    "name": "Alistair Lorimer",
+    "role": "Creative Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Print Design",
+      "Print Artwork",
+      "Creative Retouch",
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Predominantly print based designer with strong knowledge, enjoyment and experience in photography art direction.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 5,
+      "Photography": 5,
+      "Firefly": 4,
+      "Artworking": 4,
+      "Brand Identity": 4,
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "Figma": 2
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Photography": "hot",
+      "Firefly": "hot",
+      "Artworking": "hot",
+      "Brand Identity": "warm",
+      "Photoshop": "hot",
+      "Illustrator": "warm",
+      "Figma": "warm"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Photography",
+      "Firefly",
+      "Artworking",
+      "Brand Identity",
+      "Photoshop",
+      "Illustrator",
+      "Figma"
+    ]
+  },
+  {
+    "name": "Francine Conway",
+    "role": "Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4,
+      "Press & Editorial": 4,
+      "Word": 4,
+      "Artworking": 4,
+      "Retail & POS": 4,
+      "Direct Mail": 4,
+      "Out of Home (OOH)": 4,
+      "After Effects": 1
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Press & Editorial": "hot",
+      "Word": "hot",
+      "Artworking": "cold",
+      "Retail & POS": "hot",
+      "Direct Mail": "warm",
+      "Out of Home (OOH)": "warm",
+      "After Effects": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Press & Editorial",
+      "Word",
+      "Retail & POS",
+      "Direct Mail",
+      "Out of Home (OOH)"
+    ]
+  },
+  {
+    "name": "Jayne Jones",
+    "role": "Design Lead",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Design and Art Direction, particularly in food. From researching/creating content ideas, through to mood boards, design and art direction, across all printed media. \nI love crafting pieces as I am a bit of an old school typographer, where line endings, kerning, widows etc really bug me.\nPreviously life before Aldi, was more fashion based, at McCann and other agencies, starting with my first job working as a Graphic Designer for the Laura Ashley team.",
+    "avatar": "",
+    "skills": {
+      "Illustrator": 4,
+      "InDesign": 4,
+      "Brand Identity": 4,
+      "Press & Editorial": 4,
+      "Retail & POS": 4,
+      "Photoshop": 3,
+      "Facebook": 3,
+      "Firefly": 3,
+      "Out of Home (OOH)": 3,
+      "Packaging": 3,
+      "Artworking": 3,
+      "Word": 2
+    },
+    "skillRecency": {
+      "Illustrator": "warm",
+      "InDesign": "hot",
+      "Brand Identity": "warm",
+      "Press & Editorial": "hot",
+      "Retail & POS": "hot",
+      "Photoshop": "warm",
+      "Facebook": "warm",
+      "Firefly": "warm",
+      "Out of Home (OOH)": "warm",
+      "Packaging": "cold",
+      "Artworking": "warm",
+      "Word": "cold"
+    },
+    "recentSkills": [
+      "Illustrator",
+      "InDesign",
+      "Brand Identity",
+      "Press & Editorial",
+      "Retail & POS",
+      "Photoshop",
+      "Facebook",
+      "Firefly",
+      "Out of Home (OOH)",
+      "Artworking"
+    ]
+  },
+  {
+    "name": "Adele Booth",
+    "role": "Creative Lead (Copywriter)",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 2,
+      "InDesign": 2,
+      "Copywriting": 5
+    },
+    "skillRecency": {
+      "Photoshop": "warm",
+      "InDesign": "warm",
+      "Copywriting": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Copywriting"
+    ]
+  },
+  {
+    "name": "Shorna Anischenko",
+    "role": "Copywriter",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Leeds",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 4
+    },
+    "skillRecency": {
+      "Copywriting": "hot"
+    },
+    "recentSkills": [
+      "Copywriting"
+    ]
+  },
+  {
+    "name": "Alison McGann",
+    "role": "Copywriter",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design"
+    ],
+    "location": "Leeds",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Copywriting": 5
+    },
+    "skillRecency": {
+      "Copywriting": "hot"
+    },
+    "recentSkills": [
+      "Copywriting"
+    ]
+  },
+  {
+    "name": "Kevin Burrows",
+    "role": "Design Group Head",
+    "department": "Digital Design",
+    "departments": [
+      "Creative Design",
+      "Digital Design",
+      "Digital Artwork",
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "XD": 5,
+      "Display Banners": 5,
+      "HTML Email": 5,
+      "Illustrator": 4,
+      "InDesign": 4,
+      "Figma": 4,
+      "Social Content": 4,
+      "Artworking": 4,
+      "Brand Identity": 4,
+      "3D Studio max": 4,
+      "Image Compositing": 4,
+      "High-end Retouching": 4,
+      "Word": 3,
+      "Facebook": 3,
+      "Firefly": 3,
+      "DCO Flashtalking": 3,
+      "DCO Google Studio": 3,
+      "DOOH": 3,
+      "Photography": 3,
+      "Google Web Designer": 1,
+      "Runway": 1
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "XD": "hot",
+      "Display Banners": "hot",
+      "HTML Email": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Figma": "hot",
+      "Social Content": "hot",
+      "Artworking": "hot",
+      "Brand Identity": "cold",
+      "3D Studio max": "warm",
+      "Image Compositing": "warm",
+      "High-end Retouching": "warm",
+      "Word": "hot",
+      "Facebook": "hot",
+      "Firefly": "warm",
+      "DCO Flashtalking": "warm",
+      "DCO Google Studio": "warm",
+      "DOOH": "cold",
+      "Photography": "cold",
+      "Google Web Designer": "cold",
+      "Runway": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "XD",
+      "Display Banners",
+      "HTML Email",
+      "Illustrator",
+      "InDesign",
+      "Figma",
+      "Social Content",
+      "Artworking",
+      "3D Studio max",
+      "Image Compositing",
+      "High-end Retouching",
+      "Word",
+      "Facebook",
+      "Firefly",
+      "DCO Flashtalking",
+      "DCO Google Studio"
+    ]
+  }
+]
+</script>
+<div id="loginOverlay" class="login-overlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="login-card" role="document">
+      <h2 id="loginTitle">Password required</h2>
+      <form id="loginForm" class="login-form" autocomplete="off" novalidate>
+        <label for="passwordInput" class="visually-hidden">Password</label>
+        <input id="passwordInput" name="password" type="password" placeholder="Password required" aria-label="Password required" />
+        <button id="loginSubmit" type="submit">Submit</button>
+        <div id="loginError" class="login-error" role="alert">Incorrect password</div>
+      </form>
+    </div>
+  </div>
+
+  <div id="appWrapper" class="container" role="main" aria-hidden="true">
+    <div class="top-actions">
+      <input id="importFile" type="file" accept="application/json" style="display:none" />
+      <button id="importBtn" class="muted-btn" title="Import JSON">Import JSON</button>
+      <button id="manageBtn" class="muted-btn" title="Open specialists manager">Manage specialists</button>
+    </div>
+      
+
+
+   
+      
+      
+      <div class="two-col-layout">
+          
+            <!-- LEFT SIDEBAR: Filters & Skills -->
+  <div class="left-sidebar">
+
+    <div class="search-legend-row">
+      <div class="name-search-wrapper">
+        <label for="nameSearch" class="sidebar-label">Search specialists by name</label>
+    <input id="nameSearch" type="search" placeholder="Name search" aria-label="Search specialists by name" />
+      </div>
+     <div class="legend"  style="display: none" >
+  <div><span class="sw"></span> Software</div>
+  <div><span class="pf"></span> Platform</div>
+  <div><span class="sd"></span> Specialism (Digital)</div>
+  <div><span class="sp"></span> Specialism (Print)</div>
+</div>
+    </div>
+
+    <div class="controls" role="region" aria-label="Controls">
+      <div style="width:100%;">
+    <label for="skillSearch" class="sidebar-label">Search skills</label>
+    <input id="skillSearch" type="search" placeholder="Skill search" aria-label="Search skills" />
+  </div>
+      <select id="levelFilter" aria-label="Filter by level">
+        <option value="all">All Levels</option>
+        <option value="junior">Junior</option>
+        <option value="mid">Mid</option>
+        <option value="senior">Senior</option>
+      </select>
+
+      <select id="departmentFilter" aria-label="Filter by department">
+        <option value="all">All Departments</option>
+        <option value="Creative Design">Creative Design</option>
+        <option value="Print Design">Print Design</option>
+        <option value="Digital Design">Digital Design</option>
+        <option value="Print Artwork">Print Artwork</option>
+        <option value="Digital Artwork">Digital Artwork</option>
+        <option value="Creative Retouch">Creative Retouch</option>
+        <option value="Motion">Motion</option>
+        <option value="Social">Social</option>
+        <option value="Photography">Photography</option>
+        <option value="Proofreading">Proofreading</option>
+      </select>
+
+      <select id="studioFilter" aria-label="Filter by office">
+        <option value="all">All Studios</option>
+      </select>
+
+      <select id="titleFilter" aria-label="Filter by job title">
+        <option value="all">All Job Titles</option>
+      </select>
+
+      <button id="resetFilters" class="reset-btn" aria-label="Reset filters">Reset filters</button>
+    </div>
+      
+      
+      
+      
+    <div id="chipActions" style="display:flex; flex-direction:column; margin:8px 0 0px; gap:8px;">
+        
+         <label for="skillSearch" class="sidebar-label">Skill chip search</label>
+        
+      <button id="clearChips" class="clear-chip" hidden aria-hidden="true">Clear Skill Chips</button>
+      <div id="segControl" class="segmented" style="display:none;">
+        <button id="segAll" class="active">All Levels</button>
+        <button id="segMid">3+ Core</button>
+        <button id="segHigh">5 Experts</button>
+      </div>
+    </div>
+      
+    
+
+    <div id="skillList" class="skill-list" role="list" aria-label="Skills list"></div>
+
+
+ </div>
+      
+     <!-- RIGHT CONTENT: Results -->
+  <div class="right-content">
+      
+       <h1>McCANN UNITED TALENT MAP</h1>
+
+        <div id="results" role="list" aria-label="Search results"></div>
+
+    </div>
+          
+          </div>
+      
+      
+    <footer class="site-footer">
+      &#169; 2026 - Jack Gibbons. Designed and built by Jack Gibbons – McCann Manchester
+    </footer>
+      <footer class="footer-padding">
+     
+    </footer>
+  </div>  <!-- end #appWrapper -->
+
+  <div id="backdrop" class="backdrop" hidden aria-hidden="true"></div>
+
+  <aside id="sidePanel" class="side-panel" aria-hidden="true" aria-label="Person details panel">
+    <button id="panelClose" class="close-btn" aria-label="Close details">✕</button>
+    <div id="panelContent" tabindex="0"></div>
+  </aside>
+
+  <script>
+  (function(){
+    const STORAGE_KEY = 'mcann_team_data_v1';
+    const PASSWORD = 'United';
+
+    const SOFTWARE_SKILLS = ["After Effects","Photoshop","Illustrator","InDesign","Premier Pro","XD","Adobe Dimension","Lightroom","Adobe Audition","CSS","Javascript","Google Web Designer","Capture One","Ziflow","Adobe Bridge","Character Animator", "Word"];
+    const PLATFORM_SKILLS = ["Figma","Runway","Firefly","Corebook","Blender","Facebook","Ziflow","Adobe Bridge"];
+    const SPECIALISM_SKILLS = [
+      "HTML Email","Display Banners","DOOH","DCO Flashtalking","DCO Storyteq","DCO Google Studio",
+      "Artworking","Packaging","Out of Home (OOH)","Retail & POS","Press & Editorial","Direct Mail","Brand Identity",
+      "High-end Retouching","Colour Grading","Image Compositing","Technical Grading","Cutouts",
+      "Photography", "Social Content", "Copywriting", "Proofreading"
+    ];
+
+// --- Custom Skills Merge Logic ---
+// Scans all team members for 'customDefinitions' and adds new skills
+// into the master classification arrays so they appear as chips and
+// are recognised by the scoring/matching engine.
+function mergeCustomDefinitions(){
+  if(!Array.isArray(teamData) || teamData.length === 0) return;
+
+  teamData.forEach(function(p){
+    if(!p.customDefinitions) return;
+
+    Object.entries(p.customDefinitions).forEach(function(entry){
+      var skillName = entry[0];
+      var category  = entry[1];
+
+      if(category === "Software"){
+        if(!SOFTWARE_SKILLS.includes(skillName)) SOFTWARE_SKILLS.push(skillName);
+      } else if(category === "Platform"){
+        if(!PLATFORM_SKILLS.includes(skillName)) PLATFORM_SKILLS.push(skillName);
+      } else if(category.indexOf("Specialism") !== -1){
+        // Covers both "Digital Specialism" and "Print Specialism"
+        if(!SPECIALISM_SKILLS.includes(skillName)) SPECIALISM_SKILLS.push(skillName);
+      }
+    });
+  });
+}
+      
+      
+    const MERGED_SKILL_MAP = { "dco":["DCO Flashtalking","DCO Storyteq","DCO Google Studio"], "display banners":["Google Web Designer","HTML5","HPTO"] };
+
+    const DEPARTMENT_CONTACTS = {
+  "Digital Artwork":  { name: "Brett Collier", email: "Brett.Collier@mccann.com" },
+  "Digital Design":   { name: "Brett Collier", email: "Brett.Collier@mccann.com" },
+  "Print Design":     { name: "Mark Pomfret",  email: "Mark.Pomfret@mccann.com" },
+  "Print Artwork":    { name: "Mark Pomfret",  email: "Mark.Pomfret@mccann.com" },
+  "Social":           { name: "Kirsty Newman", email: "Kirsty.Newman@mccann.com" },
+  "Creative Design":  { name: "Kirsty Newman", email: "Kirsty.Newman@mccann.com" },
+  "Motion":           { name: "Laura Harris",  email: "Laura.Harris@mccann.com" },
+  "Creative Retouch": { name: "Nikki Bryan",   email: "nikki.bryan@mccann.com" },
+  "Photography":      { name: "Zoe Gent",      email: "Zoe.Gent@mccann.com" },
+  "Proofreading":     { name: "Erin Cleland",  email: "Erin.Cleland@mccann.com" }
+};
+
+const LOCATION_CONTACTS = {
+  "Leeds":         { name: "Alexandra Dowlen",    email: "Alexandra.Dowlen@mccann.com" },
+  "London":        { name: "June Hacker",         email: "June.Hacker@mccann.com" },
+  "Milton Keynes": { name: "Chris Price-Francis",  email: "Chris.Price-Francis@mccann.com" },
+  "Birmingham":    { name: "Henny Coldicott",     email: "Henny.Coldicott@mccann.com" },
+  "Bristol":       { name: "Luke King",           email: "Luke.King@mccann.com" }
+};
+
+    const ALT_SEARCH_TERMS = {
+      "html email": ["crm design","newsletters","mailchimp design","edm","email","email design"],
+      "display banners": ["digital advertising","programmatic creative","web banners","banner","banners"],
+      "dooh": ["digital billboards","out of home","digital signage","motion ooh","digital ooh"],
+      "dco": ["dynamic creative","data-driven ads","personalised creative","personalized creative","smart banners"],
+      "dco flashtalking": ["dco", "flashtalking", "dynamic creative"],
+      "dco storyteq": ["dco", "storyteq", "dynamic creative"],
+      "dco google studio": ["dco", "google studio", "dynamic creative"],
+      "artworking": ["pre-press","print ready","final mechanicals","technical design","repro"],
+      "packaging": ["keylines","cutter guides","mockups","box design","structural design"],
+      "out of home (ooh)": ["48 sheets","6 sheets","static billboards","bus sides","vinyls","48-sheet"],
+      "retail & pos": ["fsdus","shelf talkers","in-store displays","window decals","pop-ups","in store displays"],
+      "press & editorial": ["newspaper ads","magazine layout","dps","double page spread","publishing"],
+      "direct mail": ["brochures","newsletters","catalogues","leaflets","mailers"],
+      "brand identity": ["stationery","business cards","style guides","logo implementation"],
+      "high-end retouching": ["image polishing","beauty retouching","skin work","product clean-up","product cleanup"],
+      "colour grading": ["colour correction","match-to-product","look development","grading","color grading","color correction"],
+      "image compositing": ["photo montage","background removal","creative composition","pathing","compositing"],
+      "technical grading": ["print profiles","cmyk conversion","ink limits","colour management","color management"],
+      "cutouts": ["masking","deep etching","cut-outs","silhouettes","alpha channels","clipping paths"],
+      "photoshop": ["ps","adobe photoshop","photo shop"],
+      "after effects": ["ae","aftereffects","after-effects"],
+      "illustrator": ["ai","adobe illustrator"],
+      "indesign": ["id","adobe indesign"],
+      "premier pro": ["pr","premiere pro","premiere"],
+      "xd": ["adobe xd","xd"],
+      "figma": ["figma"],
+      "google web designer": ["gwd","google web designer","html5 banner","html5"],
+      "css": ["css"],
+      "javascript": ["javascript","js"],
+      "capture one": ["capture one","c1"],
+      "runway": ["runwayml","runway ml","runway"],
+      "firefly": ["adobe firefly","firefly"],
+      "corebook": ["corebook"],
+      "blender": ["blender"],
+      "facebook": ["facebook","meta"],
+      "ziflow": ["ziflow"],
+      "adobe bridge": ["adobe bridge","bridge"],
+      "photography": ["photos", "camera", "shooting"],
+      "proofreading": ["copy check", "qc", "proofing", "text check"]
+    };
+
+    const $ = id => document.getElementById(id);
+    function escapeHtml(s){ return String(s||'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+    function displayLocationFor(p){ return String(p && p.location || '').replace(/^mccann\s+/i,'').trim(); }
+    function getInitials(name){ if(!name) return ''; const parts = name.trim().split(/\s+/).slice(0,2); return parts.map(p => p.charAt(0).toUpperCase()).join(''); }
+
+    const loginOverlay = $('loginOverlay');
+    const passwordInput = $('passwordInput');
+    const loginForm = $('loginForm');
+    const loginError = $('loginError');
+    const appWrapper = $('appWrapper');
+
+    const importFile = $('importFile');
+    const importBtn = $('importBtn');
+    const manageBtn = $('manageBtn');
+
+    const nameSearch = $('nameSearch'); 
+    const skillSearch = $('skillSearch');
+    const levelFilter = $('levelFilter');
+    const departmentFilter = $('departmentFilter');
+    const studioFilter = $('studioFilter');
+    const titleFilter = $('titleFilter');
+    const resetFilters = $('resetFilters');
+
+    const skillList = $('skillList');
+    const clearChipsBtn = $('clearChips');
+    const segControl = $('segControl');
+    const segAll = $('segAll');
+    const segMid = $('segMid');
+    const segHigh = $('segHigh');
+
+    const results = $('results');
+    const backdrop = $('backdrop');
+    const sidePanel = $('sidePanel');
+    const panelContent = $('panelContent');
+    const panelClose = $('panelClose');
+
+    let teamData = [];
+    let selectedChips = new Set();
+    let skillMin = 0; // 0=all, 3=Core, 5=Expert
+      
+      
+
+      
+
+    function loadTeam(){
+      try {
+        const el = document.getElementById('embedded-team');
+        if(el){
+          const txt = el.textContent || el.innerText || '';
+          if(txt && txt.trim()){
+            const parsed = JSON.parse(txt);
+            if(Array.isArray(parsed)){
+              teamData = parsed;
+              return;
+            }
+          }
+        }
+      } catch(e){ console.warn('Failed to parse embedded-team', e); }
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(Array.isArray(parsed)) { teamData = parsed; return; }
+        }
+      }catch(e){ console.warn('Failed to parse stored team data', e); }
+      teamData = [];
+    }
+
+function renderSkillList(){
+  skillList.innerHTML = '';
+
+  var BASE_DIGITAL_SPECIALISM = new Set([
+    "HTML Email","Display Banners","DOOH",
+    "DCO Flashtalking","DCO Storyteq","DCO Google Studio","Social Content"
+  ]);
+
+  var customDigital = new Set();
+  teamData.forEach(function(p){
+    if(!p.customDefinitions) return;
+    Object.entries(p.customDefinitions).forEach(function(entry){
+      if(entry[1] === "Digital Specialism") customDigital.add(entry[0]);
+    });
+  });
+
+  var specialismDigital = [];
+  var specialismPrint = [];
+  SPECIALISM_SKILLS.forEach(function(s){
+    if(BASE_DIGITAL_SPECIALISM.has(s) || customDigital.has(s)){
+      specialismDigital.push(s);
+    } else {
+      specialismPrint.push(s);
+    }
+  });
+
+  // Add the merged DCO chip to digital specialism list
+  specialismDigital.push('DCO');
+
+  function makeChip(label, cls, val){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'skill-chip ' + (cls || '');
+    b.textContent = label;
+    b.dataset.skillValue = val || label;
+    b.addEventListener('click', function(){
+      var v = b.dataset.skillValue;
+      if(b.classList.toggle('selected')) selectedChips.add(v);
+      else selectedChips.delete(v);
+      skillSearch.value = '';
+      nameSearch.value = '';
+      updateClearButtonVisibility();
+      renderSearchDebounced();
+    });
+    return b;
+  }
+
+  var sections = [
+    { title: 'Software',              color: 'var(--software)',          cls: 'software',           skills: SOFTWARE_SKILLS },
+    { title: 'Platforms',             color: 'var(--platform)',          cls: 'platform',           skills: PLATFORM_SKILLS },
+    { title: 'Specialism (Digital)',  color: 'var(--specialism-digital)',cls: 'specialism-digital', skills: specialismDigital },
+    { title: 'Specialism (Print)',    color: 'var(--specialism-print)',  cls: 'specialism-print',   skills: specialismPrint }
+  ];
+
+  var wrapper = document.createElement('div');
+  wrapper.className = 'skill-sections-wrapper';
+
+  sections.forEach(function(sec){
+    var section = document.createElement('div');
+    section.className = 'skill-section';
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'skill-section-header';
+    header.innerHTML =
+      '<span class="section-swatch" style="background:' + sec.color + '"></span>' +
+      '<span>' + sec.title + ' (' + sec.skills.length + ')</span>' +
+      '<span class="section-arrow">▼</span>';
+
+    // Chips container
+    var chips = document.createElement('div');
+    chips.className = 'skill-section-chips';
+
+    sec.skills.forEach(function(s){
+      var val = (s === 'DCO') ? 'dco' : s;
+      chips.appendChild(makeChip(s, sec.cls, val));
+    });
+
+    // Toggle collapse
+    header.addEventListener('click', function(){
+      header.classList.toggle('collapsed');
+      chips.classList.toggle('hidden');
+    });
+
+    section.appendChild(header);
+    section.appendChild(chips);
+    wrapper.appendChild(section);
+  });
+
+  skillList.appendChild(wrapper);
+  updateClearButtonVisibility();
+}
+
+    function updateClearButtonVisibility(){ if(clearChipsBtn){ if(selectedChips.size>0){ clearChipsBtn.hidden=false; clearChipsBtn.removeAttribute('aria-hidden'); } else { clearChipsBtn.hidden=true; clearChipsBtn.setAttribute('aria-hidden','true'); } } }
+    if(clearChipsBtn) clearChipsBtn.addEventListener('click', ()=> { selectedChips.clear(); document.querySelectorAll('.skill-chip.selected').forEach(c=>c.classList.remove('selected')); updateClearButtonVisibility(); renderSearchDebounced(); });
+
+    function applySegButtonsState(){ if(segAll && segMid && segHigh){ segAll.classList.toggle('active', skillMin === 0); segMid.classList.toggle('active', skillMin === 3); segHigh.classList.toggle('active', skillMin === 5); } }
+
+    function scoreForPersonAndChip(person, chipValue){
+  if(!chipValue || !person) return 0;
+  const skills = person.skills || {};
+  const ck = String(chipValue).trim();
+  const lower = ck.toLowerCase();
+
+  if(MERGED_SKILL_MAP[lower]){
+    const list = MERGED_SKILL_MAP[lower];
+    const scores = list.map(s => {
+      if(skills[s] !== undefined) return skills[s];
+      for(const k of Object.keys(skills)){
+        if(k.toLowerCase() === s.toLowerCase()) return skills[k];
+      }
+      return 0;
+    });
+    return Math.max(...scores);
+  }
+
+  // Exact key match (case-sensitive)
+  if(skills[ck] !== undefined) return skills[ck];
+
+  // Exact key match (case-insensitive)
+  for(const k of Object.keys(skills)){
+    if(k.toLowerCase() === lower) return skills[k];
+  }
+
+  // Fuzzy substring match — but only for longer strings
+  // If either string is 4 chars or fewer, require exact match
+  // to prevent "Word" matching "Wordpress" etc.
+  for(const k of Object.keys(skills)){
+    const kn = k.toLowerCase();
+    if(kn.length <= 4 || lower.length <= 4) continue;
+    if(kn.includes(lower) || lower.includes(kn)) return skills[k];
+  }
+
+  return 0;
+}
+
+    function skillMatchesQuery(skillName, qLower){
+  if(!qLower) return true;
+  if(!skillName) return false;
+  const skillLower = String(skillName).toLowerCase();
+  const q = String(qLower).toLowerCase().trim();
+
+  // If either string is short (4 chars or fewer), require exact match
+  // This prevents "Word" matching "Wordpress" and vice versa
+  if(skillLower.length <= 4 || q.length <= 4){
+    if(skillLower === q) return true;
+  } else {
+    if(skillLower.includes(q) || q.includes(skillLower)) return true;
+  }
+
+  // Check alternative search terms (aliases)
+  const aliases = ALT_SEARCH_TERMS[skillLower] || [];
+  for(const a of aliases){
+    const ali = a.toLowerCase();
+    if(ali.length <= 4 || q.length <= 4){
+      if(ali === q) return true;
+    } else {
+      if(ali.includes(q) || q.includes(ali)) return true;
+    }
+  }
+  for(const [canonical, aliasList] of Object.entries(ALT_SEARCH_TERMS)){
+    for(const alias of aliasList){
+      const ali = alias.toLowerCase();
+      let matched = false;
+      if(ali.length <= 4 || q.length <= 4){
+        matched = (ali === q);
+      } else {
+        matched = (ali.includes(q) || q.includes(ali));
+      }
+      if(matched){
+        if(canonical === skillLower) return true;
+      }
+    }
+  }
+  return false;
+}
+      
+      
+    function renderSearch(){
+      const container = results;
+      container.innerHTML = '';
+      
+      const typedQ = (skillSearch.value || "").trim();
+      const qLower = typedQ.toLowerCase();
+      const nameQ = (nameSearch && (nameSearch.value || "").trim().toLowerCase()) || "";
+      const level = (levelFilter.value || "all");
+      const department = (departmentFilter.value || "all");
+      const studio = (studioFilter.value || "all");
+      const title = (titleFilter.value || "all");
+
+      const usingChips = selectedChips.size > 0;
+      const hasActiveFilter =
+        usingChips ||
+        typedQ !== "" ||
+        nameQ !== "" ||
+        level !== "all" ||
+        department !== "all" ||
+        studio !== "all" ||
+        title !== "all";
+
+      const matches = [];
+
+      // Logic to find matches
+      if(nameQ){
+        teamData.forEach(p=>{
+          if(level !== "all" && p.level !== level) return;
+          if(department !== "all" && (!Array.isArray(p.departments) || !p.departments.includes(department))) return;
+          if(studio !== "all" && displayLocationFor(p) !== studio) return;
+          if(title !== "all" && p.role !== title) return;
+
+          const nameLower = (p.name || '').toLowerCase();
+          if(nameLower.startsWith(nameQ)){
+            const entries = Object.entries(p.skills || {});
+            if(entries.length === 0){
+              matches.push({p, skill: '', score: 0});
+            } else {
+              const top = entries.reduce((best, curr) => curr[1] > best[1] ? curr : best, entries[0]);
+              matches.push({p, skill: top[0], score: top[1]});
+            }
+          }
+        });
+      } else {
+        teamData.forEach(p=>{
+          if(level !== "all" && p.level !== level) return;
+          if(department !== "all" && (!Array.isArray(p.departments) || !p.departments.includes(department))) return;
+          if(studio !== "all" && displayLocationFor(p) !== studio) return;
+          if(title !== "all" && p.role !== title) return;
+
+                    if(!usingChips && typedQ === ""){
+        
+            const entries = Object.entries(p.skills || {});
+            let topSkill = '', topScore = 0;
+            if(entries.length > 0){
+               [topSkill, topScore] = entries.reduce((best, curr) => curr[1] > best[1] ? curr : best, entries[0]);
+            }
+            matches.push({p, skill: topSkill, score: topScore});
+            return;
+          }
+
+          if(usingChips){
+            let allMatch = true;
+            let totalScore = 0;
+            let breakdown = []; 
+
+            for(const chipVal of selectedChips){
+              const s = scoreForPersonAndChip(p, chipVal);
+              if(!s || s <= 0){ allMatch = false; break; }
+              totalScore += s;
+              breakdown.push({ skill: chipVal, score: s });
+            }
+
+            if(allMatch){
+              const avgScore = (totalScore / selectedChips.size).toFixed(1).replace('.0','');
+              matches.push({
+                p, 
+                skill: Array.from(selectedChips).join(", "), 
+                score: totalScore, 
+                displayScore: avgScore, 
+                breakdown: breakdown
+              });
+            }
+            return;
+          }
+
+           // Typed Skill Search — pick only the best matching skill per person
+let bestSkill = null;
+let bestScore = 0;
+Object.entries(p.skills || {}).forEach(([skill,score])=>{
+  if(score <= 0) return;
+  if(skillMatchesQuery(skill, qLower)){
+    if(score > bestScore){
+      bestScore = score;
+      bestSkill = skill;
+    }
+  }
+});
+if(bestSkill){
+  matches.push({p, skill: bestSkill, score: bestScore});
+}
+        }); // <-- closes teamData.forEach
+      }  
+
+      if(matches.length === 0){
+        container.innerHTML = `<div class="warning">No matches found</div>`;
+        if(segControl) segControl.style.display = 'none';
+        return;
+      }
+
+      if((usingChips || typedQ !== "" || nameQ !== "")){
+        // Coverage check based on new scale: score >= 4 is "strong"
+        const strongMatches = matches.filter(m=>m.score>=4);
+        if(strongMatches.length<=3){
+          const warn = document.createElement('div');
+          warn.className = 'warning';
+          warn.textContent = '⚠️ Low coverage for this skill';
+          container.appendChild(warn);
+        }
+      }
+
+      // Filter by skillMin (segmented control)
+      let displayed = matches;
+      if(skillMin > 0){
+        displayed = matches.filter(m => {
+           let val = m.score;
+           if(m.displayScore) val = parseFloat(m.displayScore);
+           return val >= skillMin;
+        });
+      }
+
+      if(hasActiveFilter && matches.length > 0){
+        if(segControl) { segControl.style.display = 'inline-flex'; applySegButtonsState(); }
+      } else {
+        if(segControl) segControl.style.display = 'none';
+      }
+
+      if(displayed.length === 0){
+         container.innerHTML = `<div class="warning">No matches at this skill level</div>`;
+         return;
+      }
+
+      // *** GROUPING LOGIC ***
+      const grouped = {};
+      displayed.forEach(m => {
+        const dept = m.p.department || 'Other';
+        if(!grouped[dept]) grouped[dept] = [];
+        grouped[dept].push(m);
+      });
+
+      const deptNames = Object.keys(grouped).sort();
+
+      deptNames.forEach(deptName => {
+        const groupMatches = grouped[deptName];
+        
+        // Sort by score desc within group
+        groupMatches.sort((a,b) => b.score - a.score);
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'dept-section-title';
+        header.textContent = deptName;
+        container.appendChild(header);
+
+        // Grid
+        const grid = document.createElement('div');
+        grid.className = 'dept-results-grid';
+        container.appendChild(grid);
+
+        groupMatches.forEach((m, i) => {
+          const skillsObj = m.p.skills || {};
+          
+          let breakdownHtml = '';
+          if(m.breakdown && m.breakdown.length > 0){
+            breakdownHtml = `<div class="match-breakdown">` + 
+              m.breakdown.map(item => 
+                `<span class="match-chip">${escapeHtml(item.skill)} <b>${item.score}</b></span>`
+              ).join('') + 
+            `</div>`;
+          }
+
+          let badgeValue = m.score;
+          if(m.displayScore) {
+              badgeValue = m.displayScore;
+          }
+
+          let topSoftware = "", topSoftwareScore = -1;
+          let topPlatform = "", topPlatformScore = -1;
+          let topSpecialism = "", topSpecialismScore = -1;
+
+          Object.entries(skillsObj).forEach(([skill, score])=>{
+            if(SOFTWARE_SKILLS.includes(skill) && score > topSoftwareScore){ topSoftwareScore = score; topSoftware = skill; }
+            if(PLATFORM_SKILLS.includes(skill) && score > topPlatformScore){ topPlatformScore = score; topPlatform = skill; }
+            if(SPECIALISM_SKILLS.includes(skill) && score > topSpecialismScore){ topSpecialismScore = score; topSpecialism = skill; }
+          });
+
+          const extraLines = [
+            topSoftware ? `<div><strong>Top software:</strong> ${escapeHtml(topSoftware)} (${topSoftwareScore})</div>` : '',
+            topPlatform ? `<div><strong>Top platform:</strong> ${escapeHtml(topPlatform)} (${topPlatformScore})</div>` : '',
+            topSpecialism ? `<div><strong>Top specialism:</strong> ${escapeHtml(topSpecialism)} (${topSpecialismScore})</div>` : ''
+          ].filter(Boolean).join('');
+
+          const deptHtml = (m.p.departments || []).map(d => `<span class="dept-pill">${escapeHtml(d)}</span>`).join("");
+          const displayLoc = displayLocationFor(m.p);
+
+          const card = document.createElement("div");
+          // Top 3 check applies per department group now
+          card.className = "card " + (i < 3 ? "top3" : "");
+          card.setAttribute("role","listitem");
+          card.setAttribute("tabindex","0");
+
+          const val = parseFloat(badgeValue);
+          let badgeClass = 'low';
+          if(val >= 4) badgeClass = 'high';
+          else if(val >= 3) badgeClass = 'mid';
+          
+          const badgeHtml = (hasActiveFilter) ? `<span class="badge ${badgeClass}">${badgeValue}</span>` : ``;
+
+          card.innerHTML = `
+            <div class="card-body">
+              <h3>${escapeHtml(m.p.name)}</h3>
+              <p>${escapeHtml(m.p.role)}<br>${escapeHtml(m.p.department)} | ${escapeHtml(displayLoc)}</p>
+              ${breakdownHtml}
+              <div class="dept-badges">${deptHtml}</div>
+              <div class="hover-details" aria-hidden="true">${extraLines}</div>
+            </div>
+            ${badgeHtml}
+          `;
+
+          card.addEventListener("click", ()=> openPanel(teamData.indexOf(m.p)));
+          card.addEventListener("keydown", (ev)=>{ if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); openPanel(teamData.indexOf(m.p)); } });
+
+          grid.appendChild(card);
+        });
+      });
+    }
+
+    function debounce(fn, wait=250){ let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); }; }
+    const renderSearchDebounced = debounce(renderSearch, 200);
+
+    function populateFilters(){
+      const studios = new Set(teamData.map(p => displayLocationFor(p)).filter(Boolean));
+      const studioSel = studioFilter;
+      if(!studioSel) return;
+      studioSel.innerHTML = '<option value="all">All Studios</option>';
+      Array.from(studios).sort().forEach(s=>{
+        const o = document.createElement('option'); o.value = s; o.textContent = s; studioSel.appendChild(o);
+      });
+
+      const titles = new Set(teamData.map(p => (p.role || '').trim()).filter(Boolean));
+      const titleSel = titleFilter;
+      titleSel.innerHTML = '<option value="all">All Job Titles</option>';
+      Array.from(titles).sort().forEach(t=>{
+        const o = document.createElement('option'); o.value = t; o.textContent = t; titleSel.appendChild(o);
+      });
+    }
+
+    function openPanel(openPanelIndex){
+    const p = teamData[openPanelIndex];
+      if(!p) return;
+      const sortedSkills = Object.entries(p.skills || {}).sort(([,aScore],[,bScore]) => bScore - aScore);
+      
+      // Determine skill recency (try granular first, fallback to simple)
+      const recencyMap = p.skillRecency || {}; 
+      const legacySet = new Set(p.recentSkills || []); // for backward compat
+
+      const displayLoc = displayLocationFor(p);
+            const primaryDept = p.department || '';
+      const allDepts = p.departments || [];
+      const additionalDepts = allDepts.filter(d => d !== primaryDept);
+
+      const primaryDeptHtml = primaryDept
+        ? `<div class="panel-dept-section">
+             <strong class="panel-dept-heading">Primary Department</strong>
+             <div class="dept-badges"><span class="dept-pill">${escapeHtml(primaryDept)}</span></div>
+           </div>`
+        : '';
+
+      const additionalDeptHtml = additionalDepts.length > 0
+        ? `<div class="panel-dept-section">
+             <strong class="panel-dept-heading">Can also work in...</strong>
+             <div class="dept-badges">${additionalDepts.map(d => `<span class="dept-pill">${escapeHtml(d)}</span>`).join('')}</div>
+           </div>`
+        : '';
+      const summaryHtml = p.profileSummary ? `<p class="profile-summary">${escapeHtml(p.profileSummary)}</p>` : "";
+      const contactsHtml = (function(){
+  const primaryDept = (p.department || '').trim();
+  const loc = displayLocationFor(p);
+  const locContact = LOCATION_CONTACTS[loc] || null;
+
+  const parts = [];
+
+  // Only use primary department contact
+  if(primaryDept){
+    const info = DEPARTMENT_CONTACTS[primaryDept];
+    if(info){
+      parts.push(`<div>Resource contact (${escapeHtml(primaryDept)}): ${escapeHtml(info.name)} — <a href="mailto:${escapeHtml(info.email)}">${escapeHtml(info.email)}</a></div>`);
+    }
+  }
+
+  // If the person is NOT in Manchester, override with location-specific contact
+  if(locContact){
+    parts.length = 0;
+    parts.push(`<div>Resource contact (${escapeHtml(loc)}): ${escapeHtml(locContact.name)} — <a href="mailto:${escapeHtml(locContact.email)}">${escapeHtml(locContact.email)}</a></div>`);
+  }
+
+  if(parts.length === 0) return "";
+  return `<div class="resource-contacts" aria-label="Resourcing contacts">${parts.join("")}</div>`;
+})();
+
+      panelContent.innerHTML = `
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>${escapeHtml(p.name)}</h2>
+            <p>${escapeHtml(p.role)}<br>${escapeHtml(p.department)} | ${escapeHtml(displayLoc)}</p>
+          </div>
+          <div id="panelAvatarContainer" class="panel-avatar" aria-hidden="true"></div>
+        </div>
+
+        ${contactsHtml}
+                ${primaryDeptHtml}
+        ${additionalDeptHtml}
+        ${summaryHtml}
+        <div aria-label="Skills">
+          ${sortedSkills.map(([s,v]) => {
+            let icon = ''; 
+            // Check granular map first
+            if(recencyMap[s]) {
+              if(recencyMap[s] === 'hot') icon = '🔥';
+              else if(recencyMap[s] === 'warm') icon = '⚡';
+              else if(recencyMap[s] === 'cold') icon = '🧊'; // ADDED: render Dormant icon
+            } else {
+              // Fallback to legacy array (only supports Hot)
+              if(legacySet.has(s)) icon = '🔥';
+            }
+            
+            const iconHtml = icon ? `<span title="Recency">${icon}</span>` : '';
+            return `<div class="stat"><div class="score-row"><span>${escapeHtml(s)}</span>${iconHtml}</div><strong>${v}</strong></div>`
+          }).join("")}
+        </div>
+        
+        <section class="recency-key" aria-label="Recency Key">
+          <strong>Recency Key</strong>
+          <div class="key-item">🔥 Hot: Used frequently on live work.</div>
+          <div class="key-item">⚡ Active: Used professionally, but less often (Warm).</div>
+          <div class="key-item">🧊 Dormant: Has the skill, but hasn't used it recently (Cold).</div>
+        </section>
+
+        <section class="skill-scale" aria-label="Skill level definitions">
+          <strong>Autonomy Scale (1-5)</strong>
+          <ol>
+            <li><strong>Novice</strong> — Needs guidance on basics.</li>
+            <li><strong>Advanced Beginner</strong> — Can do standard tasks solo.</li>
+            <li><strong>Competent</strong> — Fully independent & reliable.</li>
+            <li><strong>Proficient</strong> — Highly skilled; proactive trouble-shooter.</li>
+            <li><strong>Expert</strong> — Authority; sets standards & teaches others.</li>
+          </ol>
+        </section>
+      `;
+
+      const avatarContainer = document.getElementById('panelAvatarContainer');
+      avatarContainer.innerHTML = '';
+      if(p.avatar){
+        const img = document.createElement('img');
+        img.src = p.avatar;
+        img.alt = p.name + ' avatar';
+        avatarContainer.appendChild(img);
+      } else {
+        avatarContainer.textContent = getInitials(p.name);
+      }
+
+      sidePanel.classList.add('open');
+      sidePanel.setAttribute('aria-hidden','false');
+      backdrop.classList.add('open');
+      backdrop.removeAttribute('hidden');
+      backdrop.setAttribute('aria-hidden','false');
+      document.body.classList.add('panel-open');
+
+      panelClose.focus();
+    }
+
+    function closePanel(){
+      sidePanel.classList.remove('open');
+      sidePanel.setAttribute('aria-hidden','true');
+      backdrop.classList.remove('open');
+      backdrop.setAttribute('hidden', "true");
+      backdrop.setAttribute('aria-hidden','true');
+      document.body.classList.remove('panel-open');
+    }
+
+    function initializeApp(){
+      try {
+        loadTeam();
+        mergeCustomDefinitions(); // Run the custom skill merger
+        renderSkillList();
+        populateFilters();
+        renderSearch();
+          
+           
+        if(importBtn) importBtn.addEventListener('click', ()=> importFile.click());
+        if(importFile) importFile.addEventListener('change', (ev)=> {
+          const file = ev.target.files && ev.target.files[0];
+          if(!file) return;
+          const reader = new FileReader();
+          reader.onload = function(e){
+            try{
+              const parsed = JSON.parse(e.target.result);
+              if(!Array.isArray(parsed)){ alert('Invalid file: expected JSON array'); return; }
+              const replace = confirm('Replace current dataset with imported file? OK = replace, Cancel = merge by name');
+              if(replace){
+                teamData = parsed;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(teamData, null, 2));
+                populateFilters(); renderSkillList(); renderSearch();
+                alert('Imported and replaced dataset.');
+              } else {
+                const existing = new Set(teamData.map(p => (p.name||'').trim().toLowerCase()));
+                let added=0;
+                parsed.forEach(p=>{
+                  const n = (p && p.name) ? p.name.trim().toLowerCase() : '';
+                  if(n && !existing.has(n)){ teamData.push(p); existing.add(n); added++; }
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(teamData, null, 2));
+                populateFilters(); renderSkillList(); renderSearch();
+                alert(`Imported and merged: ${added} specialists added.`);
+              }
+            }catch(err){ alert('Failed to parse JSON: ' + err.message); }
+            importFile.value = '';
+          };
+          reader.readAsText(file);
+        });
+
+        if(manageBtn) manageBtn.addEventListener('click', ()=> {
+          try { window.open(new URL('admin.html', window.location.href).href, '_blank','noopener'); } catch { window.open('admin.html','_blank','noopener'); }
+        });
+
+        if(nameSearch){
+          nameSearch.addEventListener('input', ()=> {
+            if(selectedChips.size > 0){
+              selectedChips.clear();
+              document.querySelectorAll('.skill-chip.selected').forEach(c => c.classList.remove('selected'));
+              updateClearButtonVisibility();
+            }
+            if(skillSearch) skillSearch.value = '';
+            renderSearchDebounced();
+          }, { passive: true });
+        }
+
+                if(skillSearch) skillSearch.addEventListener('input', () => {
+          if(selectedChips.size > 0){
+            selectedChips.clear();
+            document.querySelectorAll('.skill-chip.selected').forEach(c => c.classList.remove('selected'));
+            updateClearButtonVisibility();
+          }
+          if(nameSearch) nameSearch.value = '';
+
+          // Filter visible chips to match typed query
+          const q = (skillSearch.value || '').trim().toLowerCase();
+          document.querySelectorAll('.skill-chip').forEach(chip => {
+            if(!q){
+              chip.style.display = '';
+              return;
+            }
+            const label = (chip.textContent || '').toLowerCase();
+            let aliasMatch = false;
+            for(const [canonical, aliases] of Object.entries(ALT_SEARCH_TERMS)){
+              if(canonical.includes(q) || aliases.some(a => a.toLowerCase().includes(q))){
+                if(label === canonical || label.includes(q)) { aliasMatch = true; break; }
+              }
+            }
+            if(label.includes(q) || aliasMatch){
+              chip.style.display = '';
+            } else {
+              chip.style.display = 'none';
+            }
+          });
+
+          renderSearchDebounced();
+        }, { passive: true });
+
+        if(levelFilter) levelFilter.addEventListener('change', renderSearchDebounced);
+        if(departmentFilter) departmentFilter.addEventListener('change', renderSearchDebounced);
+        if(studioFilter) studioFilter.addEventListener('change', renderSearchDebounced);
+        if(titleFilter) titleFilter.addEventListener('change', renderSearchDebounced);
+
+        if(resetFilters) resetFilters.addEventListener('click', ()=> {
+            
+
+            
+          levelFilter.value = 'all';
+          departmentFilter.value = 'all';
+          studioFilter.value = 'all';
+          titleFilter.value = 'all';
+          skillSearch.value = '';
+          if(nameSearch) nameSearch.value = '';
+          selectedChips.clear();
+          document.querySelectorAll('.skill-chip.selected').forEach(c=>c.classList.remove('selected'));
+          updateClearButtonVisibility();
+          skillMin = 0;
+          applySegButtonsState();
+          renderSearchDebounced();
+            
+                      // Restore all hidden chips
+          document.querySelectorAll('.skill-chip').forEach(c => c.style.display = '');
+        });
+
+        if(segAll) segAll.addEventListener('click', ()=> { skillMin = 0; applySegButtonsState(); renderSearchDebounced(); });
+        if(segMid) segMid.addEventListener('click', ()=> { skillMin = (skillMin === 3) ? 0 : 3; applySegButtonsState(); renderSearchDebounced(); });
+        if(segHigh) segHigh.addEventListener('click', ()=> { skillMin = (skillMin === 5) ? 0 : 5; applySegButtonsState(); renderSearchDebounced(); });
+
+        if(panelClose) panelClose.addEventListener('click', closePanel);
+        if(backdrop) backdrop.addEventListener('click', closePanel);
+        document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closePanel(); });
+
+        window.addEventListener('storage', (e)=>{
+          if(e.key === STORAGE_KEY){
+            try{
+              const parsed = JSON.parse(e.newValue || '[]');
+              if(Array.isArray(parsed)){
+                teamData = parsed;
+                populateFilters();
+                renderSkillList();
+                renderSearch();
+              }
+            }catch(err){ console.error('storage event parse failed', err); }
+          }
+        });
+
+      } catch (err) {
+        console.error('initializeApp failed', err);
+        results.innerHTML = '<div class="warning">Initialisation failed - see console (F12)</div>';
+      }
+    }
+
+    if(loginForm){
+      loginForm.addEventListener('submit', function(evt){
+        evt.preventDefault();
+        if(loginError) loginError.style.display = 'none';
+        const val = (passwordInput.value || '').trim();
+        if(val === PASSWORD){
+          document.documentElement.style.setProperty('--page-bg', getComputedStyle(document.documentElement).getPropertyValue('--page-bg-light'));
+          loginOverlay.style.display = 'none';
+          loginOverlay.setAttribute('hidden','');
+          appWrapper.removeAttribute('aria-hidden');
+          initializeApp();
+        } else {
+          loginError.textContent = 'Incorrect password';
+          loginError.style.display = 'block';
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      });
+    }
+
+    try{ passwordInput.focus(); }catch(e){}
+
+    window._mcann = { initializeApp, loadTeam, renderSearch };
+
+ })(); // This closes the IIFE
+  </script>
+</body>
+</html>

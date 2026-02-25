@@ -2,355 +2,108 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f3f5fe" />
-  <title>McCann United Talent Map</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manage Specialists — McCann United</title>
   <style>
-  :root{
-    /* Colour scheme */
-    --page-bg: #0b1220;        /* dark initial background while locked */
-    --page-bg-light: #f3f5fe;  /* app background after login */
+    :root{ --bg:#f6f7f9; --card:#fff; --accent:#0b1220; --muted:#6b7280; --muted-2:#9aa4b2; --primary:#572ef5; }
+    html,body{height:100%}
+    body{ margin:0; font-family:Inter,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--accent); padding:18px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    
+    .wrap{ max-width:1200px; margin:0 auto; display:grid; grid-template-columns:380px 1fr; gap:18px; }
+    .panel{ background:var(--card); padding:12px; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.06); display:flex; flex-direction:column; max-height: 90vh; }
+    
+    h2{ margin:0 0 12px; font-size:1.05rem; }
+    .header-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; flex-shrink: 0; }
+    
+    .actions{ display:flex; gap:8px; margin-bottom:12px; justify-content:flex-end; flex-shrink: 0;}
+    button{ padding:8px 10px; border-radius:6px; border:1px solid rgba(0,0,0,.06); background:#fff; cursor:pointer; font-weight:600; font-size:13px; color:var(--accent); transition: background .1s; }
+    button:hover{ background:#f3f4f6; }
+    .primary{ background:var(--primary); color:#fff; border:none; }
+    .primary:hover{ background:#4a25cf; }
+    .danger{ background:#fff1f2; border-color:#fca5a5; color:#b91c1c; }
+    .danger:hover{ background:#fef2f2; }
+    .secondary-action { background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe; }
+    .secondary-action:hover { background:#dbeafe; }
+    .nav-link{ text-decoration:none; display:inline-block; }
 
-    --text: #0b1220;
-    --button-on: #572ef5;
-    --button-off-bg: #ffffff;
-    --button-off-border: #572ef5;
-    --button-off-text: #572ef5;
+    /* List Styles */
+    .groups{ flex:1; overflow-y:auto; padding:6px; min-height:0; }
+    .location-group { margin-bottom: 4px; }
+    .location-header { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-radius:6px; cursor:pointer; background:#f8fafc; font-weight:700; font-size:0.9rem; user-select: none; }
+    .location-header:hover{ background:#e2e8f0; }
+    
+    .dept-group { margin: 2px 0 2px 8px; border-left: 2px solid #e2e8f0; }
+    .department-header { display:flex; align-items:center; justify-content:space-between; padding:6px 10px; border-radius:0 6px 6px 0; cursor:pointer; font-size:0.85rem; color:#475569; font-weight:600; user-select: none; }
+    .department-header:hover{ background:#f1f5f9; color:#0f172a; }
 
-    --software: #e97950;
-    --platform: #63cd95;
-    --specialism-digital: #9b4871; 
-    --specialism-print: #4597e6;
+    .caret{ width:20px; text-align:center; font-size:0.7rem; color:var(--muted-2); transition: transform 0.15s; }
+    .caret.open{ transform: rotate(90deg); }
 
-    --card-bg: #ffffff;
-    --card-text: #0b1220;
-    --muted: #6b7280;
+    .spec-list{ list-style:none; padding:0; margin:0; }
+    .spec-item{ padding:6px 10px 6px 6px; margin: 1px 0 1px 12px; border-radius:6px; cursor:pointer; display:flex; justify-content:flex-start; gap:10px; align-items:center; transition: background 0.1s; }
+    .spec-item:hover{ background:#f8fafc; }
+    .spec-item.selected{ background:#eff4ff; box-shadow: inset 0 0 0 1px #bfdbfe; }
 
-    --safe-top: env(safe-area-inset-top, 0px);
-  }
+    .list-avatar{ width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#e0e7ff; color:#3730a3; font-weight:700; font-size:0.75rem; flex:0 0 28px; overflow:hidden;}
+    .list-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .list-name { font-size: 0.9rem; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-  *,*::before,*::after{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    padding: calc(12px + var(--safe-top)) 12px 24px;
-    font-family: 'Inter', sans-serif; /* or Inter */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em; /* Gives it that premium brand feel */
-    background:var(--page-bg);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    line-height:1.4;
-    font-size:16px;
-    transition: background .24s ease;
-  }
-      
-   .site-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:.85rem;
-  padding:24px 0 0;
-  margin-top:12px;
-  margin-bottom:60px;
-  border-top:1px solid rgba(11,17,30,0.06);
-}   
-      
-   .footer-padding{
-  text-align:center;
-  color:var(--muted);
-  font-size:.85rem;
-  padding:24px 0 0;
-  margin-top:12px;
-  margin-bottom:60px;
-} 
+    /* Editor Styles */
+    .editor-scroll-area { flex:1; overflow-y:auto; padding-right:4px; }
+    .left-search{ margin:8px 0 12px; display:flex; gap:8px; align-items:center; flex-shrink: 0; }
+    .left-search input[type="search"]{ flex:1; padding:8px 10px; border-radius:8px; border:1px solid #e5e7eb; }
 
-  /* Login overlay (dark) */
-  .login-overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(0,0,0,0.88), rgba(0,0,0,0.92)); z-index:2000; }
-  .login-card{ background:#fff; color:#0b1220; padding:22px; border-radius:12px; width:360px; box-shadow:0 10px 40px rgba(2,6,23,0.6); text-align:center; }
-  .login-card h2{ margin:0 0 12px; font-size:1.05rem; color:#0b1220 }
-  .login-form{ display:flex; gap:8px; flex-direction:column; align-items:stretch; }
-  .login-form input[type="password"]{ padding:10px 12px; font-size:1rem; border-radius:8px; border:1px solid #e6e9f6; background:#fff }
-  .login-form button{ padding:10px 12px; border-radius:8px; border:none; background:var(--button-on); color:#fff; cursor:pointer; font-weight:700; }
-  .login-error{ color:#c0392b; margin-top:8px; font-weight:700; display:none; }
+    .editor-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #f1f5f9; flex-shrink: 0; }
+    .editor-title{ display:flex; align-items:center; gap:12px; min-width:0; }
+    .editor-title h3{ margin:0; font-size:1.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-  /* Main layout (light after login) */
-  .container{max-width:1200px;margin:0 auto}
-  .top-actions{ display:flex; justify-content:flex-end; gap:8px; margin-bottom:12px; align-items:center; display: none !important; }
-  h1{ text-align:center; color:var(--text); margin:6px 0 18px; font-size:2rem }
-      
-      /* Two-column layout */
-.two-col-layout {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 24px;
-  align-items: start;
-}
+    .avatar{ width:56px; height:56px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; color:#0b1220; font-weight:700; font-size:1.2rem; flex:0 0 56px; overflow:hidden; }
+    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-.left-sidebar {
-  position: sticky;
-  top: 16px;
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: var(--card-bg);
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(11,17,30,0.04);
-}
+    label{ display:block; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em; color:#64748b; margin-bottom:4px; font-weight:700; }
+    input[type="text"], select, textarea, input[type="number"]{ width:100%; padding:9px; border-radius:6px; border:1px solid #cbd5e1; font-size:14px; box-sizing:border-box; background: #fff; color: #0f172a; transition: border 0.15s; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:var(--primary); box-shadow: 0 0 0 2px rgba(87, 46, 245, 0.1); }
+    
+    .field{ margin-bottom:14px; }
+    .skills-list{ margin-top:8px; }
+    .skill-row{ display:flex; gap:8px; margin-bottom:8px; align-items:center; }
+    .skill-row select{ min-width:0; flex:1; }
+    .skill-row .score-select{ width:140px; }
+    .skill-row .category-select{ width:150px; flex: 0 0 150px; font-size: 12px; color: #64748b; }
+    .skill-row .removeSkill, .skill-row .recency-toggle { padding:0; width:36px; height:36px; border-radius:6px; background:#fff; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size: 1.1rem; transition: all 0.2s; }
+    
+    .skill-row .removeSkill { color:#ef4444; }
+    .skill-row .removeSkill:hover { background:#fef2f2; border-color:#fca5a5; }
+    
+    .skill-row .recency-toggle[data-state="hot"] { background: #dc2626; color: white; border-color: #b91c1c; }
+    .skill-row .recency-toggle[data-state="warm"] { background: #f59e0b; color: #fff; border-color: #d97706; }
+    .skill-row .recency-toggle[data-state="cold"] { background: #e2e8f0; color: #94a3b8; border-color: #cbd5e1; }
 
-.right-content {
-  min-width: 0; /* prevents grid blowout */
-}
+    .skill-key { display:flex; gap:12px; font-size:0.75rem; color:var(--muted); margin-bottom:8px; align-items:center; background:#f8fafc; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; }
+    .key-item { display:flex; gap:4px; align-items:center; }
+    .key-icon { width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; border-radius:4px; font-size:10px; font-weight:bold; }
+    .k-hot { background:#dc2626; color:white; }
+    .k-warm { background:#f59e0b; color:white; }
+    .k-cold { background:#e2e8f0; color:#64748b; }
 
-/* Stack to single column on narrow screens */
-@media (max-width: 768px) {
-  .two-col-layout {
-    grid-template-columns: 1fr;
-  }
-  .left-sidebar {
-    position: static;
-    max-height: none;
-  }
-}
-      
-      
-  .search-legend-row{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-bottom:12px;
-}
+    .login-overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.98)); z-index:2000; }
+    .login-card{ background:#fff; color:#0b1220; padding:32px; border-radius:16px; width:340px; box-shadow:0 20px 50px rgba(0,0,0,0.4); text-align:center; }
+    .login-card h2{ margin:0 0 16px; font-size:1.2rem; color:#0b1220 }
+    .login-form{ display:flex; gap:12px; flex-direction:column; align-items:stretch; }
+    .login-form input[type="password"]{ padding:12px; font-size:1rem; border-radius:8px; border:1px solid #e2e8f0; background:#f8fafc; }
+    .login-form button{ padding:12px; border-radius:8px; border:none; background:var(--primary); color:#fff; cursor:pointer; font-weight:700; font-size:1rem; }
+    .login-error{ color:#ef4444; margin-top:12px; font-weight:600; font-size:0.9rem; display:none; }
 
-.name-search-wrapper{ width:100%; display:flex; flex-direction:column; }
-
-.search-legend-row .name-search-wrapper input[type="search"]{
-  width:100%;
-}
-
-.name-search-wrapper{ width:100%; display:flex; }
-.name-search-wrapper input[type="search"]{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6e9f6; background:#fff; color:var(--text); }
-
-.legend{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-.legend div{display:flex;align-items:center; gap:6px; font-size:0.82rem;}
-      
-  .legend .sw{width:14px;height:14px;border-radius:3px;background:var(--software)}
-  .legend .pf{width:14px;height:14px;border-radius:3px;background:var(--platform)}
-  .legend .sd{width:14px;height:14px;border-radius:3px;background:var(--specialism-digital)}
-  .legend .sp{width:14px;height:14px;border-radius:3px;background:var(--specialism-print)}
-
-
-
-
- .controls{display:flex; flex-direction:column; gap:10px; margin-bottom:12px;}
-  input[type="search"], select, button, .skill-chip{ padding:10px 12px; border-radius:10px; font-size:0.95rem; box-shadow:none; }
-  input[type="search"], select { background: #fff; color: var(--text); border: 1px solid #e6e9f6; width:100%; }
-
-  button{ background:var(--button-on); color:#fff; border:1px solid var(--button-on); cursor:pointer; font-weight:600; }
-  .muted-btn{ background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); }
-
-  .reset-btn { background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); padding:10px 12px; border-radius:10px; font-weight:700 }
-
-  .skill-list{ display:flex; flex-direction:column; gap:4px; margin:8px 0 8px }
-  .skill-chip{ background:var(--button-off-bg); cursor:pointer; user-select:none; border:1px solid var(--button-off-border); color:var(--button-off-text); padding:6px 10px; border-radius:20px; font-weight:700; font-size:0.82rem; }
-  .skill-chip.software{ border-color:var(--software); color:var(--software) }
-  .skill-chip.platform{ border-color:var(--platform); color:var(--platform) }
-  .skill-chip.specialism-digital{ border-color:var(--specialism-digital); color:var(--specialism-digital) }
-  .skill-chip.specialism-print{ border-color:var(--specialism-print); color:var(--specialism-print) }
-  .skill-chip.selected { background:var(--button-on); color:#fff; border-color:var(--button-on) }
-      
-  /* Skill chip hover — darker border + light grey background on rollover */
-  .skill-chip:hover{
-    transition: border-color .15s ease, background .15s ease;
-    background: #f0f1f4;
-  }
-  .skill-chip.software:hover{ border-color: #c45a2e; }
-  .skill-chip.platform:hover{ border-color: #3da96e; }
-  .skill-chip.specialism-digital:hover{ border-color: #6e2f50; }
-  .skill-chip.specialism-print:hover{ border-color: #2d6fb8; }
-
-  /* Default (uncategorised) chip hover */
-  .skill-chip:hover:not(.software):not(.platform):not(.specialism-digital):not(.specialism-print){
-    border-color: #3a1ab0;
-  }
-
-  /* Don't apply hover effect to selected or dimmed chips */
-  .skill-chip.selected:hover{ border-color: var(--button-on); background: var(--button-on); }
-  .skill-chip.category-dimmed:hover{ border-color: var(--button-off-border); background: var(--button-off-bg); } 
-
-  .clear-chip{ display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--button-off-bg); color:var(--button-off-text); border:1px solid var(--button-off-border); padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:700; font-size:0.95rem; width:100%; }
-.clear-chip[hidden]{ display:none; }
-
-  .segmented { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--button-off-border); background:#fff; margin-left:0; width:100%; }
-.segmented button { flex:1; padding:10px 12px; border:0; border-right:1px solid var(--button-off-border); background:var(--button-off-bg); cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--button-off-text); transition: background .15s ease, color .15s ease; }
-.segmented button:last-child { border-right:0; }
-.segmented button.active { background:var(--button-on); color:#fff; }   
-
-  /* Results Container is now a flow container, not a grid itself */
-  #results { margin-bottom: 40px; }
-  
-  /* The grid is applied to the sub-lists per department */
-  .dept-results-grid { display:grid; gap:20px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-items:start; margin-bottom:40px; }
-  
-  .dept-section-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text);
-      border-bottom: 2px solid #e6e9f6;
-      padding-bottom: 8px;
-      margin: 32px 0 16px 0;
-  }
-      
-        /* Collapsible skill sections */
-  .skill-section { margin-bottom: 8px; }
-  .skill-section-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 8px 14px;
-    border-radius: 10px;
-    background: #fff;
-    border: 1px solid #e6e9f6;
-    font-weight: 700;
-    font-size: .9rem;
-    color: var(--muted);
-    user-select: none;
-    transition: background .15s ease;
-  }
-  .skill-section-header:hover { background: #f0f1f4; }
-  .skill-section-header .section-swatch {
-    width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0;
-  }
-  .skill-section-header .section-arrow {
-    margin-left: auto;
-    transition: transform .2s ease;
-    font-size: .75rem;
-  }
-  .skill-section-header.collapsed .section-arrow { transform: rotate(-90deg); }
-
-  .skill-section-chips {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  justify-content: flex-start;
-  padding: 8px 0 4px;
-  overflow: hidden;
-  transition: max-height .25s ease, opacity .2s ease;
-}
-  .skill-section-chips.hidden {
-    max-height: 0 !important;
-    opacity: 0;
-    padding: 0;
-  }
-
-  .skill-sections-wrapper {
-    display: flex; flex-direction: column;
-    gap: 4px; margin: 8px 0;
-  }
-  
-  /* UPDATED CARD CSS: Auto height for chip expansion */
-  .card{
-    background:var(--card-bg);
-    color:var(--card-text);
-    padding:16px;
-    border-radius:12px;
-    box-shadow:0 6px 18px rgba(11,17,30,0.04);
-    border-left:6px solid var(--button-on);
-    cursor:pointer;
-    position:relative;
-    height: auto; 
-    transition: transform .12s ease, box-shadow .12s ease;
-    outline: none;
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-  }
-  .card:focus, .card:hover{ transform: translateY(-4px); box-shadow:0 12px 30px rgba(11,17,30,0.06); }
-  
-  .card.top3{ border-left-color: #efc94f; box-shadow:0 0 0 2px rgba(239,201,79,0.08) }
-  .card .card-body{ flex:1 1 auto; min-width:0 }
-  .card h3{ margin:0 0 6px; font-size:1.05rem; color:var(--card-text) }
-  .card p { margin: 0 0 10px; color: var(--muted); font-size: .92rem; }
-  .dept-badges{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-  .dept-pill{ background:rgba(11,17,30,0.04); color:var(--card-text); padding:4px 8px; border-radius:999px; font-size:.78rem; font-weight:700; }
-
-  .badge{ position:absolute; right:12px; top:12px; padding:6px 10px; border-radius:999px; color:#000; font-weight:700; font-size:.9rem; background:var(--button-on); }
-  
-  /* NEW BADGE COLOURS for 1-5 Scale */
-  /* High = 4-5 (Green), Mid = 3 (Amber), Low = 1-2 (Red/Grey) */
-  .high{ background:#27ae60; color:#fff } 
-  .mid{ background:#f39c12; color:#000 } 
-  .low{ background:#e74c3c; color:#fff }
-
-  .match-breakdown { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
-  .match-chip { font-size:0.8rem; background:#f1f3ff; border:1px solid #dce2f5; color:#0b1220; padding:3px 8px; border-radius:6px; display:flex; align-items:center; gap:6px; }
-  .match-chip b { color:var(--button-on); font-weight:800; }
-
-  .hover-details{ margin-top:0; max-height:0; overflow:hidden; opacity:0; transition: max-height .22s ease, opacity .22s ease, margin-top .22s ease; font-size:.9rem; color:var(--muted) }
-  .card:hover .hover-details{ max-height:400px; opacity:1; margin-top:8px; }
-
-  .backdrop{ position:fixed; inset:0; background:rgba(11,17,30,0.32); opacity:0; pointer-events:none; transition: opacity .18s ease; z-index: 990; }
-  .backdrop.open{ opacity:1; pointer-events:auto; }
-
-  .side-panel{ position:fixed; top:0; right:0; height:100%; width:min(420px, 100%); background:var(--card-bg); color:var(--card-text); box-shadow: -8px 0 30px rgba(11,17,30,0.06); padding:24px; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.9,.2,1); z-index:999; will-change:transform; overflow:auto; }
-  .side-panel.open{ transform: translateX(0) }
-  .side-panel .close-btn{ position:sticky; top:10px; float:right; cursor:pointer; font-size:1.2rem; background:transparent; border:1px solid rgba(11,17,30,0.06); padding:6px 8px; color:var(--card-text); border-radius:8px; }
-  .stat{ display:flex; justify-content:space-between; gap:12px; font-size:.9rem; padding:8px 0; border-bottom:1px dashed rgba(11,17,30,0.04); color:var(--card-text); align-items: center; }
-  .stat .score-row { display: flex; align-items: center; gap: 6px; }
-  .warning{ grid-column:1/-1; color:#c0392b; font-weight:700; text-align:center; padding:8px; background:rgba(11,17,30,0.03); border-radius:8px }
-
-  .panel-header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-  .panel-title{ flex:1 1 auto; min-width:0; }
-  .panel-title h2{ margin:0 0 6px; font-size:1.25rem; color:var(--card-text); }
-  .panel-avatar{ margin-right: 14px; width:72px; height:72px; border-radius:50%; overflow:hidden; flex:0 0 72px; display:flex; align-items:center; justify-content:center; background:#f1f3ff; color:#0b1220; font-weight:700; font-size:1.05rem; }
-  .panel-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-
-  .resource-contacts { margin-top:8px; color:var(--card-text); font-size:.95rem; }
-  .resource-contacts a { color: #0b1220 !important; text-decoration: underline !important; font-weight:700; }
-
-  #panelContent > * { margin-bottom:12px; }
-  
-  .side-panel .recency-key { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(11,17,30,0.04); font-size: 0.82rem; line-height: 1.4; color: var(--card-text); }
-  .side-panel .recency-key strong { display:block; margin-bottom:6px; }
-  .side-panel .recency-key .key-item { display: flex; align-items:center; gap:6px; margin-bottom: 4px; }
-  
-  .side-panel .skill-scale { margin-top: 12px; color: var(--card-text); font-size: 0.82rem; line-height: 1.18; }
-  .side-panel .skill-scale ol { margin: 8px 0 0 18px; padding: 0; }
-  .side-panel .skill-scale li { margin: 6px 0; color: var(--card-text); }
-
-  .side-panel .profile-summary { color: var(--muted); margin-top: 20px; font-size: .95rem; }
-      
-      .sidebar-label {
-  display: block;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.00em;
-  color: var(--muted);
-  margin-bottom: 5px;
-}
-
-   
-     .panel-dept-section { margin-bottom: 10px; }
-  .panel-dept-heading {
-    display: block;
-    font-size: .82rem;
-    color: var(--muted);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-weight: 600;
-  }
-
-
-  @media (prefers-reduced-motion: reduce){ .card, .side-panel{ transition:none } }
+    .modal-backdrop{ display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:3000; align-items:center; justify-content:center; backdrop-filter: blur(2px); }
+    .modal{ background:#fff; width:90%; max-width:650px; padding:24px; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); display:flex; flex-direction:column; gap:16px; }
+    .modal h2 { margin:0; }
+    .modal p { margin:0; color:var(--muted); font-size:0.95rem; }
+    .modal textarea{ width:100%; height:320px; font-family: 'Menlo', 'Monaco', monospace; font-size:12px; line-height:1.5; padding:12px; border:1px solid #e2e8f0; border-radius:8px; background:#f8fafc; resize: none; }
+    .modal-actions{ display:flex; justify-content:flex-end; gap:10px; }
   </style>
 </head>
 <body>
-  <script id="embedded-team" type="application/json">
-
+<script id="embedded-team" type="application/json">
 [
   {
     "name": "Jack Gibbons",
@@ -4824,1044 +4577,600 @@
   }
 ]
 </script>
-<div id="loginOverlay" class="login-overlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <div class="login-card" role="document">
-      <h2 id="loginTitle">Password required</h2>
-      <form id="loginForm" class="login-form" autocomplete="off" novalidate>
-        <label for="passwordInput" class="visually-hidden">Password</label>
-        <input id="passwordInput" name="password" type="password" placeholder="Password required" aria-label="Password required" />
-        <button id="loginSubmit" type="submit">Submit</button>
-        <div id="loginError" class="login-error" role="alert">Incorrect password</div>
+
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <h2>Manager Access</h2>
+      <form id="loginForm" class="login-form">
+        United
+          <input id="pwInput" type="password" placeholder="Enter Password" />
+        <button type="submit">Unlock</button>
+        <div id="loginError" class="login-error">Incorrect password</div>
       </form>
     </div>
   </div>
 
-  <div id="appWrapper" class="container" role="main" aria-hidden="true">
-    <div class="top-actions">
-      <input id="importFile" type="file" accept="application/json" style="display:none" />
-      <button id="importBtn" class="muted-btn" title="Import JSON">Import JSON</button>
-      <button id="manageBtn" class="muted-btn" title="Open specialists manager">Manage specialists</button>
-    </div>
-      
-
-
-   
-      
-      
-      <div class="two-col-layout">
-          
-            <!-- LEFT SIDEBAR: Filters & Skills -->
-  <div class="left-sidebar">
-
-    <div class="search-legend-row">
-      <div class="name-search-wrapper">
-        <label for="nameSearch" class="sidebar-label">Search specialists by name</label>
-    <input id="nameSearch" type="search" placeholder="Name search" aria-label="Search specialists by name" />
+  <div class="wrap" id="appWrap" aria-hidden="true">
+    <div class="panel">
+      <div class="header-row">
+        <h2>Specialists</h2>
+        <div style="display:flex; gap:8px;">
+           <button class="primary" id="newBtn" title="Create new specialist">+ New</button>
+        </div>
       </div>
-     <div class="legend"  style="display: none" >
-  <div><span class="sw"></span> Software</div>
-  <div><span class="pf"></span> Platform</div>
-  <div><span class="sd"></span> Specialism (Digital)</div>
-  <div><span class="sp"></span> Specialism (Print)</div>
-</div>
-    </div>
-
-    <div class="controls" role="region" aria-label="Controls">
-      <div style="width:100%;">
-    <label for="skillSearch" class="sidebar-label">Search skills</label>
-    <input id="skillSearch" type="search" placeholder="Skill search" aria-label="Search skills" />
-  </div>
-      <select id="levelFilter" aria-label="Filter by level">
-        <option value="all">All Levels</option>
-        <option value="junior">Junior</option>
-        <option value="mid">Mid</option>
-        <option value="senior">Senior</option>
-      </select>
-
-      <select id="departmentFilter" aria-label="Filter by department">
-        <option value="all">All Departments</option>
-        <option value="Creative Design">Creative Design</option>
-        <option value="Print Design">Print Design</option>
-        <option value="Digital Design">Digital Design</option>
-        <option value="Print Artwork">Print Artwork</option>
-        <option value="Digital Artwork">Digital Artwork</option>
-        <option value="Creative Retouch">Creative Retouch</option>
-        <option value="Motion">Motion</option>
-        <option value="Social">Social</option>
-        <option value="Photography">Photography</option>
-        <option value="Proofreading">Proofreading</option>
-      </select>
-
-      <select id="studioFilter" aria-label="Filter by office">
-        <option value="all">All Studios</option>
-      </select>
-
-      <select id="titleFilter" aria-label="Filter by job title">
-        <option value="all">All Job Titles</option>
-      </select>
-
-      <button id="resetFilters" class="reset-btn" aria-label="Reset filters">Reset filters</button>
-    </div>
+      <div class="left-search">
+        <input type="search" id="leftSearch" placeholder="Filter by name..." autocomplete="off" />
+      </div>
       
+      <div class="groups" id="groupList"></div>
       
-      
-      
-    <div id="chipActions" style="display:flex; flex-direction:column; margin:8px 0 0px; gap:8px;">
+      <div style="margin-top:auto; padding-top:12px; border-top:1px solid #f1f5f9; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button id="exportBtn" style="grid-column:1/-1;">Export All (Backup)</button>
         
-         <label for="skillSearch" class="sidebar-label">Skill chip search</label>
-        
-      <button id="clearChips" class="clear-chip" hidden aria-hidden="true">Clear Skill Chips</button>
-      <div id="segControl" class="segmented" style="display:none;">
-        <button id="segAll" class="active">All Levels</button>
-        <button id="segMid">3+ Core</button>
-        <button id="segHigh">5 Experts</button>
+        <button id="addJsonBtn" class="secondary-action" title="Add specialists without replacing the list">+ Add Specialist JSON</button>
+        <input type="file" id="addJsonFile" accept="application/json" multiple style="display:none" />
+
+        <button id="importBtn" title="Replace entire database with backup">Restore Database</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" />
+
+        <button id="resetDefaultsBtn" class="danger" style="grid-column:1/-1;">⚠ Reset to Default</button>
       </div>
     </div>
+
+    <div class="panel">
+      <div style="position:absolute; top:18px; right:18px;">
+          <a href="index_light_skills%203.html" target="_blank" class="nav-link"><button>Open Talent Map ↗</button></a>
+      </div>
+
+      <div class="editor-header">
+        <div class="editor-title" id="editorTitleArea">
+          <div class="avatar" id="editAvatar"></div>
+          <h3 id="editNameDisplay">Select a specialist</h3>
+        </div>
+        <div class="actions">
+          <button id="deleteBtn" class="danger" style="display:none">Delete</button>
+          <button id="saveBtn" class="primary" style="display:none">Save Changes</button>
+        </div>
+      </div>
       
-    
-
-    <div id="skillList" class="skill-list" role="list" aria-label="Skills list"></div>
-
-
- </div>
-      
-     <!-- RIGHT CONTENT: Results -->
-  <div class="right-content">
-      
-       <h1>McCANN UNITED TALENT MAP</h1>
-
-        <div id="results" role="list" aria-label="Search results"></div>
-
-    </div>
-          
+      <div id="editorForm" class="editor-scroll-area" style="display:none">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="inpName" placeholder="e.g. Sarah Smith" />
+        </div>
+        <div class="field">
+          <label>Job Title</label>
+          <input type="text" id="inpRole" placeholder="e.g. Senior Designer" />
+        </div>
+        
+        <div class="field" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label>Department (Primary)</label>
+            <select id="inpDept">
+              <option value="Creative Design">Creative Design</option>
+              <option value="Print Design">Print Design</option>
+              <option value="Digital Design">Digital Design</option>
+              <option value="Print Artwork">Print Artwork</option>
+              <option value="Digital Artwork">Digital Artwork</option>
+              <option value="Creative Retouch">Creative Retouch</option>
+              <option value="Motion">Motion</option>
+              <option value="Social">Social</option>
+              <option value="Photography">Photography</option>
+              <option value="Proofreading">Proofreading</option>
+            </select>
           </div>
-      
-      
-    <footer class="site-footer">
-      &#169; 2026 - Jack Gibbons. Designed and built by Jack Gibbons – McCann Manchester
-    </footer>
-      <footer class="footer-padding">
-     
-    </footer>
-  </div>  <!-- end #appWrapper -->
+          <div>
+             <label>Location</label>
+             <select id="inpLoc">
+                <option value="Manchester">Manchester</option>
+                <option value="London">London</option>
+                <option value="Birmingham">Birmingham</option>
+                <option value="Leeds">Leeds</option>
+                <option value="Bristol">Bristol</option>
+                <option value="Milton Keynes">Milton Keynes</option>
+             </select>
+          </div>
+        </div>
 
-  <div id="backdrop" class="backdrop" hidden aria-hidden="true"></div>
+        <div class="field">
+           <label>Can also work in... (Ctrl/Cmd+Click to select)</label>
+           <select id="inpDepts" multiple style="height:120px;">
+              <option value="Creative Design">Creative Design</option>
+              <option value="Print Design">Print Design</option>
+              <option value="Digital Design">Digital Design</option>
+              <option value="Print Artwork">Print Artwork</option>
+              <option value="Digital Artwork">Digital Artwork</option>
+              <option value="Creative Retouch">Creative Retouch</option>
+              <option value="Motion">Motion</option>
+              <option value="Social">Social</option>
+              <option value="Photography">Photography</option>
+              <option value="Proofreading">Proofreading</option>
+           </select>
+        </div>
+        
+        <div class="field">
+          <label>Skill Level</label>
+          <select id="inpLevel">
+            <option value="junior">Junior</option>
+            <option value="mid">Mid</option>
+            <option value="senior">Senior</option>
+          </select>
+        </div>
 
-  <aside id="sidePanel" class="side-panel" aria-hidden="true" aria-label="Person details panel">
-    <button id="panelClose" class="close-btn" aria-label="Close details">✕</button>
-    <div id="panelContent" tabindex="0"></div>
-  </aside>
+        <div class="field">
+          <label>Profile Summary</label>
+          <textarea id="inpSummary" rows="3" placeholder="Brief description of experience..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Avatar URL (optional)</label>
+          <input type="text" id="inpAvatar" placeholder="https://..." />
+        </div>
+
+        <div class="field">
+          <div class="header-row">
+            <label style="margin:0; font-size:12px;">Skills & Competency (Autonomy Scale)</label>
+            <button class="small" id="addSkillBtn">+ Add Skill</button>
+          </div>
+          
+          <div class="skill-key">
+            <span><strong>Recency Key:</strong></span>
+            <div class="key-item"><span class="key-icon k-hot">🔥</span> Hot (Frequent)</div>
+            <div class="key-item"><span class="key-icon k-warm">⚡</span> Active (Occasional)</div>
+            <div class="key-item"><span class="key-icon k-cold">🧊</span> Dormant (Not recent)</div>
+          </div>
+
+          <div class="skills-list" id="skillsContainer"></div>
+        </div>
+      </div>
+
+      <div id="emptyState" style="padding:60px 20px; text-align:center; color:var(--muted);">
+        <div style="font-size:3rem; margin-bottom:10px; opacity:0.3;">←</div>
+        Select a specialist from the list to edit,<br>or click <strong>+ New</strong> to create one.
+      </div>
+    </div>
+  </div>
+
+  <div id="exportModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <h2>Export Data</h2>
+      <p>Copy the code below and paste it into <code>index.html</code> inside the <code>&lt;script id="embedded-team"&gt;</code> tag.</p>
+      <textarea id="exportTextarea" readonly></textarea>
+      <div class="modal-actions">
+        <button id="copyExportBtn" class="primary">Copy to Clipboard</button>
+        <button id="closeExportBtn">Close</button>
+      </div>
+    </div>
+  </div>
 
   <script>
   (function(){
     const STORAGE_KEY = 'mcann_team_data_v1';
     const PASSWORD = 'United';
 
-    const SOFTWARE_SKILLS = ["After Effects","Photoshop","Illustrator","InDesign","Premier Pro","XD","Adobe Dimension","Lightroom","Adobe Audition","CSS","Javascript","Google Web Designer","Capture One","Ziflow","Adobe Bridge","Character Animator", "Word"];
-    const PLATFORM_SKILLS = ["Figma","Runway","Firefly","Corebook","Blender","Facebook","Ziflow","Adobe Bridge"];
-    const SPECIALISM_SKILLS = [
-      "HTML Email","Display Banners","DOOH","DCO Flashtalking","DCO Storyteq","DCO Google Studio",
-      "Artworking","Packaging","Out of Home (OOH)","Retail & POS","Press & Editorial","Direct Mail","Brand Identity",
-      "High-end Retouching","Colour Grading","Image Compositing","Technical Grading","Cutouts",
-      "Photography", "Social Content", "Copywriting", "Proofreading"
-    ];
-
-// --- Custom Skills Merge Logic ---
-// Scans all team members for 'customDefinitions' and adds new skills
-// into the master classification arrays so they appear as chips and
-// are recognised by the scoring/matching engine.
-function mergeCustomDefinitions(){
-  if(!Array.isArray(teamData) || teamData.length === 0) return;
-
-  teamData.forEach(function(p){
-    if(!p.customDefinitions) return;
-
-    Object.entries(p.customDefinitions).forEach(function(entry){
-      var skillName = entry[0];
-      var category  = entry[1];
-
-      if(category === "Software"){
-        if(!SOFTWARE_SKILLS.includes(skillName)) SOFTWARE_SKILLS.push(skillName);
-      } else if(category === "Platform"){
-        if(!PLATFORM_SKILLS.includes(skillName)) PLATFORM_SKILLS.push(skillName);
-      } else if(category.indexOf("Specialism") !== -1){
-        // Covers both "Digital Specialism" and "Print Specialism"
-        if(!SPECIALISM_SKILLS.includes(skillName)) SPECIALISM_SKILLS.push(skillName);
-      }
-    });
-  });
-}
-      
-      
-    const MERGED_SKILL_MAP = { "dco":["DCO Flashtalking","DCO Storyteq","DCO Google Studio"], "display banners":["Google Web Designer","HTML5","HPTO"] };
-
-    const DEPARTMENT_CONTACTS = {
-  "Digital Artwork":  { name: "Brett Collier", email: "Brett.Collier@mccann.com" },
-  "Digital Design":   { name: "Brett Collier", email: "Brett.Collier@mccann.com" },
-  "Print Design":     { name: "Mark Pomfret",  email: "Mark.Pomfret@mccann.com" },
-  "Print Artwork":    { name: "Mark Pomfret",  email: "Mark.Pomfret@mccann.com" },
-  "Social":           { name: "Kirsty Newman", email: "Kirsty.Newman@mccann.com" },
-  "Creative Design":  { name: "Kirsty Newman", email: "Kirsty.Newman@mccann.com" },
-  "Motion":           { name: "Laura Harris",  email: "Laura.Harris@mccann.com" },
-  "Creative Retouch": { name: "Nikki Bryan",   email: "nikki.bryan@mccann.com" },
-  "Photography":      { name: "Zoe Gent",      email: "Zoe.Gent@mccann.com" },
-  "Proofreading":     { name: "Erin Cleland",  email: "Erin.Cleland@mccann.com" }
-};
-
-const LOCATION_CONTACTS = {
-  "Leeds":         { name: "Alexandra Dowlen",    email: "Alexandra.Dowlen@mccann.com" },
-  "London":        { name: "June Hacker",         email: "June.Hacker@mccann.com" },
-  "Milton Keynes": { name: "Chris Price-Francis",  email: "Chris.Price-Francis@mccann.com" },
-  "Birmingham":    { name: "Henny Coldicott",     email: "Henny.Coldicott@mccann.com" },
-  "Bristol":       { name: "Luke King",           email: "Luke.King@mccann.com" }
-};
-
-    const ALT_SEARCH_TERMS = {
-      "html email": ["crm design","newsletters","mailchimp design","edm","email","email design"],
-      "display banners": ["digital advertising","programmatic creative","web banners","banner","banners"],
-      "dooh": ["digital billboards","out of home","digital signage","motion ooh","digital ooh"],
-      "dco": ["dynamic creative","data-driven ads","personalised creative","personalized creative","smart banners"],
-      "dco flashtalking": ["dco", "flashtalking", "dynamic creative"],
-      "dco storyteq": ["dco", "storyteq", "dynamic creative"],
-      "dco google studio": ["dco", "google studio", "dynamic creative"],
-      "artworking": ["pre-press","print ready","final mechanicals","technical design","repro"],
-      "packaging": ["keylines","cutter guides","mockups","box design","structural design"],
-      "out of home (ooh)": ["48 sheets","6 sheets","static billboards","bus sides","vinyls","48-sheet"],
-      "retail & pos": ["fsdus","shelf talkers","in-store displays","window decals","pop-ups","in store displays"],
-      "press & editorial": ["newspaper ads","magazine layout","dps","double page spread","publishing"],
-      "direct mail": ["brochures","newsletters","catalogues","leaflets","mailers"],
-      "brand identity": ["stationery","business cards","style guides","logo implementation"],
-      "high-end retouching": ["image polishing","beauty retouching","skin work","product clean-up","product cleanup"],
-      "colour grading": ["colour correction","match-to-product","look development","grading","color grading","color correction"],
-      "image compositing": ["photo montage","background removal","creative composition","pathing","compositing"],
-      "technical grading": ["print profiles","cmyk conversion","ink limits","colour management","color management"],
-      "cutouts": ["masking","deep etching","cut-outs","silhouettes","alpha channels","clipping paths"],
-      "photoshop": ["ps","adobe photoshop","photo shop"],
-      "after effects": ["ae","aftereffects","after-effects"],
-      "illustrator": ["ai","adobe illustrator"],
-      "indesign": ["id","adobe indesign"],
-      "premier pro": ["pr","premiere pro","premiere"],
-      "xd": ["adobe xd","xd"],
-      "figma": ["figma"],
-      "google web designer": ["gwd","google web designer","html5 banner","html5"],
-      "css": ["css"],
-      "javascript": ["javascript","js"],
-      "capture one": ["capture one","c1"],
-      "runway": ["runwayml","runway ml","runway"],
-      "firefly": ["adobe firefly","firefly"],
-      "corebook": ["corebook"],
-      "blender": ["blender"],
-      "facebook": ["facebook","meta"],
-      "ziflow": ["ziflow"],
-      "adobe bridge": ["adobe bridge","bridge"],
-      "photography": ["photos", "camera", "shooting"],
-      "proofreading": ["copy check", "qc", "proofing", "text check"]
+    // Skill list - Mutable now to allow custom additions
+    const SKILLS_BY_CATEGORY = {
+      "Software": [ "After Effects","Photoshop","Illustrator","InDesign","Premier Pro","XD","Adobe Dimension","Character Animator","Google Web Designer","Lightroom","Adobe Audition","CSS","Javascript","Capture One","Ziflow","Adobe Bridge", "Word" ],
+      "Platform": [ "Figma","Runway","Firefly","Corebook","Blender","Facebook" ],
+      "Digital Specialism": [ "HTML Email","Display Banners","DOOH","DCO Flashtalking","DCO Storyteq","DCO Google Studio","Social Content" ],
+      "Print Specialism": [ "Artworking","Packaging","Out of Home (OOH)","Retail & POS","Press & Editorial","Direct Mail","Brand Identity","High-end Retouching","Colour Grading","Image Compositing","Technical Grading","Clipping Paths","Photography", "Copywriting", "Proofreading" ]
     };
 
     const $ = id => document.getElementById(id);
-    function escapeHtml(s){ return String(s||'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-    function displayLocationFor(p){ return String(p && p.location || '').replace(/^mccann\s+/i,'').trim(); }
-    function getInitials(name){ if(!name) return ''; const parts = name.trim().split(/\s+/).slice(0,2); return parts.map(p => p.charAt(0).toUpperCase()).join(''); }
-
-    const loginOverlay = $('loginOverlay');
-    const passwordInput = $('passwordInput');
-    const loginForm = $('loginForm');
-    const loginError = $('loginError');
-    const appWrapper = $('appWrapper');
-
-    const importFile = $('importFile');
-    const importBtn = $('importBtn');
-    const manageBtn = $('manageBtn');
-
-    const nameSearch = $('nameSearch'); 
-    const skillSearch = $('skillSearch');
-    const levelFilter = $('levelFilter');
-    const departmentFilter = $('departmentFilter');
-    const studioFilter = $('studioFilter');
-    const titleFilter = $('titleFilter');
-    const resetFilters = $('resetFilters');
-
-    const skillList = $('skillList');
-    const clearChipsBtn = $('clearChips');
-    const segControl = $('segControl');
-    const segAll = $('segAll');
-    const segMid = $('segMid');
-    const segHigh = $('segHigh');
-
-    const results = $('results');
-    const backdrop = $('backdrop');
-    const sidePanel = $('sidePanel');
-    const panelContent = $('panelContent');
-    const panelClose = $('panelClose');
-
-    let teamData = [];
-    let selectedChips = new Set();
-    let skillMin = 0; // 0=all, 3=Core, 5=Expert
-      
-      
-
-      
+    function findSkillCategory(skillName){
+  for(const [cat, skills] of Object.entries(SKILLS_BY_CATEGORY)){
+    if(skills.includes(skillName)) return cat;
+  }
+  return '';
+}
+    const loginOverlay=$('loginOverlay'), loginForm=$('loginForm'), pwInput=$('pwInput'), loginError=$('loginError'), appWrap=$('appWrap');
+    
+    let team = [];
+    let selectedIndex = -1;
+    const expandedState = new Set(); 
 
     function loadTeam(){
       try {
-        const el = document.getElementById('embedded-team');
-        if(el){
-          const txt = el.textContent || el.innerText || '';
-          if(txt && txt.trim()){
-            const parsed = JSON.parse(txt);
-            if(Array.isArray(parsed)){
-              teamData = parsed;
-              return;
-            }
-          }
-        }
-      } catch(e){ console.warn('Failed to parse embedded-team', e); }
-      try{
         const raw = localStorage.getItem(STORAGE_KEY);
-        if(raw){
-          const parsed = JSON.parse(raw);
-          if(Array.isArray(parsed)) { teamData = parsed; return; }
+        if(raw) {
+          team = JSON.parse(raw);
+          if(Array.isArray(team) && team.length > 0) {
+            mergeCustomDefinitions(); // Scan for custom skills
+            return; 
+          }
         }
-      }catch(e){ console.warn('Failed to parse stored team data', e); }
-      teamData = [];
+      } catch(e){}
+
+      try {
+        const el = document.getElementById('embedded-team');
+        if(el) {
+          team = JSON.parse(el.textContent);
+          if(!Array.isArray(team)) team = [];
+          else mergeCustomDefinitions();
+        }
+      } catch(e) { team = []; }
     }
 
-function renderSkillList(){
-  skillList.innerHTML = '';
-
-  var BASE_DIGITAL_SPECIALISM = new Set([
-    "HTML Email","Display Banners","DOOH",
-    "DCO Flashtalking","DCO Storyteq","DCO Google Studio","Social Content"
-  ]);
-
-  var customDigital = new Set();
-  teamData.forEach(function(p){
-    if(!p.customDefinitions) return;
-    Object.entries(p.customDefinitions).forEach(function(entry){
-      if(entry[1] === "Digital Specialism") customDigital.add(entry[0]);
-    });
-  });
-
-  var specialismDigital = [];
-  var specialismPrint = [];
-  SPECIALISM_SKILLS.forEach(function(s){
-    if(BASE_DIGITAL_SPECIALISM.has(s) || customDigital.has(s)){
-      specialismDigital.push(s);
-    } else {
-      specialismPrint.push(s);
+    // Helper: Scan all team members for 'customDefinitions' and add them to master list
+    function mergeCustomDefinitions(){
+      team.forEach(p => {
+        if(p.customDefinitions){
+          Object.entries(p.customDefinitions).forEach(([skillName, category]) => {
+            if(SKILLS_BY_CATEGORY[category] && !SKILLS_BY_CATEGORY[category].includes(skillName)){
+              SKILLS_BY_CATEGORY[category].push(skillName);
+            }
+          });
+        }
+      });
     }
-  });
 
-  // Add the merged DCO chip to digital specialism list
-  specialismDigital.push('DCO');
-
-  function makeChip(label, cls, val){
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'skill-chip ' + (cls || '');
-    b.textContent = label;
-    b.dataset.skillValue = val || label;
-    b.addEventListener('click', function(){
-      var v = b.dataset.skillValue;
-      if(b.classList.toggle('selected')) selectedChips.add(v);
-      else selectedChips.delete(v);
-      skillSearch.value = '';
-      nameSearch.value = '';
-      updateClearButtonVisibility();
-      renderSearchDebounced();
-    });
-    return b;
-  }
-
-  var sections = [
-    { title: 'Software',              color: 'var(--software)',          cls: 'software',           skills: SOFTWARE_SKILLS },
-    { title: 'Platforms',             color: 'var(--platform)',          cls: 'platform',           skills: PLATFORM_SKILLS },
-    { title: 'Specialism (Digital)',  color: 'var(--specialism-digital)',cls: 'specialism-digital', skills: specialismDigital },
-    { title: 'Specialism (Print)',    color: 'var(--specialism-print)',  cls: 'specialism-print',   skills: specialismPrint }
-  ];
-
-  var wrapper = document.createElement('div');
-  wrapper.className = 'skill-sections-wrapper';
-
-  sections.forEach(function(sec){
-    var section = document.createElement('div');
-    section.className = 'skill-section';
-
-    // Header
-    var header = document.createElement('div');
-    header.className = 'skill-section-header';
-    header.innerHTML =
-      '<span class="section-swatch" style="background:' + sec.color + '"></span>' +
-      '<span>' + sec.title + ' (' + sec.skills.length + ')</span>' +
-      '<span class="section-arrow">▼</span>';
-
-    // Chips container
-    var chips = document.createElement('div');
-    chips.className = 'skill-section-chips';
-
-    sec.skills.forEach(function(s){
-      var val = (s === 'DCO') ? 'dco' : s;
-      chips.appendChild(makeChip(s, sec.cls, val));
-    });
-
-    // Toggle collapse
-    header.addEventListener('click', function(){
-      header.classList.toggle('collapsed');
-      chips.classList.toggle('hidden');
-    });
-
-    section.appendChild(header);
-    section.appendChild(chips);
-    wrapper.appendChild(section);
-  });
-
-  skillList.appendChild(wrapper);
-  updateClearButtonVisibility();
-}
-
-    function updateClearButtonVisibility(){ if(clearChipsBtn){ if(selectedChips.size>0){ clearChipsBtn.hidden=false; clearChipsBtn.removeAttribute('aria-hidden'); } else { clearChipsBtn.hidden=true; clearChipsBtn.setAttribute('aria-hidden','true'); } } }
-    if(clearChipsBtn) clearChipsBtn.addEventListener('click', ()=> { selectedChips.clear(); document.querySelectorAll('.skill-chip.selected').forEach(c=>c.classList.remove('selected')); updateClearButtonVisibility(); renderSearchDebounced(); });
-
-    function applySegButtonsState(){ if(segAll && segMid && segHigh){ segAll.classList.toggle('active', skillMin === 0); segMid.classList.toggle('active', skillMin === 3); segHigh.classList.toggle('active', skillMin === 5); } }
-
-    function scoreForPersonAndChip(person, chipValue){
-  if(!chipValue || !person) return 0;
-  const skills = person.skills || {};
-  const ck = String(chipValue).trim();
-  const lower = ck.toLowerCase();
-
-  if(MERGED_SKILL_MAP[lower]){
-    const list = MERGED_SKILL_MAP[lower];
-    const scores = list.map(s => {
-      if(skills[s] !== undefined) return skills[s];
-      for(const k of Object.keys(skills)){
-        if(k.toLowerCase() === s.toLowerCase()) return skills[k];
-      }
-      return 0;
-    });
-    return Math.max(...scores);
-  }
-
-  // Exact key match (case-sensitive)
-  if(skills[ck] !== undefined) return skills[ck];
-
-  // Exact key match (case-insensitive)
-  for(const k of Object.keys(skills)){
-    if(k.toLowerCase() === lower) return skills[k];
-  }
-
-  // Fuzzy substring match — but only for longer strings
-  // If either string is 4 chars or fewer, require exact match
-  // to prevent "Word" matching "Wordpress" etc.
-  for(const k of Object.keys(skills)){
-    const kn = k.toLowerCase();
-    if(kn.length <= 4 || lower.length <= 4) continue;
-    if(kn.includes(lower) || lower.includes(kn)) return skills[k];
-  }
-
-  return 0;
-}
-
-    function skillMatchesQuery(skillName, qLower){
-  if(!qLower) return true;
-  if(!skillName) return false;
-  const skillLower = String(skillName).toLowerCase();
-  const q = String(qLower).toLowerCase().trim();
-
-  // If either string is short (4 chars or fewer), require exact match
-  // This prevents "Word" matching "Wordpress" and vice versa
-  if(skillLower.length <= 4 || q.length <= 4){
-    if(skillLower === q) return true;
-  } else {
-    if(skillLower.includes(q) || q.includes(skillLower)) return true;
-  }
-
-  // Check alternative search terms (aliases)
-  const aliases = ALT_SEARCH_TERMS[skillLower] || [];
-  for(const a of aliases){
-    const ali = a.toLowerCase();
-    if(ali.length <= 4 || q.length <= 4){
-      if(ali === q) return true;
-    } else {
-      if(ali.includes(q) || q.includes(ali)) return true;
+    function saveTeam(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(team));
+      window.dispatchEvent(new Event('storage')); 
     }
-  }
-  for(const [canonical, aliasList] of Object.entries(ALT_SEARCH_TERMS)){
-    for(const alias of aliasList){
-      const ali = alias.toLowerCase();
-      let matched = false;
-      if(ali.length <= 4 || q.length <= 4){
-        matched = (ali === q);
-      } else {
-        matched = (ali.includes(q) || q.includes(ali));
-      }
-      if(matched){
-        if(canonical === skillLower) return true;
-      }
+
+    function toggleExpand(key){
+      if(expandedState.has(key)) expandedState.delete(key);
+      else expandedState.add(key);
+      renderGroupedList($('leftSearch').value);
     }
-  }
-  return false;
-}
+
+    function norm(s){ return (s||'').trim().toLowerCase(); }
+    function formatLocationForDisplay(loc) {
+      const l = (loc || 'Unknown').trim();
+      if(!/^mccann\s+/i.test(l) && l.toLowerCase() !== 'unknown') return 'McCann ' + l;
+      return l;
+    }
+
+    function renderGroupedList(filter){
+      const groupList = $('groupList');
+      groupList.innerHTML = '';
+      const f = norm(filter);
+      const isFiltering = f.length > 0;
       
-      
-    function renderSearch(){
-      const container = results;
-      container.innerHTML = '';
-      
-      const typedQ = (skillSearch.value || "").trim();
-      const qLower = typedQ.toLowerCase();
-      const nameQ = (nameSearch && (nameSearch.value || "").trim().toLowerCase()) || "";
-      const level = (levelFilter.value || "all");
-      const department = (departmentFilter.value || "all");
-      const studio = (studioFilter.value || "all");
-      const title = (titleFilter.value || "all");
+      const hierarchy = {};
+      team.forEach((p, idx)=>{
+        if(f && !norm(p.name).includes(f)) return;
+        const locRaw = (p.location || 'Unknown').trim();
+        const locDisplay = formatLocationForDisplay(locRaw);
+        const dept = (p.department || 'Other').trim();
+        if(!hierarchy[locDisplay]) hierarchy[locDisplay] = {};
+        if(!hierarchy[locDisplay][dept]) hierarchy[locDisplay][dept] = [];
+        hierarchy[locDisplay][dept].push({ ...p, originalIndex: idx });
+      });
 
-      const usingChips = selectedChips.size > 0;
-      const hasActiveFilter =
-        usingChips ||
-        typedQ !== "" ||
-        nameQ !== "" ||
-        level !== "all" ||
-        department !== "all" ||
-        studio !== "all" ||
-        title !== "all";
-
-      const matches = [];
-
-      // Logic to find matches
-      if(nameQ){
-        teamData.forEach(p=>{
-          if(level !== "all" && p.level !== level) return;
-          if(department !== "all" && (!Array.isArray(p.departments) || !p.departments.includes(department))) return;
-          if(studio !== "all" && displayLocationFor(p) !== studio) return;
-          if(title !== "all" && p.role !== title) return;
-
-          const nameLower = (p.name || '').toLowerCase();
-          if(nameLower.startsWith(nameQ)){
-            const entries = Object.entries(p.skills || {});
-            if(entries.length === 0){
-              matches.push({p, skill: '', score: 0});
-            } else {
-              const top = entries.reduce((best, curr) => curr[1] > best[1] ? curr : best, entries[0]);
-              matches.push({p, skill: top[0], score: top[1]});
-            }
-          }
-        });
-      } else {
-        teamData.forEach(p=>{
-          if(level !== "all" && p.level !== level) return;
-          if(department !== "all" && (!Array.isArray(p.departments) || !p.departments.includes(department))) return;
-          if(studio !== "all" && displayLocationFor(p) !== studio) return;
-          if(title !== "all" && p.role !== title) return;
-
-                    if(!usingChips && typedQ === ""){
-        
-            const entries = Object.entries(p.skills || {});
-            let topSkill = '', topScore = 0;
-            if(entries.length > 0){
-               [topSkill, topScore] = entries.reduce((best, curr) => curr[1] > best[1] ? curr : best, entries[0]);
-            }
-            matches.push({p, skill: topSkill, score: topScore});
-            return;
-          }
-
-          if(usingChips){
-            let allMatch = true;
-            let totalScore = 0;
-            let breakdown = []; 
-
-            for(const chipVal of selectedChips){
-              const s = scoreForPersonAndChip(p, chipVal);
-              if(!s || s <= 0){ allMatch = false; break; }
-              totalScore += s;
-              breakdown.push({ skill: chipVal, score: s });
-            }
-
-            if(allMatch){
-              const avgScore = (totalScore / selectedChips.size).toFixed(1).replace('.0','');
-              matches.push({
-                p, 
-                skill: Array.from(selectedChips).join(", "), 
-                score: totalScore, 
-                displayScore: avgScore, 
-                breakdown: breakdown
-              });
-            }
-            return;
-          }
-
-           // Typed Skill Search — pick only the best matching skill per person
-let bestSkill = null;
-let bestScore = 0;
-Object.entries(p.skills || {}).forEach(([skill,score])=>{
-  if(score <= 0) return;
-  if(skillMatchesQuery(skill, qLower)){
-    if(score > bestScore){
-      bestScore = score;
-      bestSkill = skill;
-    }
-  }
-});
-if(bestSkill){
-  matches.push({p, skill: bestSkill, score: bestScore});
-}
-        }); // <-- closes teamData.forEach
-      }  
-
-      if(matches.length === 0){
-        container.innerHTML = `<div class="warning">No matches found</div>`;
-        if(segControl) segControl.style.display = 'none';
+      const locations = Object.keys(hierarchy).sort();
+      if(locations.length === 0){
+        groupList.innerHTML = `<div style="padding:20px; text-align:center; color:#94a3b8; font-size:0.9rem;">No specialists found.</div>`;
         return;
       }
 
-      if((usingChips || typedQ !== "" || nameQ !== "")){
-        // Coverage check based on new scale: score >= 4 is "strong"
-        const strongMatches = matches.filter(m=>m.score>=4);
-        if(strongMatches.length<=3){
-          const warn = document.createElement('div');
-          warn.className = 'warning';
-          warn.textContent = '⚠️ Low coverage for this skill';
-          container.appendChild(warn);
-        }
-      }
-
-      // Filter by skillMin (segmented control)
-      let displayed = matches;
-      if(skillMin > 0){
-        displayed = matches.filter(m => {
-           let val = m.score;
-           if(m.displayScore) val = parseFloat(m.displayScore);
-           return val >= skillMin;
-        });
-      }
-
-      if(hasActiveFilter && matches.length > 0){
-        if(segControl) { segControl.style.display = 'inline-flex'; applySegButtonsState(); }
-      } else {
-        if(segControl) segControl.style.display = 'none';
-      }
-
-      if(displayed.length === 0){
-         container.innerHTML = `<div class="warning">No matches at this skill level</div>`;
-         return;
-      }
-
-      // *** GROUPING LOGIC ***
-      const grouped = {};
-      displayed.forEach(m => {
-        const dept = m.p.department || 'Other';
-        if(!grouped[dept]) grouped[dept] = [];
-        grouped[dept].push(m);
-      });
-
-      const deptNames = Object.keys(grouped).sort();
-
-      deptNames.forEach(deptName => {
-        const groupMatches = grouped[deptName];
+      locations.forEach(loc =>{
+        const locWrapper = document.createElement('div');
+        locWrapper.className = 'location-group';
+        const isLocExpanded = isFiltering || expandedState.has(loc);
         
-        // Sort by score desc within group
-        groupMatches.sort((a,b) => b.score - a.score);
+        const locHeader = document.createElement('div');
+        locHeader.className = 'location-header';
+        locHeader.innerHTML = `<span>${loc}</span><span class="caret ${isLocExpanded ? 'open' : ''}">▶</span>`;
+        locHeader.onclick = (e) => { e.stopPropagation(); toggleExpand(loc); };
+        locWrapper.appendChild(locHeader);
 
-        // Header
-        const header = document.createElement('div');
-        header.className = 'dept-section-title';
-        header.textContent = deptName;
-        container.appendChild(header);
+        if(isLocExpanded){
+          const deptsContainer = document.createElement('div');
+          Object.keys(hierarchy[loc]).sort().forEach(dept => {
+            const deptWrapper = document.createElement('div');
+            deptWrapper.className = 'dept-group';
+            const deptKey = `${loc}::${dept}`;
+            const isDeptExpanded = isFiltering || expandedState.has(deptKey);
+            const count = hierarchy[loc][dept].length;
 
-        // Grid
-        const grid = document.createElement('div');
-        grid.className = 'dept-results-grid';
-        container.appendChild(grid);
+            const deptHeader = document.createElement('div');
+            deptHeader.className = 'department-header';
+            deptHeader.innerHTML = `<span>${dept} <span style="font-weight:400; color:#94a3b8; margin-left:4px;">(${count})</span></span><span class="caret ${isDeptExpanded ? 'open' : ''}">▶</span>`;
+            deptHeader.onclick = (e) => { e.stopPropagation(); toggleExpand(deptKey); };
+            deptWrapper.appendChild(deptHeader);
 
-        groupMatches.forEach((m, i) => {
-          const skillsObj = m.p.skills || {};
-          
-          let breakdownHtml = '';
-          if(m.breakdown && m.breakdown.length > 0){
-            breakdownHtml = `<div class="match-breakdown">` + 
-              m.breakdown.map(item => 
-                `<span class="match-chip">${escapeHtml(item.skill)} <b>${item.score}</b></span>`
-              ).join('') + 
-            `</div>`;
-          }
-
-          let badgeValue = m.score;
-          if(m.displayScore) {
-              badgeValue = m.displayScore;
-          }
-
-          let topSoftware = "", topSoftwareScore = -1;
-          let topPlatform = "", topPlatformScore = -1;
-          let topSpecialism = "", topSpecialismScore = -1;
-
-          Object.entries(skillsObj).forEach(([skill, score])=>{
-            if(SOFTWARE_SKILLS.includes(skill) && score > topSoftwareScore){ topSoftwareScore = score; topSoftware = skill; }
-            if(PLATFORM_SKILLS.includes(skill) && score > topPlatformScore){ topPlatformScore = score; topPlatform = skill; }
-            if(SPECIALISM_SKILLS.includes(skill) && score > topSpecialismScore){ topSpecialismScore = score; topSpecialism = skill; }
-          });
-
-          const extraLines = [
-            topSoftware ? `<div><strong>Top software:</strong> ${escapeHtml(topSoftware)} (${topSoftwareScore})</div>` : '',
-            topPlatform ? `<div><strong>Top platform:</strong> ${escapeHtml(topPlatform)} (${topPlatformScore})</div>` : '',
-            topSpecialism ? `<div><strong>Top specialism:</strong> ${escapeHtml(topSpecialism)} (${topSpecialismScore})</div>` : ''
-          ].filter(Boolean).join('');
-
-          const deptHtml = (m.p.departments || []).map(d => `<span class="dept-pill">${escapeHtml(d)}</span>`).join("");
-          const displayLoc = displayLocationFor(m.p);
-
-          const card = document.createElement("div");
-          // Top 3 check applies per department group now
-          card.className = "card " + (i < 3 ? "top3" : "");
-          card.setAttribute("role","listitem");
-          card.setAttribute("tabindex","0");
-
-          const val = parseFloat(badgeValue);
-          let badgeClass = 'low';
-          if(val >= 4) badgeClass = 'high';
-          else if(val >= 3) badgeClass = 'mid';
-          
-          const badgeHtml = (hasActiveFilter) ? `<span class="badge ${badgeClass}">${badgeValue}</span>` : ``;
-
-          card.innerHTML = `
-            <div class="card-body">
-              <h3>${escapeHtml(m.p.name)}</h3>
-              <p>${escapeHtml(m.p.role)}<br>${escapeHtml(m.p.department)} | ${escapeHtml(displayLoc)}</p>
-              ${breakdownHtml}
-              <div class="dept-badges">${deptHtml}</div>
-              <div class="hover-details" aria-hidden="true">${extraLines}</div>
-            </div>
-            ${badgeHtml}
-          `;
-
-          card.addEventListener("click", ()=> openPanel(teamData.indexOf(m.p)));
-          card.addEventListener("keydown", (ev)=>{ if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); openPanel(teamData.indexOf(m.p)); } });
-
-          grid.appendChild(card);
-        });
-      });
-    }
-
-    function debounce(fn, wait=250){ let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); }; }
-    const renderSearchDebounced = debounce(renderSearch, 200);
-
-    function populateFilters(){
-      const studios = new Set(teamData.map(p => displayLocationFor(p)).filter(Boolean));
-      const studioSel = studioFilter;
-      if(!studioSel) return;
-      studioSel.innerHTML = '<option value="all">All Studios</option>';
-      Array.from(studios).sort().forEach(s=>{
-        const o = document.createElement('option'); o.value = s; o.textContent = s; studioSel.appendChild(o);
-      });
-
-      const titles = new Set(teamData.map(p => (p.role || '').trim()).filter(Boolean));
-      const titleSel = titleFilter;
-      titleSel.innerHTML = '<option value="all">All Job Titles</option>';
-      Array.from(titles).sort().forEach(t=>{
-        const o = document.createElement('option'); o.value = t; o.textContent = t; titleSel.appendChild(o);
-      });
-    }
-
-    function openPanel(openPanelIndex){
-    const p = teamData[openPanelIndex];
-      if(!p) return;
-      const sortedSkills = Object.entries(p.skills || {}).sort(([,aScore],[,bScore]) => bScore - aScore);
-      
-      // Determine skill recency (try granular first, fallback to simple)
-      const recencyMap = p.skillRecency || {}; 
-      const legacySet = new Set(p.recentSkills || []); // for backward compat
-
-      const displayLoc = displayLocationFor(p);
-            const primaryDept = p.department || '';
-      const allDepts = p.departments || [];
-      const additionalDepts = allDepts.filter(d => d !== primaryDept);
-
-      const primaryDeptHtml = primaryDept
-        ? `<div class="panel-dept-section">
-             <strong class="panel-dept-heading">Primary Department</strong>
-             <div class="dept-badges"><span class="dept-pill">${escapeHtml(primaryDept)}</span></div>
-           </div>`
-        : '';
-
-      const additionalDeptHtml = additionalDepts.length > 0
-        ? `<div class="panel-dept-section">
-             <strong class="panel-dept-heading">Can also work in...</strong>
-             <div class="dept-badges">${additionalDepts.map(d => `<span class="dept-pill">${escapeHtml(d)}</span>`).join('')}</div>
-           </div>`
-        : '';
-      const summaryHtml = p.profileSummary ? `<p class="profile-summary">${escapeHtml(p.profileSummary)}</p>` : "";
-      const contactsHtml = (function(){
-  const primaryDept = (p.department || '').trim();
-  const loc = displayLocationFor(p);
-  const locContact = LOCATION_CONTACTS[loc] || null;
-
-  const parts = [];
-
-  // Only use primary department contact
-  if(primaryDept){
-    const info = DEPARTMENT_CONTACTS[primaryDept];
-    if(info){
-      parts.push(`<div>Resource contact (${escapeHtml(primaryDept)}): ${escapeHtml(info.name)} — <a href="mailto:${escapeHtml(info.email)}">${escapeHtml(info.email)}</a></div>`);
-    }
-  }
-
-  // If the person is NOT in Manchester, override with location-specific contact
-  if(locContact){
-    parts.length = 0;
-    parts.push(`<div>Resource contact (${escapeHtml(loc)}): ${escapeHtml(locContact.name)} — <a href="mailto:${escapeHtml(locContact.email)}">${escapeHtml(locContact.email)}</a></div>`);
-  }
-
-  if(parts.length === 0) return "";
-  return `<div class="resource-contacts" aria-label="Resourcing contacts">${parts.join("")}</div>`;
-})();
-
-      panelContent.innerHTML = `
-        <div class="panel-header">
-          <div class="panel-title">
-            <h2>${escapeHtml(p.name)}</h2>
-            <p>${escapeHtml(p.role)}<br>${escapeHtml(p.department)} | ${escapeHtml(displayLoc)}</p>
-          </div>
-          <div id="panelAvatarContainer" class="panel-avatar" aria-hidden="true"></div>
-        </div>
-
-        ${contactsHtml}
-                ${primaryDeptHtml}
-        ${additionalDeptHtml}
-        ${summaryHtml}
-        <div aria-label="Skills">
-          ${sortedSkills.map(([s,v]) => {
-            let icon = ''; 
-            // Check granular map first
-            if(recencyMap[s]) {
-              if(recencyMap[s] === 'hot') icon = '🔥';
-              else if(recencyMap[s] === 'warm') icon = '⚡';
-              else if(recencyMap[s] === 'cold') icon = '🧊'; // ADDED: render Dormant icon
-            } else {
-              // Fallback to legacy array (only supports Hot)
-              if(legacySet.has(s)) icon = '🔥';
+            if(isDeptExpanded){
+              const ul = document.createElement('ul');
+              ul.className = 'spec-list';
+              hierarchy[loc][dept].sort((a,b)=> a.name.localeCompare(b.name)).forEach(p => {
+                 const li = document.createElement('li');
+                 li.className = 'spec-item' + (p.originalIndex === selectedIndex ? ' selected' : '');
+                 const initials = (p.name||'').split(' ').slice(0,2).map(c=>c[0]).join('').toUpperCase();
+                 li.innerHTML = `<div class="list-avatar">${p.avatar ? `<img src="${p.avatar}">` : initials}</div><div class="list-name">${p.name || 'Unnamed'}</div>`;
+                 li.onclick = (e) => { e.stopPropagation(); selectSpecialist(p.originalIndex); };
+                 ul.appendChild(li);
+              });
+              deptWrapper.appendChild(ul);
             }
-            
-            const iconHtml = icon ? `<span title="Recency">${icon}</span>` : '';
-            return `<div class="stat"><div class="score-row"><span>${escapeHtml(s)}</span>${iconHtml}</div><strong>${v}</strong></div>`
-          }).join("")}
-        </div>
-        
-        <section class="recency-key" aria-label="Recency Key">
-          <strong>Recency Key</strong>
-          <div class="key-item">🔥 Hot: Used frequently on live work.</div>
-          <div class="key-item">⚡ Active: Used professionally, but less often (Warm).</div>
-          <div class="key-item">🧊 Dormant: Has the skill, but hasn't used it recently (Cold).</div>
-        </section>
+            deptsContainer.appendChild(deptWrapper);
+          });
+          locWrapper.appendChild(deptsContainer);
+        }
+        groupList.appendChild(locWrapper);
+      });
+    }
 
-        <section class="skill-scale" aria-label="Skill level definitions">
-          <strong>Autonomy Scale (1-5)</strong>
-          <ol>
-            <li><strong>Novice</strong> — Needs guidance on basics.</li>
-            <li><strong>Advanced Beginner</strong> — Can do standard tasks solo.</li>
-            <li><strong>Competent</strong> — Fully independent & reliable.</li>
-            <li><strong>Proficient</strong> — Highly skilled; proactive trouble-shooter.</li>
-            <li><strong>Expert</strong> — Authority; sets standards & teaches others.</li>
-          </ol>
-        </section>
-      `;
+    function selectSpecialist(idx){
+      selectedIndex = idx;
+      renderGroupedList($('leftSearch').value);
+      populateEditor(team[idx]);
+    }
 
-      const avatarContainer = document.getElementById('panelAvatarContainer');
-      avatarContainer.innerHTML = '';
-      if(p.avatar){
-        const img = document.createElement('img');
-        img.src = p.avatar;
-        img.alt = p.name + ' avatar';
-        avatarContainer.appendChild(img);
-      } else {
-        avatarContainer.textContent = getInitials(p.name);
+    function populateEditor(p){
+      const form = $('editorForm');
+      const empty = $('emptyState');
+      const titleName = $('editNameDisplay');
+      const titleAvatar = $('editAvatar');
+      const delBtn = $('deleteBtn');
+      const saveBtn = $('saveBtn');
+
+      if(!p){
+        form.style.display = 'none'; delBtn.style.display = 'none'; saveBtn.style.display = 'none';
+        empty.style.display = 'block'; titleName.textContent = 'Select a specialist'; titleAvatar.innerHTML = '';
+        return;
       }
+      empty.style.display = 'none'; form.style.display = 'block'; delBtn.style.display = 'inline-block'; saveBtn.style.display = 'inline-block';
+      titleName.textContent = p.name || 'Unnamed';
+      if(p.avatar) titleAvatar.innerHTML = `<img src="${p.avatar}">`;
+      else titleAvatar.textContent = (p.name||'').split(' ').slice(0,2).map(c=>c[0]).join('').toUpperCase();
 
-      sidePanel.classList.add('open');
-      sidePanel.setAttribute('aria-hidden','false');
-      backdrop.classList.add('open');
-      backdrop.removeAttribute('hidden');
-      backdrop.setAttribute('aria-hidden','false');
-      document.body.classList.add('panel-open');
+      $('inpName').value = p.name || ''; $('inpRole').value = p.role || ''; $('inpDept').value = p.department || 'Creative Design';
+      
+      let locVal = (p.location || 'Manchester').trim().replace(/^mccann\s+/i, '');
+      const locSelect = $('inpLoc');
+      let found = false;
+      for(let i=0; i<locSelect.options.length; i++){
+          if(locSelect.options[i].value === locVal) { locSelect.selectedIndex = i; found = true; break; }
+      }
+      if(!found) $('inpLoc').value = 'Manchester';
 
-      panelClose.focus();
+      $('inpLevel').value = p.level || 'mid'; $('inpSummary').value = p.profileSummary || ''; $('inpAvatar').value = p.avatar || '';
+
+      const deptSel = $('inpDepts');
+      const pDepts = p.departments || [p.department];
+      Array.from(deptSel.options).forEach(opt => { opt.selected = pDepts.includes(opt.value); });
+
+      const cont = $('skillsContainer');
+      cont.innerHTML = '';
+      if(p.skills){
+        const recencyMap = p.skillRecency || {}; 
+        const legacySet = new Set(p.recentSkills || []);
+        Object.entries(p.skills).sort(([,a],[,b])=> b-a).forEach(([sk, sc]) => {
+    let state = 'cold';
+    if(recencyMap[sk]) state = recencyMap[sk];
+    else if (legacySet.has(sk)) state = 'hot';
+    const cat = (p.customDefinitions && p.customDefinitions[sk]) || findSkillCategory(sk) || '';
+    addSkillRow(sk, sc, state, cat);
+});
+      }
     }
 
-    function closePanel(){
-      sidePanel.classList.remove('open');
-      sidePanel.setAttribute('aria-hidden','true');
-      backdrop.classList.remove('open');
-      backdrop.setAttribute('hidden', "true");
-      backdrop.setAttribute('aria-hidden','true');
-      document.body.classList.remove('panel-open');
+    function addSkillRow(skillName='', score=2, recencyState='cold', category=''){
+  const row = document.createElement('div');
+  row.className = 'skill-row';
+  const selSkill = document.createElement('select');
+  Object.keys(SKILLS_BY_CATEGORY).forEach(cat => {
+      const group = document.createElement('optgroup');
+      group.label = cat;
+      SKILLS_BY_CATEGORY[cat].sort().forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s; opt.textContent = s;
+          if(s === skillName) opt.selected = true;
+          group.appendChild(opt);
+      });
+      selSkill.appendChild(group);
+  });
+
+  // When skill name changes, auto-update category dropdown to match
+  selSkill.addEventListener('change', () => {
+    const detectedCat = findSkillCategory(selSkill.value);
+    if(detectedCat) selCat.value = detectedCat;
+  });
+
+  const selScore = document.createElement('select');
+  selScore.className = 'score-select';
+  [{val:5, txt:"5 (Expert)"},{val:4, txt:"4 (Proficient)"},{val:3, txt:"3 (Competent)"},{val:2, txt:"2 (Adv. Beg)"},{val:1, txt:"1 (Novice)"}].forEach(optData => {
+    const opt = document.createElement('option'); opt.value = optData.val; opt.textContent = optData.txt;
+    if(optData.val === Number(score)) opt.selected = true; selScore.appendChild(opt);
+  });
+
+  // Category dropdown
+  const selCat = document.createElement('select');
+  selCat.className = 'category-select';
+  const resolvedCat = category || findSkillCategory(skillName) || Object.keys(SKILLS_BY_CATEGORY)[0];
+  Object.keys(SKILLS_BY_CATEGORY).forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat; opt.textContent = cat;
+    if(cat === resolvedCat) opt.selected = true;
+    selCat.appendChild(opt);
+  });
+
+  const btnRecency = document.createElement('button');
+  btnRecency.className = 'recency-toggle'; btnRecency.type = "button";
+  updateRecencyBtn(btnRecency, recencyState);
+  btnRecency.onclick = (e) => {
+    e.preventDefault();
+    let c = btnRecency.getAttribute('data-state');
+    let n = 'warm'; if(c==='warm')n='hot'; else if(c==='hot')n='cold';
+    updateRecencyBtn(btnRecency, n);
+  };
+  const btnRem = document.createElement('button');
+  btnRem.className = 'removeSkill'; btnRem.innerHTML = '✕'; btnRem.onclick = () => row.remove();
+  row.appendChild(selSkill); row.appendChild(selScore); row.appendChild(selCat); row.appendChild(btnRecency); row.appendChild(btnRem);
+  $('skillsContainer').appendChild(row);
+}
+
+    function updateRecencyBtn(btn, state){
+      btn.setAttribute('data-state', state);
+      if(state === 'hot') btn.innerHTML = '🔥';
+      else if (state === 'warm') btn.innerHTML = '⚡';
+      else btn.innerHTML = '🧊';
     }
 
-    function initializeApp(){
-      try {
-        loadTeam();
-        mergeCustomDefinitions(); // Run the custom skill merger
-        renderSkillList();
-        populateFilters();
-        renderSearch();
-          
-           
-        if(importBtn) importBtn.addEventListener('click', ()=> importFile.click());
-        if(importFile) importFile.addEventListener('change', (ev)=> {
-          const file = ev.target.files && ev.target.files[0];
-          if(!file) return;
+    function getEditorData(){
+      const depts = Array.from($('inpDepts').selectedOptions).map(o=>o.value);
+      const primary = $('inpDept').value;
+      if(!depts.includes(primary)) depts.unshift(primary);
+      const skills = {}, skillRecency = {}, recentSkills = [];
+      const currentPerson = selectedIndex > -1 ? team[selectedIndex] : {};
+      
+      const customDefinitions = {};
+$('skillsContainer').querySelectorAll('.skill-row').forEach(row => {
+  const sName = row.querySelector('select').value;
+  const sScore = parseInt(row.querySelector('.score-select').value, 10);
+  const selectedCat = row.querySelector('.category-select').value;
+  const state = row.querySelector('.recency-toggle').getAttribute('data-state') || 'cold';
+  skills[sName] = sScore;
+  skillRecency[sName] = state;
+  if(state === 'hot' || state === 'warm') recentSkills.push(sName);
+
+  // If category differs from the default, store as custom override
+  const defaultCat = findSkillCategory(sName);
+  if(selectedCat && selectedCat !== defaultCat){
+    customDefinitions[sName] = selectedCat;
+    // Also add to the master list so it appears in the right group going forward
+    if(SKILLS_BY_CATEGORY[selectedCat] && !SKILLS_BY_CATEGORY[selectedCat].includes(sName)){
+      SKILLS_BY_CATEGORY[selectedCat].push(sName);
+    }
+  }
+});
+
+      return {
+        name: $('inpName').value,
+        role: $('inpRole').value,
+        department: primary,
+        departments: depts,
+        location: $('inpLoc').value,
+        level: $('inpLevel').value,
+        profileSummary: $('inpSummary').value,
+        avatar: $('inpAvatar').value,
+        skills: skills,
+        skillRecency: skillRecency,
+        recentSkills: recentSkills,
+        // Preserve custom defs if they existed
+        customDefinitions: Object.keys(customDefinitions).length > 0 ? customDefinitions : undefined
+      };
+    }
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      loadTeam();
+      loginForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        if(pwInput.value === PASSWORD){
+          loginOverlay.style.display = 'none'; appWrap.removeAttribute('aria-hidden'); renderGroupedList('');
+        } else { loginError.style.display = 'block'; }
+      });
+      $('leftSearch').addEventListener('input', (e)=>{ renderGroupedList(e.target.value); });
+      $('newBtn').addEventListener('click', ()=>{
+        selectedIndex = -1;
+        document.querySelectorAll('.spec-item.selected').forEach(el => el.classList.remove('selected'));
+        populateEditor({ name:'', role:'', department:'Creative Design', location:'Manchester', skills:{}, recentSkills:[] });
+        $('inpName').focus();
+      });
+      $('addSkillBtn').addEventListener('click', ()=> addSkillRow('Photoshop', 2, 'cold', ''));
+      $('saveBtn').addEventListener('click', ()=>{
+        const data = getEditorData();
+        if(!data.name){ alert('Name is required'); return; }
+        if(selectedIndex === -1){
+           team.push(data);
+           selectedIndex = team.length - 1;
+           const locDisplay = formatLocationForDisplay(data.location || 'Unknown');
+           expandedState.add(locDisplay);
+           expandedState.add(`${locDisplay}::${data.department||'Other'}`);
+        } else { team[selectedIndex] = data; }
+        saveTeam(); renderGroupedList($('leftSearch').value);
+        const btn = $('saveBtn'); const orig = btn.textContent; btn.textContent = 'Saved!'; btn.style.background = '#22c55e';
+        setTimeout(()=> { btn.textContent = orig; btn.style.background = ''; }, 1500);
+      });
+      $('deleteBtn').addEventListener('click', ()=>{
+        if(selectedIndex === -1) return;
+        if(confirm(`Delete ${team[selectedIndex].name}?`)){
+          team.splice(selectedIndex, 1); selectedIndex = -1; saveTeam(); renderGroupedList($('leftSearch').value); populateEditor(null);
+        }
+      });
+      $('exportBtn').addEventListener('click', ()=>{ $('exportTextarea').value = JSON.stringify(team, null, 2); $('exportModalBackdrop').style.display = 'flex'; });
+      
+      // RESTORE
+      $('importBtn').addEventListener('click', ()=> $('importFile').click());
+      $('importFile').addEventListener('change', (e)=>{
+        const f = e.target.files[0]; if(!f) return;
+        const r = new FileReader();
+        r.onload = (evt)=>{
+          try{
+             const d = JSON.parse(evt.target.result);
+             if(Array.isArray(d)){
+               if(confirm(`WARNING: This will REPLACE your entire database. Are you sure?`)){
+                 team = d; selectedIndex = -1; expandedState.clear();
+                 mergeCustomDefinitions(); // Scan new data
+                 saveTeam(); renderGroupedList(''); populateEditor(null);
+                 alert('Database restored.');
+               }
+             } else alert('Invalid JSON file.');
+          }catch(err){ alert('Error parsing JSON'); }
+        };
+        r.readAsText(f);
+      });
+
+      // ADD (APPEND)
+      $('addJsonBtn').addEventListener('click', ()=> $('addJsonFile').click());
+      $('addJsonFile').addEventListener('change', (e)=>{
+        const files = Array.from(e.target.files);
+        if(files.length === 0) return;
+        let addedCount = 0; let processed = 0;
+        files.forEach(file => {
           const reader = new FileReader();
-          reader.onload = function(e){
-            try{
-              const parsed = JSON.parse(e.target.result);
-              if(!Array.isArray(parsed)){ alert('Invalid file: expected JSON array'); return; }
-              const replace = confirm('Replace current dataset with imported file? OK = replace, Cancel = merge by name');
-              if(replace){
-                teamData = parsed;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(teamData, null, 2));
-                populateFilters(); renderSkillList(); renderSearch();
-                alert('Imported and replaced dataset.');
-              } else {
-                const existing = new Set(teamData.map(p => (p.name||'').trim().toLowerCase()));
-                let added=0;
-                parsed.forEach(p=>{
-                  const n = (p && p.name) ? p.name.trim().toLowerCase() : '';
-                  if(n && !existing.has(n)){ teamData.push(p); existing.add(n); added++; }
-                });
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(teamData, null, 2));
-                populateFilters(); renderSkillList(); renderSearch();
-                alert(`Imported and merged: ${added} specialists added.`);
-              }
-            }catch(err){ alert('Failed to parse JSON: ' + err.message); }
-            importFile.value = '';
+          reader.onload = (evt) => {
+            try {
+              const data = JSON.parse(evt.target.result);
+              const items = Array.isArray(data) ? data : [data];
+              items.forEach(item => {
+                if(item && item.name) {
+                  team.push(item); addedCount++;
+                  const locDisplay = formatLocationForDisplay(item.location || 'Unknown');
+                  expandedState.add(locDisplay); expandedState.add(`${locDisplay}::${item.department||'Other'}`);
+                }
+              });
+            } catch(err) { console.error('Skipped invalid file', file.name); }
+            processed++;
+            if(processed === files.length) {
+              mergeCustomDefinitions(); // Update dropdowns with new custom skills
+              saveTeam(); renderGroupedList($('leftSearch').value);
+              alert(`Successfully added ${addedCount} specialist(s).`);
+              $('addJsonFile').value = '';
+            }
           };
           reader.readAsText(file);
         });
+      });
 
-        if(manageBtn) manageBtn.addEventListener('click', ()=> {
-          try { window.open(new URL('admin.html', window.location.href).href, '_blank','noopener'); } catch { window.open('admin.html','_blank','noopener'); }
-        });
-
-        if(nameSearch){
-          nameSearch.addEventListener('input', ()=> {
-            if(selectedChips.size > 0){
-              selectedChips.clear();
-              document.querySelectorAll('.skill-chip.selected').forEach(c => c.classList.remove('selected'));
-              updateClearButtonVisibility();
-            }
-            if(skillSearch) skillSearch.value = '';
-            renderSearchDebounced();
-          }, { passive: true });
-        }
-
-                if(skillSearch) skillSearch.addEventListener('input', () => {
-          if(selectedChips.size > 0){
-            selectedChips.clear();
-            document.querySelectorAll('.skill-chip.selected').forEach(c => c.classList.remove('selected'));
-            updateClearButtonVisibility();
-          }
-          if(nameSearch) nameSearch.value = '';
-
-          // Filter visible chips to match typed query
-          const q = (skillSearch.value || '').trim().toLowerCase();
-          document.querySelectorAll('.skill-chip').forEach(chip => {
-            if(!q){
-              chip.style.display = '';
-              return;
-            }
-            const label = (chip.textContent || '').toLowerCase();
-            let aliasMatch = false;
-            for(const [canonical, aliases] of Object.entries(ALT_SEARCH_TERMS)){
-              if(canonical.includes(q) || aliases.some(a => a.toLowerCase().includes(q))){
-                if(label === canonical || label.includes(q)) { aliasMatch = true; break; }
-              }
-            }
-            if(label.includes(q) || aliasMatch){
-              chip.style.display = '';
-            } else {
-              chip.style.display = 'none';
-            }
-          });
-
-          renderSearchDebounced();
-        }, { passive: true });
-
-        if(levelFilter) levelFilter.addEventListener('change', renderSearchDebounced);
-        if(departmentFilter) departmentFilter.addEventListener('change', renderSearchDebounced);
-        if(studioFilter) studioFilter.addEventListener('change', renderSearchDebounced);
-        if(titleFilter) titleFilter.addEventListener('change', renderSearchDebounced);
-
-        if(resetFilters) resetFilters.addEventListener('click', ()=> {
-            
-
-            
-          levelFilter.value = 'all';
-          departmentFilter.value = 'all';
-          studioFilter.value = 'all';
-          titleFilter.value = 'all';
-          skillSearch.value = '';
-          if(nameSearch) nameSearch.value = '';
-          selectedChips.clear();
-          document.querySelectorAll('.skill-chip.selected').forEach(c=>c.classList.remove('selected'));
-          updateClearButtonVisibility();
-          skillMin = 0;
-          applySegButtonsState();
-          renderSearchDebounced();
-            
-                      // Restore all hidden chips
-          document.querySelectorAll('.skill-chip').forEach(c => c.style.display = '');
-        });
-
-        if(segAll) segAll.addEventListener('click', ()=> { skillMin = 0; applySegButtonsState(); renderSearchDebounced(); });
-        if(segMid) segMid.addEventListener('click', ()=> { skillMin = (skillMin === 3) ? 0 : 3; applySegButtonsState(); renderSearchDebounced(); });
-        if(segHigh) segHigh.addEventListener('click', ()=> { skillMin = (skillMin === 5) ? 0 : 5; applySegButtonsState(); renderSearchDebounced(); });
-
-        if(panelClose) panelClose.addEventListener('click', closePanel);
-        if(backdrop) backdrop.addEventListener('click', closePanel);
-        document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closePanel(); });
-
-        window.addEventListener('storage', (e)=>{
-          if(e.key === STORAGE_KEY){
-            try{
-              const parsed = JSON.parse(e.newValue || '[]');
-              if(Array.isArray(parsed)){
-                teamData = parsed;
-                populateFilters();
-                renderSkillList();
-                renderSearch();
-              }
-            }catch(err){ console.error('storage event parse failed', err); }
-          }
-        });
-
-      } catch (err) {
-        console.error('initializeApp failed', err);
-        results.innerHTML = '<div class="warning">Initialisation failed - see console (F12)</div>';
-      }
-    }
-
-    if(loginForm){
-      loginForm.addEventListener('submit', function(evt){
-        evt.preventDefault();
-        if(loginError) loginError.style.display = 'none';
-        const val = (passwordInput.value || '').trim();
-        if(val === PASSWORD){
-          document.documentElement.style.setProperty('--page-bg', getComputedStyle(document.documentElement).getPropertyValue('--page-bg-light'));
-          loginOverlay.style.display = 'none';
-          loginOverlay.setAttribute('hidden','');
-          appWrapper.removeAttribute('aria-hidden');
-          initializeApp();
-        } else {
-          loginError.textContent = 'Incorrect password';
-          loginError.style.display = 'block';
-          passwordInput.value = '';
-          passwordInput.focus();
+      $('copyExportBtn').addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText($('exportTextarea').value); const btn = $('copyExportBtn'); const old = btn.textContent; btn.textContent = 'Copied!'; setTimeout(()=> btn.textContent = old, 1500); }catch(e){ alert('Copy failed.'); }
+      });
+      $('closeExportBtn').addEventListener('click', ()=> { $('exportModalBackdrop').style.display = 'none'; });
+      $('resetDefaultsBtn').addEventListener('click', ()=>{
+        if(confirm('Reset to official list?')){
+            try {
+              const el = document.getElementById('embedded-team');
+              if(el) { team = JSON.parse(el.textContent); saveTeam(); selectedIndex = -1; mergeCustomDefinitions(); renderGroupedList(''); populateEditor(null); alert('Reset complete.'); }
+            } catch(e) { alert('Error loading default data'); }
         }
       });
-    }
+      try{ pwInput.focus(); }catch(e){}
+    });
 
-    try{ passwordInput.focus(); }catch(e){}
+    window.addEventListener('storage', (e)=>{
+      if(e.key === STORAGE_KEY){
+        try{
+          const parsed = JSON.parse(e.newValue || '[]');
+          if(Array.isArray(parsed)){ team = parsed; mergeCustomDefinitions(); renderGroupedList($('leftSearch').value); }
+        }catch(err){}
+      }
+    });
 
-    window._mcann = { initializeApp, loadTeam, renderSearch };
-
- })(); // This closes the IIFE
+    window._admin = { loadTeam, saveTeam, team };
+  })();
   </script>
 </body>
 </html>

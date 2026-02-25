@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Specialist Profile Entry</title>
+  <style>
+    :root{ --bg:#f6f7f9; --card:#fff; --accent:#0b1220; --muted:#6b7280; --primary:#572ef5; --border:#e2e8f0; }
+    
+    html { height: 100%; }
+    body { 
+      min-height: 100%; margin: 0;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      background: var(--bg); color: var(--accent); 
+      display: flex; justify-content: center; align-items: flex-start; 
+      padding: 40px 20px; box-sizing: border-box;
+    }
+    
+    .container {
+      width: 100%; max-width: 700px;
+      background: var(--card); border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      padding: 30px; display: flex; flex-direction: column; gap: 20px;
+      height: auto; position: relative;
+    }
+
+    h1 { margin:0 0 5px; font-size: 1.5rem; text-align:center; color: var(--accent); }
+    p.intro { text-align:center; color: var(--muted); font-size: 0.95rem; margin-top:0; margin-bottom: 20px; line-height: 1.5; }
+
+    label { display:block; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em; color:#64748b; margin-bottom:6px; font-weight:700; }
+    
+    input[type="text"], select, textarea { 
+      width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--border); 
+      font-size:15px; box-sizing:border-box; background: #fff; color: var(--accent); 
+      font-family:inherit; transition: border 0.15s, box-shadow 0.15s;
+    }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:var(--primary); box-shadow: 0 0 0 3px rgba(87, 46, 245, 0.1); }
+    
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 4px; }
+
+    /* Skills Section */
+    .skills-section { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px; overflow: visible; }
+    
+    .skill-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+    .skill-header-row h3 { margin:0; font-size: 1rem; font-weight: 700; color: var(--accent); }
+
+    .legend { display: flex; gap: 12px; font-size: 0.75rem; color: var(--muted); align-items: center; flex-wrap: wrap; }
+    .legend span { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; border-radius: 4px; font-size: 10px; margin-right: 4px; font-weight: bold; }
+    .l-hot { background: #dc2626; color: white; }
+    .l-warm { background: #f59e0b; color: white; }
+    .l-cold { background: #fff; color: #94a3b8; border: 1px solid #cbd5e1; }
+
+    /* TABLE LAYOUT FOR SKILLS */
+    .skills-table-header {
+      display: grid; grid-template-columns: 1fr 130px 50px 42px; 
+      gap: 10px; padding: 0 0 6px 0; border-bottom: 1px solid var(--border); margin-bottom: 10px;
+    }
+    .col-head { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .col-center { text-align: center; }
+
+    .skill-row { display: grid; grid-template-columns: 1fr 130px 50px 42px; gap: 10px; margin-bottom: 8px; align-items: center; }
+    .skill-row select { width: 100%; }
+    
+    .recency-toggle, .remove-skill { 
+      width:100%; height:42px; border-radius:8px; background:#fff; border:1px solid var(--border); 
+      display:flex; align-items:center; justify-content:center; font-size: 1.2rem; cursor: pointer; transition: all 0.2s;
+    }
+    .remove-skill { color: #ef4444; }
+    .remove-skill:hover { background: #fef2f2; border-color: #fca5a5; }
+    .recency-toggle[data-state="hot"] { background: #dc2626; color: white; border-color: #b91c1c; }
+    .recency-toggle[data-state="warm"] { background: #f59e0b; color: white; border-color: #d97706; }
+    .recency-toggle[data-state="cold"] { background: #fff; color: #94a3b8; border-color: #cbd5e1; }
+
+    button { cursor: pointer; font-family: inherit; font-weight: 600; border: none; transition: all 0.2s; }
+
+    .btn-bar { margin-top: 12px; display: flex; gap: 10px; }
+    .btn-add { background: #fff; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; color: var(--accent); flex: 1; }
+    .btn-add:hover { background: #f1f5f9; }
+    .btn-create { background: #eff4ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .btn-create:hover { background: #dbeafe; }
+
+    .footer-actions { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center; }
+    .btn-download { width: 100%; padding: 14px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 1rem; font-weight: 700; }
+    .btn-download:hover { background: #4a25cf; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(87, 46, 245, 0.25); }
+
+    /* Custom Skill Modal */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal { background: #fff; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .modal h3 { margin: 0 0 16px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
+    .btn-cancel { background: #fff; color: var(--muted); padding: 8px 16px; border-radius: 6px; }
+    .btn-confirm { background: var(--primary); color: #fff; padding: 8px 16px; border-radius: 6px; }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div>
+      <h1>Specialist Profile Entry</h1>
+      <p class="intro">Please fill out your details. If your skill isn't in the list, click <strong>Create New Skill</strong> to add it.</p>
+    </div>
+
+    <div class="field">
+      <label>Full Name *</label>
+      <input type="text" id="inpName" placeholder="e.g. Sarah Smith" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" id="inpRole" placeholder="e.g. Senior Designer" />
+      </div>
+      <div class="field">
+        <label>Level</label>
+        <select id="inpLevel">
+          <option value="junior">Junior</option>
+          <option value="mid" selected>Mid</option>
+          <option value="senior">Senior</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Primary Department</label>
+        <select id="inpDept">
+          <option value="Creative Design">Creative Design</option>
+          <option value="Print Design">Print Design</option>
+          <option value="Digital Design">Digital Design</option>
+          <option value="Print Artwork">Print Artwork</option>
+          <option value="Digital Artwork">Digital Artwork</option>
+          <option value="Creative Retouch">Creative Retouch</option>
+          <option value="Motion">Motion</option>
+          <option value="Social">Social</option>
+          <option value="Photography">Photography</option>
+          <option value="Proofreading">Proofreading</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <select id="inpLoc">
+           <option value="Manchester">Manchester</option>
+           <option value="London">London</option>
+           <option value="Birmingham">Birmingham</option>
+           <option value="Leeds">Leeds</option>
+           <option value="Bristol">Bristol</option>
+           <option value="Milton Keynes">Milton Keynes</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>I can also work in...(Ctrl/Cmd + Click to select)</label>
+      <select id="inpDepts" multiple style="height: 100px;">
+        <option value="Creative Design">Creative Design</option>
+        <option value="Print Design">Print Design</option>
+        <option value="Digital Design">Digital Design</option>
+        <option value="Print Artwork">Print Artwork</option>
+        <option value="Digital Artwork">Digital Artwork</option>
+        <option value="Creative Retouch">Creative Retouch</option>
+        <option value="Motion">Motion</option>
+        <option value="Social">Social</option>
+        <option value="Photography">Photography</option>
+        <option value="Proofreading">Proofreading</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Profile Summary</label>
+      <textarea id="inpSummary" rows="3" placeholder="Briefly describe your experience..."></textarea>
+    </div>
+    
+    <div class="field">
+      <label>Avatar URL (Optional)</label>
+      <input type="text" id="inpAvatar" placeholder="https://..." />
+    </div>
+
+    <div class="skills-section">
+      <div class="skill-header-row">
+        <h3>Skills & Competency</h3>
+        <div class="legend">
+          <div style="display:flex; align-items:center"><span class="l-hot">🔥</span> Hot (Frequent)</div>
+          <div style="display:flex; align-items:center"><span class="l-warm">⚡</span> Active (Occasional)</div>
+          <div style="display:flex; align-items:center"><span class="l-cold">🧊</span> Dormant (Not recent)</div>
+        </div>
+      </div>
+      
+      <div class="skills-table-header">
+        <div class="col-head">Skill Name</div>
+        <div class="col-head">Level (1-5)</div>
+        <div class="col-head col-center">Use</div>
+        <div class="col-head col-center">Del</div>
+      </div>
+
+      <div id="skillsList"></div>
+
+      <div class="btn-bar">
+        <button type="button" class="btn-add" id="addSkillBtn">+ Add Existing Skill</button>
+        <button type="button" class="btn-add btn-create" id="createSkillBtn">✨ Create New Skill</button>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button type="button" class="btn-download" id="downloadBtn">Download Profile JSON ⇩</button>
+      <p style="font-size:0.85rem; color:#94a3b8; margin: 8px 0 0;">Email this file to your manager/admin.</p>
+    </div>
+  </div>
+
+  <div id="customSkillModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>Define New Skill</h3>
+      <div class="field">
+        <label>Skill Name</label>
+        <input type="text" id="newSkillName" placeholder="e.g. Cinema 4D" />
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="newSkillCat">
+          <option value="Software">Software</option>
+          <option value="Platform">Platform</option>
+          <option value="Digital Specialism">Digital Specialism</option>
+          <option value="Print Specialism">Print Specialism</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelNewSkill">Cancel</button>
+        <button class="btn-confirm" id="confirmNewSkill">Add Skill</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const SKILLS_BY_CATEGORY = {
+      "Software": [ "After Effects","Photoshop","Illustrator","InDesign","Premier Pro","XD","Adobe Dimension","Character Animator","Google Web Designer","Lightroom","Adobe Audition","CSS","Javascript","Capture One","Ziflow","Adobe Bridge", "Word" ],
+      "Platform": [ "Figma","Runway","Firefly","Corebook","Blender","Facebook" ],
+      "Digital Specialism": [ "HTML Email","Display Banners","DOOH","DCO Flashtalking","DCO Storyteq","DCO Google Studio","Social Content" ],
+      "Print Specialism": [ "Artworking","Packaging","Out of Home (OOH)","Retail & POS","Press & Editorial","Direct Mail","Brand Identity","High-end Retouching","Colour Grading","Image Compositing","Technical Grading","Cutouts","Photography", "Copywriting", "Proofreading" ]
+  };
+  
+  // Storage for custom definitions added during this session
+  const CUSTOM_DEFINITIONS = {};
+
+  const skillsList = document.getElementById('skillsList');
+  const modal = document.getElementById('customSkillModal');
+
+  function addSkillRow(skillName='', score=3, recency='hot'){
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+
+    const selSkill = document.createElement('select');
+    // Rebuild options every time to include new custom ones
+    Object.keys(SKILLS_BY_CATEGORY).forEach(category => {
+        const group = document.createElement('optgroup');
+        group.label = category;
+        SKILLS_BY_CATEGORY[category].sort().forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            if(s === skillName) opt.selected = true;
+            group.appendChild(opt);
+        });
+        selSkill.appendChild(group);
+    });
+
+    const selScore = document.createElement('select');
+    selScore.className = 'score-select';
+    [
+      {val:5, txt:"5 (Expert)"}, {val:4, txt:"4 (Proficient)"},
+      {val:3, txt:"3 (Competent)"}, {val:2, txt:"2 (Adv. Beg)"}, {val:1, txt:"1 (Novice)"}
+    ].forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.val; opt.textContent = d.txt;
+      if(d.val === Number(score)) opt.selected = true;
+      selScore.appendChild(opt);
+    });
+
+    const btnRecency = document.createElement('button');
+    btnRecency.className = 'recency-toggle';
+    btnRecency.type = "button";
+    updateRecencyBtn(btnRecency, recency);
+    btnRecency.onclick = () => {
+      let c = btnRecency.getAttribute('data-state');
+      let n = c==='hot'?'cold':(c==='warm'?'hot':'warm'); // cycle hot->cold->warm->hot
+      updateRecencyBtn(btnRecency, n);
+    };
+
+    const btnRem = document.createElement('button');
+    btnRem.className = 'remove-skill';
+    btnRem.innerHTML = '✕';
+    btnRem.onclick = () => row.remove();
+
+    row.appendChild(selSkill);
+    row.appendChild(selScore);
+    row.appendChild(btnRecency);
+    row.appendChild(btnRem);
+    skillsList.appendChild(row);
+  }
+
+  function updateRecencyBtn(btn, state){
+    btn.setAttribute('data-state', state);
+    if(state === 'hot') btn.innerHTML = '🔥';
+    else if(state === 'warm') btn.innerHTML = '⚡';
+    else btn.innerHTML = '🧊';
+  }
+
+  // Event Handlers
+  document.getElementById('addSkillBtn').addEventListener('click', () => addSkillRow('Photoshop', 3, 'hot'));
+  
+  // Custom Skill Logic
+  document.getElementById('createSkillBtn').addEventListener('click', () => {
+    document.getElementById('newSkillName').value = '';
+    modal.style.display = 'flex';
+    document.getElementById('newSkillName').focus();
+  });
+
+  document.getElementById('cancelNewSkill').addEventListener('click', () => modal.style.display = 'none');
+  
+  document.getElementById('confirmNewSkill').addEventListener('click', () => {
+    const name = document.getElementById('newSkillName').value.trim();
+    const cat = document.getElementById('newSkillCat').value;
+    if(name) {
+      // Add to local list so it appears in dropdowns
+      if(!SKILLS_BY_CATEGORY[cat].includes(name)){
+        SKILLS_BY_CATEGORY[cat].push(name);
+        CUSTOM_DEFINITIONS[name] = cat; // Track it for export
+      }
+      addSkillRow(name, 3, 'hot');
+      modal.style.display = 'none';
+    }
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const name = document.getElementById('inpName').value.trim();
+    if(!name){ alert('Please enter Full Name.'); return; }
+
+    const primaryDept = document.getElementById('inpDept').value;
+    const extraDepts = Array.from(document.getElementById('inpDepts').selectedOptions).map(o=>o.value);
+    const allDepts = Array.from(new Set([primaryDept, ...extraDepts]));
+    
+    const skills = {}, skillRecency = {}, recentSkills = [];
+    skillsList.querySelectorAll('.skill-row').forEach(row => {
+      const sName = row.querySelector('select').value;
+      const sScore = parseInt(row.querySelector('.score-select').value, 10);
+      const sRecency = row.querySelector('.recency-toggle').getAttribute('data-state');
+      skills[sName] = sScore;
+      skillRecency[sName] = sRecency;
+      if(sRecency !== 'cold') recentSkills.push(sName);
+    });
+
+    const profileObject = [{
+      name: name,
+      role: document.getElementById('inpRole').value,
+      department: primaryDept,
+      departments: allDepts,
+      location: document.getElementById('inpLoc').value,
+      level: document.getElementById('inpLevel').value,
+      profileSummary: document.getElementById('inpSummary').value,
+      avatar: document.getElementById('inpAvatar').value,
+      skills: skills,
+      skillRecency: skillRecency,
+      recentSkills: recentSkills,
+      customDefinitions: CUSTOM_DEFINITIONS // EXPORTING THE NEW DEFS
+    }];
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profileObject, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `profile_${name.replace(/\s+/g,'_').toLowerCase()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  addSkillRow('Photoshop', 3, 'hot'); // Init
+})();
+</script>
+</body>
+</html>

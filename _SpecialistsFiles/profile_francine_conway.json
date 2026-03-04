@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Francine Conway",
+    "role": "Designer",
+    "department": "Print Design",
+    "departments": [
+      "Print Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "Illustrator": 4,
+      "InDesign": 4,
+      "Press & Editorial": 4,
+      "After Effects": 1,
+      "Word": 4,
+      "Artworking": 4,
+      "Retail & POS": 4,
+      "Direct Mail": 4,
+      "Out of Home (OOH)": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "InDesign": "hot",
+      "Press & Editorial": "hot",
+      "After Effects": "cold",
+      "Word": "hot",
+      "Artworking": "cold",
+      "Retail & POS": "hot",
+      "Direct Mail": "warm",
+      "Out of Home (OOH)": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Press & Editorial",
+      "Word",
+      "Retail & POS",
+      "Direct Mail",
+      "Out of Home (OOH)"
+    ],
+    "customDefinitions": {}
+  }
+]

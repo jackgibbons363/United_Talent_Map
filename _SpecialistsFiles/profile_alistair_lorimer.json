@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Alistair Lorimer",
+    "role": "Creative Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Print Design",
+      "Print Artwork",
+      "Creative Retouch",
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "Predominantly print based designer with strong knowledge, enjoyment and experience in photography art direction.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "InDesign": 5,
+      "Figma": 2,
+      "Firefly": 4,
+      "Artworking": 4,
+      "Brand Identity": 4,
+      "Photography": 5
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "Illustrator": "warm",
+      "InDesign": "hot",
+      "Figma": "warm",
+      "Firefly": "hot",
+      "Artworking": "hot",
+      "Brand Identity": "warm",
+      "Photography": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Figma",
+      "Firefly",
+      "Artworking",
+      "Brand Identity",
+      "Photography",
+      "Photoshop"
+    ],
+    "customDefinitions": {}
+  }
+]

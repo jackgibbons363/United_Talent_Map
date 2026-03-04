@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Studio Workflows</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .card h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2980b9;
+        }
+        .accordion {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.4s;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .active, .accordion:hover {
+            background-color: #bdc3c7;
+        }
+        .accordion:after {
+            content: '\002B';
+            color: #2c3e50;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+        .active:after {
+            content: "\2212";
+        }
+        .panel {
+            padding: 0 15px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-left: 3px solid #3498db;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .tag {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            float: right;
+        }
+        .tag-static { background-color: #d4e6f1; color: #1b4f72; }
+        .tag-mp4 { background-color: #fad7a1; color: #7e5109; }
+        .tag-psd { background-color: #d5f5e3; color: #186a3b; }
+        .tag-html { background-color: #f5b7b1; color: #78281f; }
+        .tag-GWD { background-color: #b069f7; color: #ffffff; }
+
+        /* Lightbox & Carousel Specific Styles */
+        .lightbox-trigger {
+            cursor: pointer;
+            color: #2980b9;
+            font-weight: 500;
+        }
+        .lightbox-trigger:hover {
+            background-color: #f0f8ff;
+            padding-left: 5px;
+        }
+        .lightbox-trigger::before {
+            content: '👁️ ';
+            font-size: 12px;
+        }
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(4px);
+            animation: fadeEffect 0.3s ease-out;
+        }
+        @keyframes fadeEffect {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .lightbox-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+        .lightbox-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 80%;
+        }
+        #lightbox-image {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 4px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+        .lightbox-caption {
+            color: #ecf0f1;
+            font-size: 13px;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        /* New Lightbox Details Styles */
+        .lightbox-details {
+            display: none;
+            color: #ecf0f1;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            border-radius: 6px;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .lightbox-details ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        .lightbox-details li {
+            border-bottom: none;
+            padding: 4px 0;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10000;
+        }
+        .close-lightbox:hover {
+            color: #e74c3c;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 20px;
+            margin-top: -30px;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            transition: 0.3s ease;
+            user-select: none;
+            z-index: 10000;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+        .next { right: 30px; }
+        .prev { left: 30px; }
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Process Workflow Section */
+        .process-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .process-section h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2ecc71;
+            color: #27ae60;
+        }
+        .tabs {
+            display: flex;
+            margin-top: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tab-btn.active-tab {
+            color: #27ae60;
+            border-bottom: 3px solid #27ae60;
+            margin-bottom: -2px;
+        }
+        .tab-content {
+            display: none;
+            padding: 30px 0;
+        }
+        .tab-content.active-content {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ecf0f1;
+            z-index: 1;
+        }
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            cursor: pointer;
+            width: 20%;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            background: #bdc3c7;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+            font-weight: bold;
+            transition: 0.3s;
+            border: 4px solid #fff;
+        }
+        .step:hover .step-circle, .step.active-step .step-circle {
+            background: #27ae60;
+            transform: scale(1.1);
+        }
+        .step-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .details-box {
+            background: #f8f9f9;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            border-radius: 4px;
+            min-height: 80px;
+        }
+        .details-box h4 {
+            margin-top: 0;
+            color: #27ae60;
+        }
+        .details-box p {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Digital Studio Workflows</h1>
+    
+    <div class="grid">
+        <div class="card">
+            <h2>Monthly (Bespoke)</h2>
+            <p>Custom, conceptual, and high-touch deliverables.</p>
+
+            <button class="accordion">Digital Media (DM)</button>
+            <div class="panel">
+                <ul>
+                    <li class="lightbox-trigger" data-images="images/DM_Specialbuys_4Screen_01.jpg">4screens <span class="tag tag-static">Static</span>
+                    </li>
+                    <li class="lightbox-trigger" data-images="images/DM_EDLP_Smoothies_PauseAd_Channel4_BigScreen_1280x720.jpg,images/DM_EDLP_Smoothies_PauseAd_ITV_1440x810.png,images/DM_EDLP_Smoothies_PauseAd_Channel4_Desktop_1024x576.jpg,images/DM_EDLP_Smoothies_PauseAd_Channel4_Mobile_869x414.jpg">
+                        Channel 4 / ITV Pause Ads <span class="tag tag-static">Static</span>
+                    </li>
+                    <li class="lightbox-trigger" data-images="images/DM_GumGum Mobile Skin.png">
+                        GumGum Mobile Skin <span class="tag tag-static">Static</span>
+                    </li>
+                    <li class="lightbox-trigger" data-images="images/DM_GumGum-Desktop-Skin.png">
+                        GumGum-Desktop-Skin <span class="tag tag-static">Static</span>
+                    </li>
+                    <li class="lightbox-trigger" data-images="images/DM_GumGum-Native.png">
+                        GumGum-Native <span class="tag tag-static">Static</span>
+                    </li>
+                    <li class="lightbox-trigger" data-images="images/DM_Immediate_Anchor_Ad.png">Immediate Anchor Ad <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Immediate Media-Skins_1.png,images/DM_Immediate Media-Skins_2.png,images/DM_Immediate Media-Skins_3.png">Immediate Media-Skins <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Seamless_Switching_Skin_01.png,images/DM_Seamless_Switching_Skin_02.png,images/DM_Seamless_Switching_Skin_03.png">Immediate Seamless Switching Skin <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Mail_Online_App_Splash.png">Mail Online App Splash <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_EDLP_Radio_Digital_Banner-V1-CTA.jpg,images/DM_EDLP_Radio_Digital_Banner-V2-CTA.jpg">Radio Digital Banner <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Reddit Conversation Ad Compact.png,images/DM_Reddit Conversation Ad Expanded.png">Reddit Conversation Ad <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_YouTube_ChannelArt_01.png,images/DM_YouTube_ChannelArt_02.png">YouTube Channel Art <span class="tag tag-static">Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Meta_Colection_ad.png">Meta Collection Ad <span class="tag tag-mp4">MP4</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Meta_1x1_01.png,images/DM_Meta_1x1_02.png">Meta Infeed <span class="tag tag-mp4">MP4</span></li>
+                    <li class="lightbox-trigger" data-images="images/DDM_Meta_Reel_01.png,images/DM_Meta_Reel_02.png">Meta Reels <span class="tag tag-mp4">MP4</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Meta_Story_01.png,images/DM_Meta_Story_02.png">Meta Story <span class="tag tag-mp4">MP4</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_AnchorBanner.png,images/DM_MobileMidscroll.png">Mobile Midscroll with Anchor Banner <span class="tag tag-mp4">MP4</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Pinterest_MP4_01.png,images/DM_Pinterest_Static_01.png,images/DM_Pinterest_Static_02.png">Pinterest <span class="tag tag-mp4">MP4 / Static</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_Provenance_GWD_Banners_GWD.png">Google Display Banners <span class="tag tag-GWD">Animated</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_DCO_Templates_01.png,images/DM_DCO_Templates_02.png">DCO Templates <span class="tag tag-psd">PSD Concepts</span></li>
+                    <li class="lightbox-trigger" data-images="images/DM_turbine_Ad_01.png,images/DM_turbine_Ad_02.png,images/DM_turbine_Ad_03.png">Turbine Ad <span class="tag tag-psd">PSD Concept</span></li>
+                </ul>
+            </div>
+
+            <button class="accordion">Web Assets (WEB)</button>
+            <div class="panel">
+                <ul>
+                    <li class="lightbox-trigger" data-images="images/web_always_on_app_01.png,images/web_always_on_app_02.png,images/web_always_on_app_03.png,images/web_always_on_app_04.png,images/web_always_on_app_05.png">Always On - App <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_always_on_BAU_Recipes.png">Always On - BAU Recipes <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_always_on_BWS.png">Always On - BWS <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_always_on_LP_01.png,images/web_always_on_LP_02.png">Always On - Landing Page <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_always_on_MeanPlanner_01.png,images/web_always_on_MeanPlanner_02.png">Always On - Meal Planner <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_alwaysOn_springboard_01.png,images/web_alwaysOn_springboard_02.png,images/web_alwaysOn_springboard_03.png,images/web_alwaysOn_springboard_04.png,images/web_alwaysOn_springboard_05.png,images/web_alwaysOn_springboard_06.png">Always On - Springboard <span class="tag tag-static">Statics</span></li>
+                    <li class="lightbox-trigger" data-images="images/web_Campaign_LP_01.png,images/web_Campaign_LP_02.png,images/web_Campaign_LP_03.png,images/web_Campaign_LP_04.png">Campaign LP <span class="tag tag-static">Statics</span></li>
+                </ul>
+            </div>
+
+            <button class="accordion">Digital Screens</button>
+            <div class="panel">
+                <ul>
+                    <li class="lightbox-trigger" data-images="images/DSCR_digiScreen_01.png,images/DSCR_digiScreen_02.png,images/DSCR_digiScreen_03.png,images/DSCR_digiScreen_04.png,images/DSCR_digiScreen_05.png,images/DSCR_digiScreen_06.png">Digi Screens <span class="tag tag-mp4">MP4</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Weekly (Templated)</h2>
+            <p>Fast-turnaround, high-volume BAU deliverables.</p>
+
+            <ul>
+                <li class="lightbox-trigger" data-images="images/DM_GumGum-Native.png,images/DM_Native_FWO.jpg" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Supplied as JPGs directly to Aldi</li></ul>">FWO Offers - Native <span class="tag tag-static">Static</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/weekly_merchBanners_01.png,images/weekly_merchBanners_02.png,images/weekly_merchBanners_03.png,images/weekly_merchBanners_04.png,images/weekly_merchBanners_05.png,images/weekly_merchBanners_06.png,images/weekly_merchBanners_07.png,images/weekly_merchBanners_08.png" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Supplied as JPGs directly to Aldi</li></ul>">Merch Banners <span class="tag tag-static">Static</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/Reddit-Carousel-1_lifestyle.jpg,images/Reddit-Carousel-2_lifestyle.jpg,images/Reddit-Carousel-3_lifestyle.jpg,images/Reddit-Carousel-4_lifestyle.jpg,images/Reddit-Carousel-5_lifestyle.jpg" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Supplied as JPGs directly to Aldi</li></ul>">Reddit Carousels <span class="tag tag-static">Static</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/weekly_webOffers_01.png,images/weekly_webOffers_02.png,images/weekly_webOffers_03.png,images/weekly_webOffers_04.png,images/weekly_webOffers_05.png" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Supplied as JPGs directly to Aldi</li></ul>">Weekly Web Offers <span class="tag tag-static">Static</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/Week_11_APP-Teaser-Card_LastWeek_UK.jpg,images/Week_11_APP-Teaser-Card_ThisWeek_UK.jpg,images/Week_11_LW_Col_ALT_B.jpg,images/Week_11_TW_Col_ALT_A.jpg" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Supplied as JPGs directly to Aldi</li></ul>">Digital Leaflet Assets <span class="tag tag-static">Static</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/weekly_digi_screen_01.png,images/weekly_digi_screen_02.png,images/weekly_digi_screen_03.png,images/weekly_digi_screen_04.png" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Animated in After Effects</li><li>Supplied as MP4s directly to Aldi</li></ul>">Weekly Digital Screens <span class="tag tag-mp4">MP4</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/weekly_WOTW_digiScreen_01.png,images/weekly_WOTW_digiScreen_02.png" data-details="<ul><li>Designed in Photoshop</li><li>Presented in an PDF deck compiled in XD</li><li>Animated in After Effects</li><li>Supplied as MP4s directly to Aldi</li></ul>">WOTW Digi Screens <span class="tag tag-mp4">MP4</span></li>
+                
+                <li class="lightbox-trigger" data-images="images/weekly_email_campaign.png,images/weekly_email_postcard.png,images/weekly_email_TWAA.png" data-details="<ul><li>Component assets designed in Photoshop</li><li>Currently compiled in XD, soon to be FIGMA.</li><li>Presented in an PDF deck</li><li>Built using an HTML editor</li><li>Uploaded to Adobe Campaign</li><li>Dispatched by Aldi</li></ul>">HTML Email (Campaign, Postcard, TWAA) <span class="tag tag-html">HTML</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="process-section">
+        <h2>Weekly Templated Workflows</h2>
+        <p>Click through the process steps below to view the interactive routing and amendment loops for each asset type.</p>
+
+        <div class="tabs">
+            <button class="tab-btn active-tab" onclick="openTab(event, 'workflow-static')">Static Assets</button>
+            <button class="tab-btn" onclick="openTab(event, 'workflow-mp4')">Animated (MP4)</button>
+            <button class="tab-btn" onclick="openTab(event, 'workflow-email')">HTML Emails</button>
+        </div>
+
+        <div id="workflow-static" class="tab-content active-content">
+            <div class="timeline">
+                <div class="step active-step" onclick="showDetails('static', 1, this)"><div class="step-circle">1</div><div class="step-label">Creative Setup</div></div>
+                <div class="step" onclick="showDetails('static', 2, this)"><div class="step-circle">2</div><div class="step-label">Presentation</div></div>
+                <div class="step" onclick="showDetails('static', 3, this)"><div class="step-circle">3</div><div class="step-label">Amends Loop</div></div>
+                <div class="step" onclick="showDetails('static', 4, this)"><div class="step-circle">4</div><div class="step-label">Sign Off</div></div>
+                <div class="step" onclick="showDetails('static', 5, this)"><div class="step-circle">5</div><div class="step-label">Delivery</div></div>
+            </div>
+            <div id="static-details" class="details-box">
+                <h4>1. Creative Setup</h4>
+                <p>The process begins in the Creative Department, where initial assets are designed and laid out using Adobe Photoshop.</p>
+            </div>
+        </div>
+
+        <div id="workflow-mp4" class="tab-content">
+            <div class="timeline">
+                <div class="step active-step" onclick="showDetails('mp4', 1, this)"><div class="step-circle">1</div><div class="step-label">Concept Setup</div></div>
+                <div class="step" onclick="showDetails('mp4', 2, this)"><div class="step-circle">2</div><div class="step-label">Concept Amends</div></div>
+                <div class="step" onclick="showDetails('mp4', 3, this)"><div class="step-circle">3</div><div class="step-label">Motion Build</div></div>
+                <div class="step" onclick="showDetails('mp4', 4, this)"><div class="step-circle">4</div><div class="step-label">Build Amends</div></div>
+                <div class="step" onclick="showDetails('mp4', 5, this)"><div class="step-circle">5</div><div class="step-label">Delivery</div></div>
+            </div>
+            <div id="mp4-details" class="details-box">
+                <h4>1. Concept Setup</h4>
+                <p>The process begins in the Creative Department using Adobe Photoshop to create the static storyboards/frames, which are then presented as a PDF generated from XD.</p>
+            </div>
+        </div>
+
+        <div id="workflow-email" class="tab-content">
+            <div class="timeline">
+                <div class="step active-step" onclick="showDetails('email', 1, this)"><div class="step-circle">1</div><div class="step-label">Figma Layout</div></div>
+                <div class="step" onclick="showDetails('email', 2, this)"><div class="step-circle">2</div><div class="step-label">Layout Amends</div></div>
+                <div class="step" onclick="showDetails('email', 3, this)"><div class="step-circle">3</div><div class="step-label">Code Build</div></div>
+                <div class="step" onclick="showDetails('email', 4, this)"><div class="step-circle">4</div><div class="step-label">Build Amends</div></div>
+                <div class="step" onclick="showDetails('email', 5, this)"><div class="step-circle">5</div><div class="step-label">Deployment</div></div>
+            </div>
+            <div id="email-details" class="details-box">
+                <h4>1. Figma Layout</h4>
+                <p>Emails are laid out in Figma, heavily utilising the Auto Layout function to optimise setup time.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="lightbox">
+    <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-content">
+        <span class="prev" id="prevBtn" onclick="changeImage(-1)">&#10094;</span>
+        <div class="lightbox-wrapper">
+            <img id="lightbox-image" src="" alt="Asset Image">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+            <div id="lightbox-details" class="lightbox-details"></div>
+        </div>
+        <span class="next" id="nextBtn" onclick="changeImage(1)">&#10095;</span>
+    </div>
+</div>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            } 
+        });
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active-content");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active-tab");
+        }
+        document.getElementById(tabName).classList.add("active-content");
+        evt.currentTarget.classList.add("active-tab");
+    }
+
+    const processData = {
+        static: {
+            1: { title: "1. Creative Setup", desc: "The process begins in the Creative Department, where initial assets are designed and laid out using Adobe Photoshop." },
+            2: { title: "2. Presentation", desc: "The Photoshop assets are compiled and presented to stakeholders as a PDF generated from Adobe XD." },
+            3: { title: "3. Amends Loop (Routing)", desc: "Feedback is triaged. <strong>Creative Amends:</strong> Routed back to the Creative Department. <strong>Prescriptive Amends:</strong> Routed directly into the Digital Studio. This loop repeats until final approval." },
+            4: { title: "4. Sign Off", desc: "The final static asset receives formal approval and is locked for distribution." },
+            5: { title: "5. Delivery", desc: "The completed, signed-off assets are packaged and supplied directly to Account Management." }
+        },
+        mp4: {
+            1: { title: "1. Concept Setup", desc: "The process begins in the Creative Department using Adobe Photoshop to create the static storyboards/frames, which are then presented as a PDF generated from XD." },
+            2: { title: "2. Concept Amends", desc: "Feedback on the storyboard is triaged. Creative amends return to the Creative Dept, while prescriptive amends go to the Digital Studio. Loop repeats until the static concept is approved." },
+            3: { title: "3. Motion Build", desc: "Once the static storyboard is approved, the asset moves into the build phase where it is animated and constructed in Adobe After Effects." },
+            4: { title: "4. Build Amends", desc: "Any feedback regarding timing, motion, or final rendering is addressed within After Effects until final approval is met." },
+            5: { title: "5. Delivery", desc: "The final, approved MP4 file is rendered out and supplied directly to the relevant Publisher." }
+        },
+        email: {
+            1: { title: "1. Figma Layout", desc: "Emails are laid out in Figma, heavily utilising the Auto Layout function to optimise setup time." },
+            2: { title: "2. Layout Amends", desc: "The visual layout goes through an initial amends loop (similar to MP4 concepting) until the static design is approved." },
+            3: { title: "3. Code Build", desc: "The approved Figma layout is translated into HTML. The email is built out using a dedicated code editor." },
+            4: { title: "4. Build Amends", desc: "The coded HTML email is tested. Any rendering issues or prescriptive code amends are made in the code editor until signed off." },
+            5: { title: "5. Deployment", desc: "The final HTML build is uploaded to Adobe Campaign, where the client manages the final distribution." }
+        }
+    };
+
+    function showDetails(type, stepNum, element) {
+        var steps = element.parentElement.getElementsByClassName("step");
+        for (var i = 0; i < steps.length; i++) {
+            steps[i].classList.remove("active-step");
+        }
+        element.classList.add("active-step");
+
+        var detailsBox = document.getElementById(type + "-details");
+        var data = processData[type][stepNum];
+        detailsBox.innerHTML = "<h4>" + data.title + "</h4><p>" + data.desc + "</p>";
+    }
+
+    let currentImages = [];
+    let currentIndex = 0;
+    let currentDetails = ''; // Captures specific asset details
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxDetails = document.getElementById('lightbox-details');
+    const triggers = document.querySelectorAll('.lightbox-trigger');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            currentImages = this.getAttribute('data-images').split(',').map(item => item.trim());
+            // Extract the data-details attribute or default to empty
+            currentDetails = this.getAttribute('data-details') || ''; 
+            currentIndex = 0;
+            
+            updateLightboxView();
+            lightbox.style.display = 'block';
+        });
+    });
+
+    function updateLightboxView() {
+        const currentPath = currentImages[currentIndex];
+        lightboxImage.src = currentPath;
+
+        const fileName = currentPath.split('/').pop();
+        lightboxCaption.innerText = fileName;
+
+        // Display or hide the details box based on whether the data exists
+        if (currentDetails) {
+            lightboxDetails.innerHTML = currentDetails;
+            lightboxDetails.style.display = 'block';
+        } else {
+            lightboxDetails.style.display = 'none';
+        }
+
+        if (currentImages.length > 1) {
+            prevBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+    }
+
+    function changeImage(direction) {
+        currentIndex += direction;
+        
+        if (currentIndex >= currentImages.length) {
+            currentIndex = 0;
+        } else if (currentIndex < 0) {
+            currentIndex = currentImages.length - 1;
+        }
+        
+        updateLightboxView();
+    }
+
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        lightboxImage.src = ''; 
+        lightboxCaption.innerText = '';
+        lightboxDetails.innerHTML = '';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == lightbox || event.target.className == 'lightbox-content' || event.target.className == 'lightbox-wrapper') {
+            closeLightbox();
+        }
+    }
+</script>
+
+</body>
+</html>

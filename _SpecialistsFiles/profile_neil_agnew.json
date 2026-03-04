@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Neil Agnew",
+    "role": "Design Lead",
+    "department": "Print Design",
+    "departments": [
+      "Print Design",
+      "Creative Design",
+      "Digital Design",
+      "Print Artwork",
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Over 25 years experience working agencies in and around Manchester. Had an 18 month spell working as a Freelance designer in 2018-20. Worked with many brands - multinational to small independents - across a wide variety of sectors. ",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 4,
+      "InDesign": 4,
+      "Illustrator": 4,
+      "Artworking": 3,
+      "Firefly": 4,
+      "Brand Identity": 4,
+      "Photographic Art Direction": 4,
+      "AI Image Creation": 4
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "InDesign": "hot",
+      "Illustrator": "hot",
+      "Artworking": "warm",
+      "Firefly": "hot",
+      "Brand Identity": "cold",
+      "Photographic Art Direction": "hot",
+      "AI Image Creation": "hot"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Illustrator",
+      "Artworking",
+      "Firefly",
+      "Photographic Art Direction",
+      "AI Image Creation"
+    ],
+    "customDefinitions": {
+      "Photographic Art Direction": "Platform",
+      "AI Image Creation": "Platform"
+    }
+  }
+]

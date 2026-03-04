@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Adam Kenyon",
+    "role": "Creative Designer",
+    "department": "Creative Design",
+    "departments": [
+      "Creative Design",
+      "Print Design",
+      "Digital Design",
+      "Print Artwork",
+      "Digital Artwork",
+      "Creative Retouch",
+      "Motion",
+      "Social",
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "I have over 25 years of creative experience in Art Direction, Advertising, Branding, Typography and Layout Design, spanning Print, Packaging, Publication and Signage/Exhibition design. My expertise extends to some Digital Marketing, Advertising and Social Media Design, along with Data Visualisation and Presentation Design that communicate complex ideas clearly. I also bring advanced skills in Image Editing, Photo Retouching and AI image creation, delivering strategic, high-quality visual solutions across both print and digital platforms.\n\nMore recently, my focus has intensified around AI-generated imagery and video. I have been actively developing my expertise in Adobe Firefly and Adobe Photoshop (Beta), while staying up to date with advancements in other leading models such as Runway, Flux, and Nano Banana as global standards continue to evolve.\n\nI am currently working towards, and have begun training in, ComfyUI to further expand my technical knowledge. This complements my AI image generation skillset and supports a strong awareness of efficient, forward-thinking workflows that leverage emerging technologies to enhance creative output.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 5,
+      "InDesign": 5,
+      "Illustrator": 4,
+      "After Effects": 2,
+      "Firefly": 5,
+      "Runway": 3,
+      "Word": 3,
+      "Artworking": 4,
+      "Brand Identity": 4,
+      "Cutouts": 5,
+      "High-end Retouching": 5,
+      "Image Compositing": 5,
+      "Direct Mail": 3,
+      "Packaging": 3,
+      "Retail & POS": 3,
+      "Display Banners": 3,
+      "Social Content": 2,
+      "ComfyUI": 1
+    },
+    "skillRecency": {
+      "Photoshop": "hot",
+      "InDesign": "hot",
+      "Illustrator": "warm",
+      "After Effects": "cold",
+      "Firefly": "hot",
+      "Runway": "warm",
+      "Word": "warm",
+      "Artworking": "warm",
+      "Brand Identity": "warm",
+      "Cutouts": "warm",
+      "High-end Retouching": "warm",
+      "Image Compositing": "hot",
+      "Direct Mail": "cold",
+      "Packaging": "cold",
+      "Retail & POS": "cold",
+      "Display Banners": "cold",
+      "Social Content": "cold",
+      "ComfyUI": "warm"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Illustrator",
+      "Firefly",
+      "Runway",
+      "Word",
+      "Artworking",
+      "Brand Identity",
+      "Cutouts",
+      "High-end Retouching",
+      "Image Compositing",
+      "Photoshop",
+      "Word",
+      "ComfyUI"
+    ],
+    "customDefinitions": {
+      "ComfyUI": "Software"
+    }
+  }
+]

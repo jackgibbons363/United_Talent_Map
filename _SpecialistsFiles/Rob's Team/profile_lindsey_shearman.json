@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Lindsey Shearman",
+    "role": "Senior Artworker, Primary Lago User/Trainer",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Creative Design",
+      "Print Design",
+      "Digital Design"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Senior Artworker responsible for preparing and delivering leaflets, point-of-sale (POS) materials, and high-profile client projects to print on a daily basis. Possesses a strong understanding of print processes and production requirements. Also Lead on our Lago system, which is a Multichannel marketing and product information management (PIM) software system, designed to help retailers, manufacturers, and agencies centralize data for marketing, and produce content for both print (catalogs, circulars) and digital (e-commerce, web) channels.",
+    "avatar": "",
+    "skills": {
+      "Illustrator": 3,
+      "Photoshop": 2,
+      "Artworking": 5,
+      "Out of Home (OOH)": 4,
+      "Retail & POS": 4,
+      "Packaging": 4,
+      "InDesign": 5,
+      "Word": 2
+    },
+    "skillRecency": {
+      "Illustrator": "hot",
+      "Photoshop": "hot",
+      "Artworking": "hot",
+      "Out of Home (OOH)": "hot",
+      "Retail & POS": "hot",
+      "Packaging": "hot",
+      "InDesign": "hot",
+      "Word": "hot"
+    },
+    "recentSkills": [
+      "Illustrator",
+      "Photoshop",
+      "Artworking",
+      "Out of Home (OOH)",
+      "Retail & POS",
+      "Packaging",
+      "InDesign",
+      "Word"
+    ],
+    "customDefinitions": {}
+  }
+]

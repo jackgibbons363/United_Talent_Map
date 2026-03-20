@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Louise Troyano",
+    "role": "Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Print Design",
+      "Digital Artwork",
+      "Creative Retouch",
+      "Photography"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Over 30 years of design, print and digital experience.",
+    "avatar": "",
+    "skills": {
+      "Photoshop": 3,
+      "InDesign": 4,
+      "Illustrator": 3,
+      "Word": 3,
+      "After Effects": 1,
+      "Figma": 1,
+      "Display Banners": 2,
+      "Artworking": 3,
+      "Brand Identity": 2,
+      "Photography": 2,
+      "Retail & POS": 3,
+      "Out of Home (OOH)": 3
+    },
+    "skillRecency": {
+      "Photoshop": "warm",
+      "InDesign": "hot",
+      "Illustrator": "warm",
+      "Word": "cold",
+      "After Effects": "cold",
+      "Figma": "cold",
+      "Display Banners": "cold",
+      "Artworking": "hot",
+      "Brand Identity": "cold",
+      "Photography": "cold",
+      "Retail & POS": "cold",
+      "Out of Home (OOH)": "cold"
+    },
+    "recentSkills": [
+      "Photoshop",
+      "InDesign",
+      "Illustrator",
+      "Artworking"
+    ],
+    "customDefinitions": {}
+  }
+]

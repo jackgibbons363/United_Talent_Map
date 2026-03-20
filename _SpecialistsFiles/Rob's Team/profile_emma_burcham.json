@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Emma Burcham",
+    "role": "Mac Operator",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Creative Design"
+    ],
+    "location": "Manchester",
+    "level": "mid",
+    "profileSummary": "I predominately use Indesign as part of my day to day tasks however I have used Illustrator throughout university although I haven't used this skill as much recently. I have also used After Effects and Photoshop in the past, particularly After Effects when I began at McCann. ",
+    "avatar": "",
+    "skills": {
+      "After Effects": 2,
+      "Illustrator": 3,
+      "Photoshop": 1,
+      "InDesign": 4,
+      "Figma": 1,
+      "Artworking": 3,
+      "Brand Identity": 3,
+      "Out of Home (OOH)": 3,
+      "Proofreading": 3
+    },
+    "skillRecency": {
+      "After Effects": "cold",
+      "Illustrator": "warm",
+      "Photoshop": "cold",
+      "InDesign": "hot",
+      "Figma": "cold",
+      "Artworking": "hot",
+      "Brand Identity": "hot",
+      "Out of Home (OOH)": "hot",
+      "Proofreading": "hot"
+    },
+    "recentSkills": [
+      "Illustrator",
+      "InDesign",
+      "Artworking",
+      "Brand Identity",
+      "Out of Home (OOH)",
+      "Proofreading"
+    ],
+    "customDefinitions": {}
+  }
+]

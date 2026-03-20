@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Nick Lawrence",
+    "role": "Creative Artworker",
+    "department": "Print Artwork",
+    "departments": [
+      "Print Artwork",
+      "Print Design",
+      "Digital Artwork",
+      "Creative Retouch"
+    ],
+    "location": "Manchester",
+    "level": "senior",
+    "profileSummary": "Almost thirty years of experience in creative artwork mainly for print, at various agencies, businesses and as freelance.",
+    "avatar": "",
+    "skills": {
+      "InDesign": 5,
+      "Photoshop": 3,
+      "Illustrator": 3,
+      "Artworking": 5,
+      "Out of Home (OOH)": 4,
+      "DOOH": 3,
+      "After Effects": 1,
+      "Word": 3,
+      "Cutouts": 3,
+      "Packaging": 3,
+      "Press & Editorial": 4,
+      "Retail & POS": 5
+    },
+    "skillRecency": {
+      "InDesign": "hot",
+      "Photoshop": "hot",
+      "Illustrator": "hot",
+      "Artworking": "hot",
+      "Out of Home (OOH)": "hot",
+      "DOOH": "warm",
+      "After Effects": "cold",
+      "Word": "warm",
+      "Cutouts": "warm",
+      "Packaging": "cold",
+      "Press & Editorial": "hot",
+      "Retail & POS": "hot"
+    },
+    "recentSkills": [
+      "InDesign",
+      "Photoshop",
+      "Illustrator",
+      "Artworking",
+      "Out of Home (OOH)",
+      "DOOH",
+      "Word",
+      "Cutouts",
+      "Press & Editorial",
+      "Retail & POS"
+    ],
+    "customDefinitions": {}
+  }
+]
